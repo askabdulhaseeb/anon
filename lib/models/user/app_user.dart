@@ -6,6 +6,7 @@ import 'number_detail.dart';
 class AppUser {
   AppUser({
     required this.uid,
+    required this.agencyID,
     required this.name,
     required this.designation,
     required this.phoneNumber,
@@ -24,6 +25,7 @@ class AppUser {
         notAllowedWords = notAllowedWords ?? <String>[];
 
   final String uid;
+  final String agencyID;
   final String name;
   final String nickName;
   final UserDesignation designation;
@@ -39,6 +41,7 @@ class AppUser {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'uid': uid,
+      'agency_id': agencyID,
       'name': name,
       'nickName': nickName,
       'designation': designation.json,
@@ -63,6 +66,7 @@ class AppUser {
     }
     return AppUser(
       uid: map['uid'] ?? '',
+      agencyID: map['agency_id'] ?? '',
       name: map['name'] ?? '',
       nickName: map['nickName'] ?? '',
       designation: UserDesignationConvertor()

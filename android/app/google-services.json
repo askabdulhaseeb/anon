@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "932325401767",
+    "project_id": "dm-managment",
+    "storage_bucket": "dm-managment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932325401767:android:8d45bdc19d98387b85a782",
+        "android_client_info": {
+          "package_name": "com.devmarkaz.devmarkaz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAi51RurcceCVS6Z6zWkNZwXmmjPBDr8FM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

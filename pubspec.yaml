@@ -32,6 +32,8 @@ dependencies:
   carousel_slider: ^4.2.1
 
   video_player: ^2.6.1
+  flutter_dotenv: ^5.0.2
+  firebase_core: ^2.13.0
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +65,7 @@ flutter_native_splash:
 flutter:
   uses-material-design: true
   assets:
+    - .env
     - assets/images/
     - assets/logo/
 
