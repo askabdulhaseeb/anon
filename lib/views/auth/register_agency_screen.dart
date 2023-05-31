@@ -16,56 +16,63 @@ class RegisterAgencyScreen extends StatefulWidget {
 }
 
 class _RegisterAgencyScreenState extends State<RegisterAgencyScreen> {
-  final TextEditingController _name = TextEditingController();
   final String username = 'devmarkaz';
+  final TextEditingController _name = TextEditingController();
   final TextEditingController _webURL = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   File? logo;
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Register Agency')),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            CustomNetworkChangeImageBox(
-              title: 'Agency logo',
-              onTap: () async {
-                final File? temp = await PickerFunctions().image();
-                if (temp == null) return;
-                setState(() {
-                  logo = temp;
-                });
-              },
+      body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Form(
+            key: _key,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                CustomNetworkChangeImageBox(
+                  title: 'Agency logo',
+                  onTap: () async {
+                    final File? temp = await PickerFunctions().image();
+                    if (temp == null) return;
+                    setState(() {
+                      logo = temp;
+                    });
+                  },
+                ),
+                CustomTextFormField(
+                  controller: _name,
+                  hint: 'Agency Name',
+                  readOnly: isLoading,
+                  validator: (String? value) => CustomValidator.lessThen3(value),
+                ),
+                CustomTextFormField(
+                  controller: _webURL,
+                  hint: 'website: ex, www.exemple.com',
+                  readOnly: isLoading,
+                  validator: (String? value) => null,
+                ),
+                SizedBox(
+                  height: 40,
+                  child: FittedBox(child: Text(username)),
+                ),
+                Text(
+                  'You can edit the username later',
+                  style: TextStyle(color: Theme.of(context).disabledColor),
+                ),
+                const SizedBox(height: 16),
+                CustomElevatedButton(
+                  title: 'Add Agency',
+                  onTap: () async => await onStartAgency(),
+                ),
+              ],
             ),
-            CustomTextFormField(
-              controller: _name,
-              hint: 'Agency Name',
-              readOnly: isLoading,
-              validator: (String? value) => CustomValidator.lessThen3(value),
-            ),
-            CustomTextFormField(
-              controller: _webURL,
-              hint: 'website: ex, www.exemple.com',
-              readOnly: isLoading,
-              validator: (String? value) => null,
-            ),
-            SizedBox(
-              height: 40,
-              child: FittedBox(child: Text(username)),
-            ),
-            Text(
-              'You can edit the username later',
-              style: TextStyle(color: Theme.of(context).disabledColor),
-            ),
-            const SizedBox(height: 16),
-            CustomElevatedButton(
-              title: 'Add Agency',
-              onTap: () async => await onStartAgency(),
-            ),
-          ],
+          ),
         ),
       ),
     );

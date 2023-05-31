@@ -1,5 +1,6 @@
-import '../../enums/auth_type.dart';
-import '../../enums/user_type.dart';
+import '../../enums/user/auth_type.dart';
+import '../../enums/user/user_designation.dart';
+import '../../enums/user/user_type.dart';
 import 'device_token.dart';
 import 'number_detail.dart';
 
@@ -12,6 +13,7 @@ class AppUser {
     required this.phoneNumber,
     required this.email,
     required this.password,
+    required this.type,
     String? nickName,
     AuthType? authType,
     String? imageURL,
@@ -29,6 +31,7 @@ class AppUser {
   final String name;
   final String nickName;
   final UserDesignation designation;
+  final UserType type;
   final AuthType authType;
   final NumberDetails phoneNumber;
   final String email;
@@ -45,6 +48,7 @@ class AppUser {
       'name': name,
       'nickName': nickName,
       'designation': designation.json,
+      'type': type.json,
       'auth_type': authType.json,
       'phone_number': phoneNumber.toMap(),
       'email': email,
@@ -71,6 +75,7 @@ class AppUser {
       nickName: map['nickName'] ?? '',
       designation: UserDesignationConvertor()
           .toEnum(map['designation'] ?? UserDesignation.employee.json),
+      type: UserTypeConvertor().toEnum(map['type'] ?? UserType.user.json),
       authType:
           AuthTypeConvertor().toEnum(map['auth_type'] ?? AuthType.email.json),
       phoneNumber:

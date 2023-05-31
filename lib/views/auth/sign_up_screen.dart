@@ -28,6 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       PhoneNumber(countryCode: '+44', countryISOCode: 'GB', number: '');
   File? file;
   bool _isLoading = false;
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,58 +37,66 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              CustomNetworkChangeImageBox(
-                title: 'Profile Image',
-                onTap: () async {
-                  final File? temp = await PickerFunctions().image();
-                  if (temp == null) return;
-                  setState(() {
-                    file = temp;
-                  });
-                },
-              ),
-              CustomTextFormField(
-                controller: _name,
-                hint: 'Your full name',
-                autoFocus: true,
-                keyboardType: TextInputType.name,
-                readOnly: _isLoading,
-                validator: (String? value) => CustomValidator.lessThen3(value),
-              ),
-              PhoneNumberField(
-                initialCountryCode: 'GB',
-                onChange: (PhoneNumber value) => setState(() {
-                  _number = value;
-                }),
-              ),
-              CustomTextFormField(
-                controller: _email,
-                hint: 'Your Email',
-                keyboardType: TextInputType.emailAddress,
-                readOnly: _isLoading,
-                validator: (String? value) => CustomValidator.lessThen3(value),
-              ),
-              PasswordTextFormField(controller: _password),
-              PasswordTextFormField(
-                controller: _confirmPassword,
-                title: 'Confirm Password',
-                validator: (String? value) => _password.text == value!
-                    ? null
-                    : 'Confirm Password is not same',
-              ),
-              const SizedBox(height: 16),
-              CustomElevatedButton(
-                title: 'Register',
-                onTap: () async => await onRegister(),
-              ),
-            ],
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Form(
+            key: _key,
+            child: Column(
+              children: <Widget>[
+                CustomNetworkChangeImageBox(
+                  title: 'Profile Image',
+                  onTap: () async {
+                    final File? temp = await PickerFunctions().image();
+                    if (temp == null) return;
+                    setState(() {
+                      file = temp;
+                    });
+                  },
+                ),
+                CustomTextFormField(
+                  controller: _name,
+                  hint: 'Your full name',
+                  autoFocus: true,
+                  keyboardType: TextInputType.name,
+                  readOnly: _isLoading,
+                  validator: (String? value) =>
+                      CustomValidator.lessThen3(value),
+                ),
+                PhoneNumberField(
+                  initialCountryCode: 'GB',
+                  onChange: (PhoneNumber value) => setState(() {
+                    _number = value;
+                  }),
+                ),
+                CustomTextFormField(
+                  controller: _email,
+                  hint: 'Your Email',
+                  keyboardType: TextInputType.emailAddress,
+                  readOnly: _isLoading,
+                  validator: (String? value) =>
+                      CustomValidator.lessThen3(value),
+                ),
+                PasswordTextFormField(controller: _password),
+                PasswordTextFormField(
+                  controller: _confirmPassword,
+                  title: 'Confirm Password',
+                  validator: (String? value) => _password.text == value!
+                      ? null
+                      : 'Confirm Password is not same',
+                ),
+                const SizedBox(height: 16),
+                CustomElevatedButton(
+                  title: 'Register',
+                  onTap: () async => await onRegister(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Future<void> onRegister() async {}
+  Future<void> onRegister() async {
+    if (!_key.currentState!.validate()) return;
+  }
 }

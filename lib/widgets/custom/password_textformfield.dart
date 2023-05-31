@@ -8,6 +8,7 @@ class PasswordTextFormField extends StatefulWidget {
     this.title = 'Password',
     this.validator,
     this.textInputAction = TextInputAction.done,
+    this.onFieldSubmitted,
     Key? key,
   })  : _controller = controller,
         super(key: key);
@@ -15,6 +16,7 @@ class PasswordTextFormField extends StatefulWidget {
   final String title;
   final String? Function(String? value)? validator;
   final TextInputAction? textInputAction;
+  final void Function(String)? onFieldSubmitted;
   @override
   PasswordTextFormFieldState createState() => PasswordTextFormFieldState();
 }
@@ -49,6 +51,7 @@ class PasswordTextFormFieldState extends State<PasswordTextFormField> {
           validator: (String? value) => widget.validator == null
               ? CustomValidator.password(value)
               : widget.validator!(value),
+          onFieldSubmitted: widget.onFieldSubmitted,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(horizontal: 12),
             hintText: widget.title,
