@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'basics.dart';
 import 'firebase_options.dart';
 import 'providers/app_theme_provider.dart';
-import 'views/auth/register_agency_screen.dart';
+import 'views/auth/sign_in_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +33,8 @@ class MyApp extends StatelessWidget {
             theme: AppThemes.light,
             darkTheme: AppThemes.dark,
             themeMode: appPro.themeMode,
-            home: const RegisterAgencyScreen(),
+            home: const SignInScreen(),
+            routes: myRoutes,
           );
         },
       ),

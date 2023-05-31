@@ -19,21 +19,19 @@ class PhoneNumberField extends StatefulWidget {
 class _PhoneNumberFieldState extends State<PhoneNumberField> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 10, right: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Theme.of(context).dividerTheme.color,
-      ),
+    final OutlineInputBorder border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+    );
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: IntlPhoneField(
         textInputAction: TextInputAction.done,
         showCountryFlag: true,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 12),
-          enabledBorder: InputBorder.none,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+          enabledBorder: border,
           labelText: 'Mobile number',
-          labelStyle: TextStyle(color: Colors.grey),
-          border: InputBorder.none,
+          border: border,
         ),
         initialCountryCode: 'GB',
         keyboardType: TextInputType.number,
