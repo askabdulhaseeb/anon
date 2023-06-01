@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../database/firebase/agency_api.dart';
 import '../../providers/app_theme_provider.dart';
 import '../../utilities/app_images.dart';
 import '../../utilities/custom_validators.dart';
@@ -22,6 +23,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final FocusNode passNode = FocusNode();
   bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -70,8 +72,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   autoFocus: _isLoading,
                   keyboardType: TextInputType.emailAddress,
                   validator: (String? value) => CustomValidator.email(value),
+                  onFieldSubmitted: (_) =>
+                      FocusScope.of(context).requestFocus(passNode),
                 ),
-                PasswordTextFormField(controller: _password),
+                PasswordTextFormField(
+                  controller: _password,
+                  focusNode: passNode,
+                ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: TextButton(
@@ -81,7 +88,8 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 CustomElevatedButton(
                   title: 'Sign In',
-                  onTap: () async {},
+                  isLoading: _isLoading,
+                  onTap: () async => await onSignIn(),
                 ),
                 const SizedBox(height: 16),
                 Center(
@@ -109,5 +117,14 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> onSignIn() async {
+    try {
+      if (!_key.currentState!.validate()) return;
+      await AgencyAPI().view('value');
+    } catch (e) {
+      print(e);
+    }
   }
 }

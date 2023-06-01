@@ -6,6 +6,7 @@ class PasswordTextFormField extends StatefulWidget {
   const PasswordTextFormField({
     required TextEditingController controller,
     this.title = 'Password',
+    this.focusNode,
     this.validator,
     this.textInputAction = TextInputAction.done,
     this.onFieldSubmitted,
@@ -14,6 +15,7 @@ class PasswordTextFormField extends StatefulWidget {
         super(key: key);
   final TextEditingController _controller;
   final String title;
+  final FocusNode? focusNode;
   final String? Function(String? value)? validator;
   final TextInputAction? textInputAction;
   final void Function(String)? onFieldSubmitted;
@@ -45,6 +47,7 @@ class PasswordTextFormFieldState extends State<PasswordTextFormField> {
         child: TextFormField(
           controller: widget._controller,
           obscureText: _notVisible,
+          focusNode: widget.focusNode,
           keyboardType: TextInputType.visiblePassword,
           textInputAction: widget.textInputAction,
           cursorColor: Theme.of(context).colorScheme.secondary,

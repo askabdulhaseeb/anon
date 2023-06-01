@@ -4,14 +4,14 @@ class NumberDetails {
     required this.number,
     required this.completeNumber,
     required this.isoCode,
-    required this.timestamp,
-  });
+    DateTime? timestamp,
+  }) : timestamp = timestamp ?? DateTime.now();
 
   final String countryCode;
   final String number;
   final String completeNumber;
   final String isoCode;
-  final int timestamp;
+  final DateTime timestamp;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

@@ -49,7 +49,8 @@ class _RegisterAgencyScreenState extends State<RegisterAgencyScreen> {
                   controller: _name,
                   hint: 'Agency Name',
                   readOnly: isLoading,
-                  validator: (String? value) => CustomValidator.lessThen3(value),
+                  validator: (String? value) =>
+                      CustomValidator.lessThen3(value),
                 ),
                 CustomTextFormField(
                   controller: _webURL,
@@ -68,6 +69,7 @@ class _RegisterAgencyScreenState extends State<RegisterAgencyScreen> {
                 const SizedBox(height: 16),
                 CustomElevatedButton(
                   title: 'Add Agency',
+                  isLoading: isLoading,
                   onTap: () async => await onStartAgency(),
                 ),
               ],

@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'basics.dart';
+import 'database/firebase/auth_methods.dart';
 import 'firebase_options.dart';
 import 'providers/app_theme_provider.dart';
 import 'views/auth/sign_in_screen.dart';
+import 'views/main_screen/main_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +27,9 @@ class MyApp extends StatelessWidget {
             theme: AppThemes.light,
             darkTheme: AppThemes.dark,
             themeMode: appPro.themeMode,
-            home: const SignInScreen(),
+            home: AuthMethods.getCurrentUser == null
+                ? const SignInScreen()
+                : const MainScreen(),
             routes: myRoutes,
           );
         },

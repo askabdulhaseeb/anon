@@ -7,6 +7,7 @@ class CustomTextFormField extends StatefulWidget {
     this.keyboardType,
     this.textInputAction,
     this.onChanged,
+    this.focusNode,
     this.validator,
     this.onFieldSubmitted,
     this.initialValue,
@@ -31,6 +32,7 @@ class CustomTextFormField extends StatefulWidget {
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final void Function(String)? onChanged;
+  final FocusNode? focusNode;
   final Widget? prefixIcon;
   final bool showSuffixIcon;
   final bool displayCrossSufixIcon;
@@ -76,6 +78,7 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
           initialValue: widget.initialValue,
           controller: widget._controller,
           readOnly: widget.readOnly,
+          focusNode: widget.focusNode,
           keyboardType: widget.keyboardType == TextInputType.number
               ? const TextInputType.numberWithOptions(
                   signed: true, decimal: true)
