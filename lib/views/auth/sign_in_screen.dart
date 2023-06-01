@@ -1,14 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/firebase/agency_api.dart';
+import '../../database/firebase/auth_methods.dart';
 import '../../providers/app_theme_provider.dart';
 import '../../utilities/app_images.dart';
 import '../../utilities/custom_validators.dart';
 import '../../widgets/custom/custom_elevated_button.dart';
 import '../../widgets/custom/custom_textformfield.dart';
+import '../../widgets/custom/custom_toast.dart';
 import '../../widgets/custom/password_textformfield.dart';
+import '../main_screen/main_screen.dart';
 import 'forget_password_screen.dart';
 import 'sign_up_screen.dart';
 
@@ -79,21 +82,19 @@ class _SignInScreenState extends State<SignInScreen> {
                 PasswordTextFormField(
                   controller: _password,
                   focusNode: passNode,
+                  onFieldSubmitted: (_) => onSignIn(),
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushNamed(ForgetPasswordScreen.routeName);
-                    },
+                    onPressed: onForgetPassword,
                     child: const Text('Forget password?'),
                   ),
                 ),
                 CustomElevatedButton(
                   title: 'Sign In',
                   isLoading: _isLoading,
-                  onTap: () async => await onSignIn(),
+                  onTap: onSignIn,
                 ),
                 const SizedBox(height: 16),
                 Center(
@@ -126,9 +127,33 @@ class _SignInScreenState extends State<SignInScreen> {
   Future<void> onSignIn() async {
     try {
       if (!_key.currentState!.validate()) return;
-      await AgencyAPI().view('value');
+      setState(() {
+        _isLoading = true;
+      });
+      final User? user = await AuthMethods()
+          .loginWithEmailAndPassword(_email.text, _password.text);
+      assert(user != null);
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Future<void> onForgetPassword() async {
+    try {
+      final String? isEmailCorrect = CustomValidator.email(_email.text.trim());
+      if (isEmailCorrect != null) throw 'Invalid Email';
+      final bool sended =
+          await AuthMethods().forgetPassword(_email.text.trim());
+      if (!sended) throw 'Request fail';
+      if (!mounted) return;
+      Navigator.of(context).pushNamed(ForgetPasswordScreen.routeName);
+    } catch (e) {
+      CustomToast.errorToast(message: e.toString());
     }
   }
 }

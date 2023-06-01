@@ -114,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 CustomElevatedButton(
                   title: 'Register',
                   isLoading: _isLoading,
-                  onTap: () async => await onRegister(),
+                  onTap: onRegister,
                 ),
               ],
             ),

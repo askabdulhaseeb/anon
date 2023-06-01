@@ -14,6 +14,7 @@ class CustomExceptions {
         return 'Wrong email/password combination.';
       case 'ERROR_USER_NOT_FOUND':
       case 'user-not-found':
+      case 'auth/user-not-found':
       case 'Error 17011':
         return 'No user found with this email.';
       case 'ERROR_USER_DISABLED':
@@ -26,11 +27,12 @@ class CustomExceptions {
         return 'Server error, please try again later.';
       case 'ERROR_INVALID_EMAIL':
       case 'invalid-email':
+      case 'auth/invalid-email':
         return 'Email address is invalid.';
       case 'Error 17020':
         return 'Network Error';
       default:
-        return 'Login failed.';
+        return 'Request failed.';
     }
   }
 
