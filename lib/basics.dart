@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 import 'providers/app_theme_provider.dart';
+import 'views/auth/forget_password_screen.dart';
 import 'views/auth/register_agency_screen.dart';
 import 'views/auth/sign_in_screen.dart';
 import 'views/auth/sign_up_screen.dart';
@@ -17,6 +18,7 @@ List<SingleChildWidget> myProviders = <SingleChildWidget>[
 final Map<String, WidgetBuilder> myRoutes = <String, WidgetBuilder>{
   // Auth
   SignInScreen.routeName: (_) => const SignInScreen(),
+  ForgetPasswordScreen.routeName: (_) => const ForgetPasswordScreen(),
   SignUpScreen.routeName: (_) => const SignUpScreen(),
   RegisterAgencyScreen.routeName: (_) => const RegisterAgencyScreen(),
   // Main

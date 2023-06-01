@@ -9,6 +9,7 @@ import '../../utilities/custom_validators.dart';
 import '../../widgets/custom/custom_elevated_button.dart';
 import '../../widgets/custom/custom_textformfield.dart';
 import '../../widgets/custom/password_textformfield.dart';
+import 'forget_password_screen.dart';
 import 'sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -82,7 +83,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 Align(
                   alignment: Alignment.bottomRight,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushNamed(ForgetPasswordScreen.routeName);
+                    },
                     child: const Text('Forget password?'),
                   ),
                 ),
