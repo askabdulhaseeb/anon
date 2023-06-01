@@ -1,3 +1,7 @@
+import 'package:hive/hive.dart';
+part 'device_token.g.dart';
+
+@HiveType(typeId: 15)
 class MyDeviceToken {
   MyDeviceToken({
     required this.token,
@@ -6,8 +10,11 @@ class MyDeviceToken {
   })  : failNotificationByUID = failNotificationByUID ?? <String>[],
         registerTimestamp = registerTimestamp ?? DateTime.now();
 
+  @HiveField(0)
   final String token;
+  @HiveField(1)
   final List<String> failNotificationByUID;
+  @HiveField(2)
   final DateTime registerTimestamp;
 
   Map<String, dynamic> toMap() {

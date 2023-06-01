@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../enums/user/user_designation.dart';
 import '../../enums/user/user_type.dart';
 import '../../functions/firebase_exceptions.dart';
 import '../../models/user/app_user.dart';
@@ -22,6 +21,7 @@ class AuthMethods {
     NumberDetails? number,
     String? name,
     File? file,
+    UserType? userType,
   }) async {
     try {
       final UserCredential result = await _auth.createUserWithEmailAndPassword(
@@ -42,11 +42,10 @@ class AuthMethods {
         uid: uid,
         agencyID: 'agencyID',
         name: name ?? '',
-        designation: UserDesignation.employee,
         phoneNumber: number!,
         email: email,
         password: password,
-        type: UserType.user,
+        type: userType ?? UserType.user,
         imageURL: _auth.currentUser!.photoURL ?? '',
       );
       await UserAPI().register(appUser);

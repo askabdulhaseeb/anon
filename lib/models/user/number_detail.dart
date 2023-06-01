@@ -1,3 +1,7 @@
+import 'package:hive/hive.dart';
+part 'number_detail.g.dart';
+
+@HiveType(typeId: 14)
 class NumberDetails {
   NumberDetails({
     required this.countryCode,
@@ -7,10 +11,15 @@ class NumberDetails {
     DateTime? timestamp,
   }) : timestamp = timestamp ?? DateTime.now();
 
+  @HiveField(0)
   final String countryCode;
+  @HiveField(1)
   final String number;
+  @HiveField(2)
   final String completeNumber;
+  @HiveField(3)
   final String isoCode;
+  @HiveField(4)
   final DateTime timestamp;
 
   Map<String, dynamic> toMap() {

@@ -134,7 +134,8 @@ class _SignInScreenState extends State<SignInScreen> {
           .loginWithEmailAndPassword(_email.text, _password.text);
       assert(user != null);
       if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          MainScreen.routeName, (Route<dynamic> route) => false);
     } catch (e) {
       debugPrint(e.toString());
     }

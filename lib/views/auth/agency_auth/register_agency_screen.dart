@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../functions/picker_functions.dart';
-import '../../utilities/custom_validators.dart';
-import '../../widgets/custom/custom_elevated_button.dart';
-import '../../widgets/custom/custom_network_change_img_box.dart';
-import '../../widgets/custom/custom_textformfield.dart';
+import '../../../functions/picker_functions.dart';
+import '../../../utilities/custom_validators.dart';
+import '../../../widgets/custom/custom_elevated_button.dart';
+import '../../../widgets/custom/custom_network_change_img_box.dart';
+import '../../../widgets/custom/custom_textformfield.dart';
 
 class RegisterAgencyScreen extends StatefulWidget {
   const RegisterAgencyScreen({Key? key}) : super(key: key);

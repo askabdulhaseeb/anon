@@ -1,7 +1,15 @@
+import 'package:hive/hive.dart';
+part 'auth_type.g.dart';
+
+@HiveType(typeId: 13)
 enum AuthType {
+  @HiveField(0)
   facebook('assets/icons/facebook-icon.png', 'Facebook', 'facebook'),
+  @HiveField(1)
   apple('assets/icons/apple-icon.png', 'Apple', 'apple'),
+  @HiveField(2)
   google('assets/icons/google-icon.png', 'Google', 'google'),
+  @HiveField(3)
   email('', 'Email', 'email');
 
   const AuthType(this.icon, this.title, this.json);

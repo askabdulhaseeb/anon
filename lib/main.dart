@@ -5,6 +5,7 @@ import 'basics.dart';
 import 'database/firebase/auth_methods.dart';
 import 'firebase_options.dart';
 import 'providers/app_theme_provider.dart';
+import 'views/auth/agency_auth/join_agency_screen.dart';
 import 'views/auth/sign_in_screen.dart';
 import 'views/main_screen/main_screen.dart';
 
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
             themeMode: appPro.themeMode,
             home: AuthMethods.getCurrentUser == null
                 ? const SignInScreen()
-                : const MainScreen(),
+                : const JoinAgencyScreen(),
             routes: myRoutes,
           );
         },
@@ -40,3 +41,6 @@ class MyApp extends StatelessWidget {
 
 //
 // flutter packages pub run build_runner build
+// Class Codes
+// AppUser -> 1
+// Agency -> 2

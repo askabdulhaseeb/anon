@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
 import '../../database/firebase/auth_methods.dart';
+import '../../enums/user/user_type.dart';
 import '../../functions/picker_functions.dart';
 import '../../models/user/number_detail.dart';
 import '../../utilities/custom_validators.dart';
+import '../../widgets/auth/user_type_selection_widget.dart';
 import '../../widgets/custom/custom_elevated_button.dart';
 import '../../widgets/custom/custom_network_change_img_box.dart';
 import '../../widgets/custom/custom_textformfield.dart';
@@ -37,6 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       PhoneNumber(countryCode: '+44', countryISOCode: 'GB', number: '');
   File? file;
   bool _isLoading = false;
+  UserType userType = UserType.user;
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +113,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : 'Confirm Password is not same',
                   onFieldSubmitted: (_) async => await onRegister(),
                 ),
+                UserTypeSelectionWidget(
+                  initType: userType,
+                  onSwitch: (UserType? value) => setState(() {
+                    userType = value ?? UserType.user;
+                  }),
+                ),
                 const SizedBox(height: 16),
                 CustomElevatedButton(
                   title: 'Register',
@@ -144,7 +153,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       assert(user != null);
       if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          MainScreen.routeName, (Route<dynamic> route) => false);
     } catch (e) {
       debugPrint(e.toString());
     }

@@ -33,6 +33,9 @@ class CustomValidator {
   //   }
   //   return null;
   // }
+  static String? agency(String? value) {
+    return (value!.length < 3) ? 'Enter more then 2 characters' : null;
+  }
 
   static String? isEmpty(String? value) {
     return (value!.isEmpty) ? 'Field could not be empty' : null;
