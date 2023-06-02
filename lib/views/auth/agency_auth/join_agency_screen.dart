@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utilities/custom_validators.dart';
 import '../../../widgets/custom/custom_elevated_button.dart';
+import 'start_agency_screen.dart';
 
 class JoinAgencyScreen extends StatefulWidget {
   const JoinAgencyScreen({Key? key}) : super(key: key);
@@ -39,6 +41,7 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
                 autocorrect: true,
                 style: const TextStyle(fontSize: 48),
                 textAlign: TextAlign.center,
+                autofocus: true,
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) async => await onJoinAgency(),
                 validator: (String? value) => CustomValidator.agency(value),
@@ -53,7 +56,27 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
                 isLoading: _isLoading,
                 onTap: onJoinAgency,
               ),
-              const SizedBox(height: 120),
+              const SizedBox(height: 12),
+              Center(
+                child: RichText(
+                  text: TextSpan(
+                      style: Theme.of(context).textTheme.bodySmall,
+                      children: <TextSpan>[
+                        const TextSpan(text: '''Start your own agency? '''),
+                        TextSpan(
+                          text: 'Start Agency',
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => Navigator.of(context)
+                                .pushNamed(StartAgencyScreen.routeName),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -67,7 +90,9 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
       setState(() {
         _isLoading = true;
       });
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
     setState(() {
       _isLoading = false;
     });

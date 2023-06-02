@@ -40,7 +40,7 @@ class AuthMethods {
       }
       final AppUser appUser = AppUser(
         uid: uid,
-        agencyID: 'agencyID',
+        agencyIDs: <String>[],
         name: name ?? '',
         phoneNumber: number!,
         email: email,

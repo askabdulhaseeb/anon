@@ -7,7 +7,6 @@ import 'firebase_options.dart';
 import 'providers/app_theme_provider.dart';
 import 'views/auth/agency_auth/join_agency_screen.dart';
 import 'views/auth/sign_in_screen.dart';
-import 'views/main_screen/main_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

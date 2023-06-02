@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 
 import '../../enums/user/auth_type.dart';
@@ -10,7 +11,7 @@ part 'app_user.g.dart';
 class AppUser extends HiveObject {
   AppUser({
     required this.uid,
-    required this.agencyID,
+    required this.agencyIDs,
     required this.name,
     required this.phoneNumber,
     required this.email,
@@ -30,8 +31,7 @@ class AppUser extends HiveObject {
 
   @HiveField(0)
   final String uid;
-  @HiveField(1)
-  final String agencyID;
+  // file 1, not available
   @HiveField(2)
   final String name;
   @HiveField(3)
@@ -55,11 +55,13 @@ class AppUser extends HiveObject {
   final List<String> notAllowedWords;
   @HiveField(13)
   final bool status;
+  @HiveField(14)
+  final List<String> agencyIDs;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'uid': uid,
-      'agency_id': agencyID,
+      'agency_ids': agencyIDs,
       'name': name,
       'nickName': nickName,
       'type': type.json,
@@ -75,34 +77,35 @@ class AppUser extends HiveObject {
   }
 
   // ignore: sort_constructors_first
-  factory AppUser.fromMap(Map<String, dynamic> map) {
+  factory AppUser.fromMap(DocumentSnapshot<Map<String, dynamic>> doc) {
     List<MyDeviceToken> dtData = <MyDeviceToken>[];
-    if (map['devices_token'] != null) {
-      map['devices_token'].forEach((dynamic e) {
+    if (doc.data()?['devices_token'] != null) {
+      doc.data()?['devices_token'].forEach((dynamic e) {
         dtData.add(MyDeviceToken.fromMap(e));
       });
     }
     return AppUser(
-      uid: map['uid'] ?? '',
-      agencyID: map['agency_id'] ?? '',
-      name: map['name'] ?? '',
-      nickName: map['nickName'] ?? '',
-      type: UserTypeConvertor().toEnum(map['type'] ?? UserType.user.json),
-      authType:
-          AuthTypeConvertor().toEnum(map['auth_type'] ?? AuthType.email.json),
-      phoneNumber:
-          NumberDetails.fromMap(map['phone_number'] as Map<String, dynamic>),
-      email: map['email'] ?? '',
-      password: map['password'] ?? '',
-      imageURL: map['image_url'] ?? '',
-      deviceToken: List<MyDeviceToken>.from(
-        (map['devices_token'] as List<int>).map<MyDeviceToken>(
-          (int x) => MyDeviceToken.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      uid: doc.data()?['uid'] ?? '',
+      agencyIDs: List<String>.from((doc.data()?['agency_ids'] ?? <String>[])),
+      name: doc.data()?['name'] ?? '',
+      nickName: doc.data()?['nickName'] ?? '',
+      type:
+          UserTypeConvertor().toEnum(doc.data()?['type'] ?? UserType.user.json),
+      authType: AuthTypeConvertor()
+          .toEnum(doc.data()?['auth_type'] ?? AuthType.email.json),
+      phoneNumber: NumberDetails.fromMap(
+          doc.data()?['phone_number'] ?? <String, dynamic>{}),
+      email: doc.data()?['email'] ?? '',
+      password: doc.data()?['password'] ?? '',
+      imageURL: doc.data()?['image_url'] ?? '',
+      deviceToken: dtData,
       notAllowedWords:
-          List<String>.from((map['not_allowed_words'] as List<String>)),
-      status: map['status'] ?? false,
+          List<String>.from((doc.data()?['not_allowed_words'] ?? <String>[])),
+      status: doc.data()?['status'] ?? false,
     );
+  }
+
+  Map<String, dynamic> updateAgency() {
+    return <String, dynamic>{'agency_ids': agencyIDs};
   }
 }

@@ -19,6 +19,29 @@ class UserAPI {
     }
   }
 
+  Future<AppUser?> user(String value) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> doc =
+          await _instance.collection(_collection).doc(value).get();
+      if (!doc.exists) return null;
+      return AppUser.fromMap(doc);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<void> updateAgency(AppUser value) async {
+    try {
+      await _instance
+          .collection(_collection)
+          .doc(value.uid)
+          .update(value.updateAgency());
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   Future<String?> uploadProfilePhoto({required File file}) async {
     try {
       TaskSnapshot snapshot = await FirebaseStorage.instance

@@ -1,4 +1,6 @@
 import 'package:hive/hive.dart';
+
+import '../../functions/time_functions.dart';
 part 'number_detail.g.dart';
 
 @HiveType(typeId: 14)
@@ -39,7 +41,7 @@ class NumberDetails {
       number: map['number'] ?? '',
       completeNumber: map['complete_number'] ?? '',
       isoCode: map['iso_code'] ?? '',
-      timestamp: map['timestamp']?.toInt() ?? 0,
+      timestamp: TimeFun.parseTime(map['timestamp']),
     );
   }
 }

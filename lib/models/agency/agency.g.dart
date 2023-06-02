@@ -19,7 +19,6 @@ class AgencyAdapter extends TypeAdapter<Agency> {
     return Agency(
       agencyID: fields[0] as String,
       agencyCode: fields[3] as String,
-      username: fields[2] as String,
       name: fields[1] as String,
       websiteURL: fields[4] as String?,
       members: (fields[5] as List?)?.cast<String>(),
@@ -32,13 +31,11 @@ class AgencyAdapter extends TypeAdapter<Agency> {
   @override
   void write(BinaryWriter writer, Agency obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.agencyID)
       ..writeByte(1)
       ..write(obj.name)
-      ..writeByte(2)
-      ..write(obj.username)
       ..writeByte(3)
       ..write(obj.agencyCode)
       ..writeByte(4)

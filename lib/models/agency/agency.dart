@@ -10,7 +10,6 @@ class Agency extends HiveObject {
   Agency({
     required this.agencyID,
     required this.agencyCode,
-    required this.username,
     required this.name,
     String? websiteURL,
     List<String>? members,
@@ -45,8 +44,7 @@ class Agency extends HiveObject {
   final String agencyID;
   @HiveField(1)
   final String name;
-  @HiveField(2)
-  final String username;
+  // field 2 not available
   @HiveField(3)
   final String agencyCode;
   @HiveField(4)
@@ -64,7 +62,6 @@ class Agency extends HiveObject {
     return <String, dynamic>{
       'agency_id': agencyID,
       'name': name,
-      'username': username,
       'agency_code': agencyCode,
       'website_url': websiteURL,
       'members': members,
@@ -99,7 +96,6 @@ class Agency extends HiveObject {
     return Agency(
       agencyID: map['agency_id'] ?? '',
       name: map['name'] ?? '',
-      username: map['username'] ?? '',
       agencyCode: map['agency_code'] ?? '',
       websiteURL: map['website_url'] ?? '',
       members: List<String>.from((map['members'] as List<String>)),

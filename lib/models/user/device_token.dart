@@ -1,4 +1,6 @@
 import 'package:hive/hive.dart';
+
+import '../../functions/time_functions.dart';
 part 'device_token.g.dart';
 
 @HiveType(typeId: 15)
@@ -21,7 +23,7 @@ class MyDeviceToken {
     return <String, dynamic>{
       'token': token,
       'fail_notification_by_uid': failNotificationByUID,
-      'register_timestamp': registerTimestamp.millisecondsSinceEpoch,
+      'register_timestamp': registerTimestamp,
     };
   }
 
@@ -32,8 +34,7 @@ class MyDeviceToken {
       failNotificationByUID: map['fail_notification_by_uid'] != null
           ? List<String>.from((map['fail_notification_by_uid']) ?? <String>[])
           : <String>[],
-      registerTimestamp:
-          DateTime.fromMillisecondsSinceEpoch(map['register_timestamp'] ?? 0),
+      registerTimestamp: TimeFun.parseTime(map['register_timestamp']),
     );
   }
 }

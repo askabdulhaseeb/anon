@@ -18,7 +18,7 @@ class AppUserAdapter extends TypeAdapter<AppUser> {
     };
     return AppUser(
       uid: fields[0] as String,
-      agencyID: fields[1] as String,
+      agencyIDs: (fields[14] as List).cast<String>(),
       name: fields[2] as String,
       phoneNumber: fields[7] as NumberDetails,
       email: fields[8] as String,
@@ -39,8 +39,6 @@ class AppUserAdapter extends TypeAdapter<AppUser> {
       ..writeByte(13)
       ..writeByte(0)
       ..write(obj.uid)
-      ..writeByte(1)
-      ..write(obj.agencyID)
       ..writeByte(2)
       ..write(obj.name)
       ..writeByte(3)
@@ -62,7 +60,9 @@ class AppUserAdapter extends TypeAdapter<AppUser> {
       ..writeByte(12)
       ..write(obj.notAllowedWords)
       ..writeByte(13)
-      ..write(obj.status);
+      ..write(obj.status)
+      ..writeByte(14)
+      ..write(obj.agencyIDs);
   }
 
   @override

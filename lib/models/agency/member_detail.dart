@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 
 import '../../enums/user/user_designation.dart';
+import '../../functions/time_functions.dart';
 part 'member_detail.g.dart';
 
 @HiveType(typeId: 20)
@@ -54,8 +55,8 @@ class MemberDetail {
       isAccepted: map['is_accepted'] ?? false,
       isPending: map['is_pending'] ?? true,
       responcedBy: map['responced_by'] ?? '',
-      requestTime: DateTime(map['request_time'] ?? DateTime.now()),
-      responceTime: DateTime(map['responce_time'] ?? DateTime.now()),
+      requestTime: TimeFun.parseTime(map['request_time']),
+      responceTime: TimeFun.parseTime(map['responce_time']),
       designation: UserDesignationConvertor()
           .toEnum(map['designation'] ?? UserDesignation.employee),
     );
