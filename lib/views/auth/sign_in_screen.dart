@@ -11,7 +11,7 @@ import '../../widgets/custom/custom_elevated_button.dart';
 import '../../widgets/custom/custom_textformfield.dart';
 import '../../widgets/custom/custom_toast.dart';
 import '../../widgets/custom/password_textformfield.dart';
-import '../main_screen/main_screen.dart';
+import 'agency_auth/switch_agency_screen.dart';
 import 'forget_password_screen.dart';
 import 'sign_up_screen.dart';
 
@@ -135,7 +135,7 @@ class _SignInScreenState extends State<SignInScreen> {
       assert(user != null);
       if (!mounted) return;
       Navigator.of(context).pushNamedAndRemoveUntil(
-          MainScreen.routeName, (Route<dynamic> route) => false);
+          SwitchAgencyScreen.routeName, (Route<dynamic> route) => false);
     } catch (e) {
       debugPrint(e.toString());
     }

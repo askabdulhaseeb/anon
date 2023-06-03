@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import '../../../database/firebase/agency_api.dart';
+import '../../../functions/helping_funcation.dart';
 import '../../../functions/picker_functions.dart';
 import '../../../utilities/custom_validators.dart';
 import '../../../widgets/custom/custom_elevated_button.dart';
@@ -41,6 +42,7 @@ class _StartAgencyScreenState extends State<StartAgencyScreen> {
                 CustomNetworkChangeImageBox(
                   title: 'Agency logo',
                   isDisable: isLoading,
+                  file: logo,
                   onTap: () async {
                     final File? temp = await PickerFunctions().image();
                     if (temp == null) return;
@@ -66,29 +68,6 @@ class _StartAgencyScreenState extends State<StartAgencyScreen> {
                   onFieldSubmitted: (_) => onStartAgency(),
                 ),
                 const SizedBox(height: 16),
-                RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Theme.of(context).disabledColor,
-                    ),
-                    children: <TextSpan>[
-                      const TextSpan(text: 'Agency Code: '),
-                      TextSpan(
-                        text: username,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Note: You can edit the Agency Code later',
-                  style: TextStyle(color: Theme.of(context).disabledColor),
-                ),
-                const SizedBox(height: 16),
                 CustomElevatedButton(
                   title: 'Start Agency',
                   isLoading: isLoading,
@@ -104,6 +83,7 @@ class _StartAgencyScreenState extends State<StartAgencyScreen> {
 
   Future<void> onStartAgency() async {
     if (!_key.currentState!.validate()) return;
+    HelpingFuncation().dismissKeyboard(context);
     setState(() {
       isLoading = true;
     });

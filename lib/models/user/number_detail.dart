@@ -44,4 +44,6 @@ class NumberDetails {
       timestamp: TimeFun.parseTime(map['timestamp']),
     );
   }
+
+  
 }

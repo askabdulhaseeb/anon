@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 
 import '../../enums/user/auth_type.dart';
 import '../../enums/user/user_type.dart';
+import '../../functions/helping_funcation.dart';
 import 'device_token.dart';
 import 'number_detail.dart';
 part 'app_user.g.dart';
@@ -27,7 +28,17 @@ class AppUser extends HiveObject {
         authType = authType ?? AuthType.email,
         imageURL = imageURL ?? '',
         deviceToken = deviceToken ?? <MyDeviceToken>[],
-        notAllowedWords = notAllowedWords ?? <String>[];
+        notAllowedWords = notAllowedWords ??
+            <String>[
+              'on Whatsapp',
+              'paying',
+              'paid',
+              '\$',
+              'usd',
+              phoneNumber.number,
+              phoneNumber.completeNumber,
+              HelpingFuncation().numberInWords(phoneNumber.number),
+            ];
 
   @HiveField(0)
   final String uid;

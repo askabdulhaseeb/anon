@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../functions/helping_funcation.dart';
 import '../../../widgets/custom/custom_elevated_button.dart';
+import '../../main_screen/main_screen.dart';
 
 class AgencyWelcomeScreen extends StatelessWidget {
   const AgencyWelcomeScreen({Key? key}) : super(key: key);
@@ -9,6 +11,7 @@ class AgencyWelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final String code = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -65,7 +68,8 @@ class AgencyWelcomeScreen extends StatelessWidget {
                 ),
                 IconButton(
                   splashRadius: 16,
-                  onPressed: () {},
+                  onPressed: () =>
+                      HelpingFuncation().copyToClipboard(context, code),
                   icon: const Icon(Icons.copy),
                 ),
               ],
@@ -85,7 +89,8 @@ class AgencyWelcomeScreen extends StatelessWidget {
             const Spacer(),
             CustomElevatedButton(
               title: 'Open Agency dashboard',
-              onTap: () {},
+              onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                  MainScreen.routeName, (Route<dynamic> route) => false),
               isLoading: false,
             ),
             const SizedBox(height: 16),

@@ -6,17 +6,21 @@ import 'show_loading.dart';
 class CustomNetworkImage extends StatelessWidget {
   const CustomNetworkImage({
     required this.imageURL,
+    this.size,
     this.fit = BoxFit.cover,
     this.timeLimit = const Duration(days: 2),
     Key? key,
   }) : super(key: key);
   final String imageURL;
+  final double? size;
   final BoxFit? fit;
   final Duration? timeLimit;
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
+      height: size,
+      width: size,
       imageUrl: imageURL,
       fit: fit,
       placeholder: (BuildContext context, String url) => const ShowLoading(),

@@ -15,7 +15,7 @@ import '../../widgets/custom/custom_network_change_img_box.dart';
 import '../../widgets/custom/custom_textformfield.dart';
 import '../../widgets/custom/password_textformfield.dart';
 import '../../widgets/custom/phone_number_field.dart';
-import '../main_screen/main_screen.dart';
+import 'agency_auth/join_agency_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -154,7 +154,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       assert(user != null);
       if (!mounted) return;
       Navigator.of(context).pushNamedAndRemoveUntil(
-          MainScreen.routeName, (Route<dynamic> route) => false);
+          JoinAgencyScreen.routeName, (Route<dynamic> route) => false);
     } catch (e) {
       debugPrint(e.toString());
     }

@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'basics.dart';
 import 'database/firebase/auth_methods.dart';
+import 'database/local/local_agency.dart';
+import 'database/local/local_db.dart';
 import 'firebase_options.dart';
 import 'providers/app_theme_provider.dart';
-import 'views/auth/agency_auth/join_agency_screen.dart';
+import 'views/auth/agency_auth/switch_agency_screen.dart';
 import 'views/auth/sign_in_screen.dart';
+import 'views/main_screen/main_screen.dart';
+import 'widgets/custom/show_loading.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LocalDB().init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
@@ -29,7 +34,25 @@ class MyApp extends StatelessWidget {
             themeMode: appPro.themeMode,
             home: AuthMethods.getCurrentUser == null
                 ? const SignInScreen()
-                : const JoinAgencyScreen(),
+                : Scaffold(
+                    body: FutureBuilder<bool>(
+                      future: LocalAgency().displayMainScreen(),
+                      builder: (
+                        BuildContext context,
+                        AsyncSnapshot<bool> snapshot,
+                      ) {
+                        if (snapshot.hasData) {
+                          return snapshot.data ?? false
+                              ? const MainScreen()
+                              : const SwitchAgencyScreen();
+                        } else if (snapshot.hasError) {
+                          return const SwitchAgencyScreen();
+                        } else {
+                          return const ShowLoading();
+                        }
+                      },
+                    ),
+                  ),
             routes: myRoutes,
           );
         },

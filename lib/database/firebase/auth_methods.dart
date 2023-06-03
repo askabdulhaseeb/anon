@@ -11,6 +11,8 @@ import '../../models/user/app_user.dart';
 import '../../models/user/number_detail.dart';
 import '../../views/auth/sign_in_screen.dart';
 import '../../widgets/custom/custom_toast.dart';
+import '../local/local_db.dart';
+import '../local/local_user.dart';
 import 'user_api.dart';
 
 class AuthMethods {
@@ -52,6 +54,7 @@ class AuthMethods {
         imageURL: _auth.currentUser!.photoURL ?? '',
       );
       await UserAPI().register(appUser);
+      await LocalUser().signIn(appUser);
       return user;
     } on FirebaseAuthException catch (e) {
       CustomToast.errorToast(message: CustomExceptions.auth(e));
@@ -66,6 +69,10 @@ class AuthMethods {
         password: password.trim(),
       );
       final User? user = result.user;
+      assert(user != null);
+      final AppUser? appUser = await UserAPI().user(user!.uid);
+      assert(appUser != null);
+      await LocalUser().signIn(appUser!);
       return user;
     } on FirebaseAuthException catch (e) {
       CustomToast.errorToast(message: CustomExceptions.auth(e));
@@ -94,6 +101,8 @@ class AuthMethods {
 
   Future<void> signout(BuildContext context) async {
     _auth.signOut();
+    await LocalDB().signOut();
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushNamedAndRemoveUntil(
         SignInScreen.routeName, (Route<dynamic> route) => false);
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../database/firebase/auth_methods.dart';
+import '../../database/local/local_agency.dart';
+import '../../models/agency/agency.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -12,9 +13,10 @@ class MainScreen extends StatelessWidget {
         title: const Text('MainScreen'),
       ),
       body: Center(
-        child: GestureDetector(
-          onTap: () => AuthMethods().signout(context),
-          child: Text(AuthMethods.getCurrentUser?.displayName ?? 'null'),
+        child: FutureBuilder<bool>(
+          future: LocalAgency().displayMainScreen(),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
+              Text(snapshot.data == true ? 'true' : 'false'),
         ),
       ),
     );
