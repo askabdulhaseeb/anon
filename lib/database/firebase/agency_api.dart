@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../functions/unique_id_fun.dart';
@@ -14,7 +17,7 @@ class AgencyAPI {
   Future<String?> create({
     required String name,
     required String webURL,
-    required String logoURL,
+    required File? logoFile,
   }) async {
     try {
       String code = UniqueIdFun.generateRandomString();
@@ -32,11 +35,17 @@ class AgencyAPI {
           i = 0;
         }
       }
+
+      String url = '';
+      if (logoFile != null) {
+        url = await uploadLogo(file: logoFile, code: code) ?? '';
+      }
       final Agency value = Agency(
         agencyID: code,
         agencyCode: code,
         name: name.trim(),
         websiteURL: webURL.trim(),
+        logoURL: url,
       );
       await _instance
           .collection(_collection)
@@ -60,6 +69,20 @@ class AgencyAPI {
     } on FirebaseException catch (e) {
       debugPrint("Failed with error '${e.code}': ${e.message}");
       throw 'e.code';
+    }
+  }
+
+  Future<String?> uploadLogo({
+    required File file,
+    required String code,
+  }) async {
+    try {
+      TaskSnapshot snapshot =
+          await FirebaseStorage.instance.ref('agency_logo/$code').putFile(file);
+      String url = await snapshot.ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      return null;
     }
   }
 }

@@ -12,11 +12,13 @@ class Agency extends HiveObject {
     required this.agencyCode,
     required this.name,
     String? websiteURL,
+    String? logoURL,
     List<String>? members,
     List<MemberDetail>? activeMembers,
     List<MemberDetail>? pendingRequest,
     List<MemberDetail>? requestHistory,
   })  : websiteURL = websiteURL ?? '',
+        logoURL = logoURL ?? '',
         members = members ?? <String>[AuthMethods.uid],
         activeMembers = activeMembers ??
             <MemberDetail>[
@@ -57,11 +59,14 @@ class Agency extends HiveObject {
   final List<MemberDetail> pendingRequest;
   @HiveField(8) // Class Code: 20
   final List<MemberDetail> requestHistory;
+  @HiveField(9)
+  String logoURL;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'agency_id': agencyID,
       'name': name,
+      'logo_url': logoURL,
       'agency_code': agencyCode,
       'website_url': websiteURL,
       'members': members,
@@ -96,6 +101,7 @@ class Agency extends HiveObject {
     return Agency(
       agencyID: map['agency_id'] ?? '',
       name: map['name'] ?? '',
+      logoURL: map['logo_url'] ?? '',
       agencyCode: map['agency_code'] ?? '',
       websiteURL: map['website_url'] ?? '',
       members: List<String>.from((map['members'] as List<String>)),

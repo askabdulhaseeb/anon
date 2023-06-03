@@ -111,7 +111,7 @@ class _StartAgencyScreenState extends State<StartAgencyScreen> {
       final String? code = await AgencyAPI().create(
         name: _name.text,
         webURL: _webURL.text,
-        logoURL: '',
+        logoFile: logo,
       );
       assert(code != null);
       if (!mounted) return;

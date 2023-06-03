@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import '../../enums/user/user_type.dart';
+import '../../functions/encryption.dart';
 import '../../functions/firebase_exceptions.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/number_detail.dart';
+import '../../views/auth/sign_in_screen.dart';
 import '../../widgets/custom/custom_toast.dart';
 import 'user_api.dart';
 
@@ -41,10 +44,10 @@ class AuthMethods {
       final AppUser appUser = AppUser(
         uid: uid,
         agencyIDs: <String>[],
-        name: name ?? '',
+        name: name ?? 'null',
         phoneNumber: number!,
         email: email,
-        password: password,
+        password: MyEncryption().encrypt(password, uid),
         type: userType ?? UserType.user,
         imageURL: _auth.currentUser!.photoURL ?? '',
       );
@@ -89,7 +92,9 @@ class AuthMethods {
     }
   }
 
-  Future<void> signout() async {
+  Future<void> signout(BuildContext context) async {
     _auth.signOut();
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        SignInScreen.routeName, (Route<dynamic> route) => false);
   }
 }

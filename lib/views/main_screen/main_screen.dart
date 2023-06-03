@@ -9,11 +9,11 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('MainScreen'),
+        title: const Text('MainScreen'),
       ),
       body: Center(
         child: GestureDetector(
-          onTap: () => AuthMethods().signout(),
+          onTap: () => AuthMethods().signout(context),
           child: Text(AuthMethods.getCurrentUser?.displayName ?? 'null'),
         ),
       ),

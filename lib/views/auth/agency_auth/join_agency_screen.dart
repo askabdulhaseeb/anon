@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../../../database/firebase/auth_methods.dart';
 import '../../../utilities/custom_validators.dart';
 import '../../../widgets/custom/custom_elevated_button.dart';
 import 'start_agency_screen.dart';
@@ -20,7 +21,35 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Join Agency')),
+      appBar: AppBar(
+        title: RichText(
+          text: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                text: 'Hi, ',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).disabledColor,
+                ),
+              ),
+              TextSpan(
+                text: '${AuthMethods.getCurrentUser?.displayName ?? 'null'} ',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => AuthMethods().signout(context),
+            child: const Text('Sign Out', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
