@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../enums/user/user_designation.dart';
 import '../../functions/unique_id_fun.dart';
 import '../../models/agency/agency.dart';
+import '../../models/agency/member_detail.dart';
 import '../../models/user/app_user.dart';
 import '../local/local_agency.dart';
 import 'auth_methods.dart';
@@ -74,25 +76,67 @@ class AgencyAPI {
     }
   }
 
-  // Future<List<Agency>> myAgencies() async {
-  //   List<Agency> result = <Agency>[];
-  //   try {
-  //     final QuerySnapshot<Map<String, dynamic>> docs = await _instance
-  //         .collection(_collection)
-  //         .where('members', arrayContains: AuthMethods.uid)
-  //         .get();
-  //     for (DocumentSnapshot<Map<String, dynamic>> element in docs.docs) {
-  //       final Agency temp = Agency.fromMap(element);
-  //       result.add(temp);
-  //     }
-  //     print(result.length);
-  //     await LocalAgency().addAll(result);
-  //   } on FirebaseException catch (e) {
-  //     debugPrint("Failed with error '${e.code}': ${e.message}");
-  //     throw 'e.code';
-  //   }
-  //   return result;
-  // }
+  Future<Agency?> joinAgency(String value) async {
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> doc =
+          await _instance.collection(_collection).doc(value).get();
+      if (!doc.exists) return null;
+      final Agency result = Agency.fromMap(doc);
+      final String myUID = AuthMethods.uid;
+      if (result.activeMembers
+          .any((MemberDetail element) => element.uid == myUID)) {
+        result.isCurrenlySelected = true;
+        await LocalAgency().add(result);
+        return result;
+      } else {
+        result.onJoinRequest(
+            myUID: myUID, designation: UserDesignation.employee);
+        await _instance
+            .collection(_collection)
+            .doc(result.agencyID)
+            .update(result.updateRequest());
+        await LocalAgency().add(result);
+        return result;
+      }
+    } on FirebaseException catch (e) {
+      debugPrint("Failed with error '${e.code}': ${e.message}");
+      throw 'e.code';
+    }
+  }
+
+  Future<void> leaveAgency(
+      {required Agency value, required String userID}) async {
+    value.onLeaveAgency(myUID: userID);
+    try {
+      await _instance
+          .collection(_collection)
+          .doc(value.agencyID)
+          .update(value.updateRequest());
+      await LocalAgency().leaveAgency(value.agencyID);
+    } on FirebaseException catch (e) {
+      debugPrint("Failed with error '${e.code}': ${e.message}");
+      throw 'e.code';
+    }
+  }
+
+  Future<List<Agency>> myAgencies() async {
+    List<Agency> result = <Agency>[];
+    try {
+      final QuerySnapshot<Map<String, dynamic>> docs = await _instance
+          .collection(_collection)
+          .where('members', arrayContains: AuthMethods.uid)
+          .get();
+      for (DocumentSnapshot<Map<String, dynamic>> element in docs.docs) {
+        final Agency temp = Agency.fromMap(element);
+        result.add(temp);
+      }
+      await LocalAgency().addAll(result);
+    } on FirebaseException catch (e) {
+      debugPrint("Failed with error '${e.code}': ${e.message}");
+      throw 'e.code';
+    }
+    return result;
+  }
 
   Future<String?> uploadLogo({
     required File file,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../database/local/local_agency.dart';
-import '../../models/agency/agency.dart';
+import '../../widgets/agency/agency_app_bar_title.dart';
+import '../auth/agency_auth/switch_agency_screen.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -10,7 +11,14 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MainScreen'),
+        title: const AgencyNameAppBarTitle(),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () =>
+                Navigator.of(context).pushNamed(SwitchAgencyScreen.routeName),
+            child: const Text('Switch Agency'),
+          ),
+        ],
       ),
       body: Center(
         child: FutureBuilder<bool>(

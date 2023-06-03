@@ -1,10 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../../../database/firebase/agency_api.dart';
 import '../../../database/firebase/auth_methods.dart';
+import '../../../models/agency/agency.dart';
+import '../../../models/agency/member_detail.dart';
 import '../../../utilities/custom_validators.dart';
 import '../../../widgets/custom/custom_elevated_button.dart';
+import '../../../widgets/custom/custom_toast.dart';
+import '../../main_screen/main_screen.dart';
 import 'start_agency_screen.dart';
+import 'switch_agency_screen.dart';
 
 class JoinAgencyScreen extends StatefulWidget {
   const JoinAgencyScreen({Key? key}) : super(key: key);
@@ -119,6 +125,21 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
       setState(() {
         _isLoading = true;
       });
+      final Agency? result =
+          await AgencyAPI().joinAgency(_agencyCode.text.trim());
+      assert(result != null);
+      final String myUID = AuthMethods.uid;
+      if (result!.activeMembers
+          .any((MemberDetail element) => element.uid == myUID)) {
+        if (!mounted) return;
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            MainScreen.routeName, (Route<dynamic> route) => false);
+      } else {
+        CustomToast.successToast(message: 'Request Sended');
+        if (!mounted) return;
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            SwitchAgencyScreen.routeName, (Route<dynamic> route) => false);
+      }
     } catch (e) {
       debugPrint(e.toString());
     }

@@ -40,6 +40,11 @@ class LocalAgency {
     }
   }
 
+  Future<void> leaveAgency(String value) async {
+    final Box<Agency> box = await refresh();
+    await box.delete(value);
+  }
+
   Future<bool> displayMainScreen() async {
     final Box<Agency> box = await refresh();
     try {
@@ -101,9 +106,9 @@ class LocalAgency {
           element.isCurrenlySelected = false;
         }
       }
-      // for (Agency element in results) {
-      //   await element.save();
-      // }
+      for (Agency element in results) {
+        await element.save();
+      }
       print('done');
     } catch (e) {
       debugPrint('Error: Local User - ${e.toString()}');

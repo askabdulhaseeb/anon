@@ -133,14 +133,44 @@ class Agency extends HiveObject {
       ..isAccepted = isAccepted
       ..isPending = false
       ..designation = designation;
+    members.toSet().add(uid);
     requestHistory.add(temp);
     if (isAccepted) activeMembers.add(temp);
     pendingRequest
         .removeWhere((MemberDetail element) => element.uid == temp.uid);
   }
 
+  void onJoinRequest({
+    required String myUID,
+    required UserDesignation designation,
+  }) {
+    MemberDetail requestValue = MemberDetail(
+      uid: myUID,
+      designation: designation,
+    );
+    members.add(myUID);
+    pendingRequest.add(requestValue);
+    requestHistory.add(requestValue);
+  }
+
+  void onLeaveAgency({required String myUID}) {
+    final bool canLeave = activeMembers
+            .firstWhere(
+              (MemberDetail element) => element.uid == myUID,
+              orElse: () => MemberDetail(
+                  uid: myUID, designation: UserDesignation.employee),
+            )
+            .designation !=
+        UserDesignation.admin;
+    if (!canLeave) return;
+    members.remove(myUID);
+    pendingRequest.removeWhere((MemberDetail element) => element.uid == myUID);
+    activeMembers.removeWhere((MemberDetail element) => element.uid == myUID);
+  }
+
   Map<String, dynamic> updateRequest() {
     return <String, dynamic>{
+      'members': members,
       'active_members':
           activeMembers.map((MemberDetail x) => x.toMap()).toList(),
       'pending_request':

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../database/firebase/agency_api.dart';
 import '../../../database/firebase/auth_methods.dart';
 import '../../../widgets/auth/my_agencies_list.dart';
 
@@ -42,6 +43,16 @@ class SwitchAgencyScreen extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: () async {
+                  await AgencyAPI().myAgencies();
+                },
+                icon: const Icon(Icons.refresh),
+                label: const Text('Refresh Agencies'),
               ),
             ),
             const MyAgenciesList(),
