@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../database/local/local_agency.dart';
 import '../../widgets/agency/agency_app_bar_title.dart';
 import '../auth/agency_auth/switch_agency_screen.dart';
+import 'main_bottom_nav_bar.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -27,6 +28,7 @@ class MainScreen extends StatelessWidget {
               Text(snapshot.data == true ? 'true' : 'false'),
         ),
       ),
+      bottomNavigationBar: const MainBottomNavigationBar(),
     );
   }
 }

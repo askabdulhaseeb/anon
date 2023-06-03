@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import 'providers/app_nav_provider.dart';
 import 'providers/app_theme_provider.dart';
 import 'views/auth/agency_auth/agency_welcome_screen.dart';
 import 'views/auth/agency_auth/join_agency_screen.dart';
@@ -14,6 +15,7 @@ import 'views/main_screen/main_screen.dart';
 
 List<SingleChildWidget> myProviders = <SingleChildWidget>[
   ChangeNotifierProvider<AppThemeProvider>.value(value: AppThemeProvider()),
+  ChangeNotifierProvider<AppNavProvider>.value(value: AppNavProvider()),
 ];
 
 //
