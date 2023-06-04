@@ -111,7 +111,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   validator: (String? value) => _password.text == value!
                       ? null
                       : 'Confirm Password is not same',
-                  onFieldSubmitted: (_) async => await onRegister(),
                 ),
                 UserTypeSelectionWidget(
                   initType: userType,
@@ -125,6 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   isLoading: _isLoading,
                   onTap: onRegister,
                 ),
+                const SizedBox(height: 120),
               ],
             ),
           ),

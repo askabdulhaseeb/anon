@@ -66,3 +66,4 @@ class MyApp extends StatelessWidget {
 // Class Codes
 // AppUser -> 1
 // Agency -> 2
+// Project -> 3
