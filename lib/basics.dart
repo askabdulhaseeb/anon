@@ -25,11 +25,13 @@ final Map<String, WidgetBuilder> myRoutes = <String, WidgetBuilder>{
   SignInScreen.routeName: (_) => const SignInScreen(),
   ForgetPasswordScreen.routeName: (_) => const ForgetPasswordScreen(),
   SignUpScreen.routeName: (_) => const SignUpScreen(),
-  // Agency
+  // Agency Auth
   JoinAgencyScreen.routeName: (_) => const JoinAgencyScreen(),
   StartAgencyScreen.routeName: (_) => const StartAgencyScreen(),
   AgencyWelcomeScreen.routeName: (_) => const AgencyWelcomeScreen(),
   SwitchAgencyScreen.routeName: (_) => const SwitchAgencyScreen(),
   // Main
   MainScreen.routeName: (_) => const MainScreen(),
+  // Project
+
 };

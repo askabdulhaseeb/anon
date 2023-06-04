@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../database/local/local_agency.dart';
+import '../../providers/app_nav_provider.dart';
 import '../../widgets/agency/agency_app_bar_title.dart';
 import '../auth/agency_auth/switch_agency_screen.dart';
+import '../main_pages/agency_page.dart';
+import '../main_pages/project_page.dart';
 import 'main_bottom_nav_bar.dart';
 
 class MainScreen extends StatelessWidget {
@@ -10,6 +13,11 @@ class MainScreen extends StatelessWidget {
   static const String routeName = '/main';
   @override
   Widget build(BuildContext context) {
+    List<Widget> _pages = const <Widget>[
+      ProjectPage(),
+      Center(child: Text('TODO')),
+      AgencyPage(),
+    ];
     return Scaffold(
       appBar: AppBar(
         title: const AgencyNameAppBarTitle(),
@@ -21,12 +29,10 @@ class MainScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: FutureBuilder<bool>(
-          future: LocalAgency().displayMainScreen(),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) =>
-              Text(snapshot.data == true ? 'true' : 'false'),
-        ),
+      body: Consumer<AppNavProvider>(
+        builder: (BuildContext context, AppNavProvider appPro, _) {
+          return _pages[appPro.currentTap];
+        },
       ),
       bottomNavigationBar: const MainBottomNavigationBar(),
     );
