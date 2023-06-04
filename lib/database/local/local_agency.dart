@@ -51,7 +51,6 @@ class LocalAgency {
       final List<Agency> results = box.values.toList();
       final Agency found = results.firstWhere(
         (Agency element) {
-          print(element.toString());
           return element.isCurrenlySelected &&
               element.members.contains(AuthMethods.uid);
         },

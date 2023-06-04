@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../database/firebase/auth_methods.dart';
 import '../../database/local/local_agency.dart';
 import '../../models/agency/agency.dart';
 import '../../models/agency/member_detail.dart';
@@ -72,8 +73,9 @@ class _AgencyTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isAtchiveMember =
-        agency.activeMembers.any((MemberDetail element) => element.isAccepted);
+    final String myUID = AuthMethods.uid;
+    final bool isAtchiveMember = agency.activeMembers.any(
+        (MemberDetail element) => element.isAccepted && element.uid == myUID);
     return GestureDetector(
       onTap: isAtchiveMember
           ? () async {

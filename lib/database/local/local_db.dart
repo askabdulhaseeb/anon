@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -9,10 +8,12 @@ import '../../enums/user/user_designation.dart';
 import '../../enums/user/user_type.dart';
 import '../../models/agency/agency.dart';
 import '../../models/agency/member_detail.dart';
+import '../../models/project/project.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/device_token.dart';
 import '../../models/user/number_detail.dart';
 import 'local_agency.dart';
+import 'local_project.dart';
 import 'local_user.dart';
 
 class LocalDB {
@@ -32,15 +33,20 @@ class LocalDB {
     Hive.registerAdapter(AgencyAdapter()); // 2
     Hive.registerAdapter(MemberDetailAdapter()); // 20
     Hive.registerAdapter(UserDesignationAdapter()); // 200
+    //
+    // Type: Project 3
+    Hive.registerAdapter(ProjectAdapter()); // 3
 
     //
     // Open Boxes
     await LocalUser.openBox;
     await LocalAgency.openBox;
+    await LocalProject.openBox;
   }
 
   Future<void> signOut() async {
     await LocalUser().signOut();
     await LocalAgency().signOut();
+    await LocalProject().signOut();
   }
 }

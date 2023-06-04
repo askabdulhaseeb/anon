@@ -7,11 +7,12 @@ import 'providers/app_theme_provider.dart';
 import 'views/auth/agency_auth/agency_welcome_screen.dart';
 import 'views/auth/agency_auth/join_agency_screen.dart';
 import 'views/auth/agency_auth/switch_agency_screen.dart';
-import 'views/auth/forget_password_screen.dart';
+import 'views/auth/user_auth/forget_password_screen.dart';
 import 'views/auth/agency_auth/start_agency_screen.dart';
-import 'views/auth/sign_in_screen.dart';
-import 'views/auth/sign_up_screen.dart';
+import 'views/auth/user_auth/sign_in_screen.dart';
+import 'views/auth/user_auth/sign_up_screen.dart';
 import 'views/main_screen/main_screen.dart';
+import 'views/project_screens/create_project_screen.dart';
 
 List<SingleChildWidget> myProviders = <SingleChildWidget>[
   ChangeNotifierProvider<AppThemeProvider>.value(value: AppThemeProvider()),
@@ -33,5 +34,5 @@ final Map<String, WidgetBuilder> myRoutes = <String, WidgetBuilder>{
   // Main
   MainScreen.routeName: (_) => const MainScreen(),
   // Project
-
+  CreateProjectScreen.routeName: (_) => const CreateProjectScreen(),
 };

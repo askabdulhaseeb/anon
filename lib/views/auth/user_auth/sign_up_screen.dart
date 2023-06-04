@@ -4,18 +4,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
-import '../../database/firebase/auth_methods.dart';
-import '../../enums/user/user_type.dart';
-import '../../functions/picker_functions.dart';
-import '../../models/user/number_detail.dart';
-import '../../utilities/custom_validators.dart';
-import '../../widgets/auth/user_type_selection_widget.dart';
-import '../../widgets/custom/custom_elevated_button.dart';
-import '../../widgets/custom/custom_network_change_img_box.dart';
-import '../../widgets/custom/custom_textformfield.dart';
-import '../../widgets/custom/password_textformfield.dart';
-import '../../widgets/custom/phone_number_field.dart';
-import 'agency_auth/join_agency_screen.dart';
+import '../../../database/firebase/auth_methods.dart';
+import '../../../enums/user/user_type.dart';
+import '../../../functions/picker_functions.dart';
+import '../../../models/user/number_detail.dart';
+import '../../../utilities/custom_validators.dart';
+import '../../../widgets/auth/user_type_selection_widget.dart';
+import '../../../widgets/custom/custom_elevated_button.dart';
+import '../../../widgets/custom/custom_network_change_img_box.dart';
+import '../../../widgets/custom/custom_textformfield.dart';
+import '../../../widgets/custom/password_textformfield.dart';
+import '../../../widgets/custom/phone_number_field.dart';
+import '../agency_auth/join_agency_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);

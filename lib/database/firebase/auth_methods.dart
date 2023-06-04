@@ -9,7 +9,7 @@ import '../../functions/encryption.dart';
 import '../../functions/firebase_exceptions.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/number_detail.dart';
-import '../../views/auth/sign_in_screen.dart';
+import '../../views/auth/user_auth/sign_in_screen.dart';
 import '../../widgets/custom/custom_toast.dart';
 import '../local/local_db.dart';
 import '../local/local_user.dart';

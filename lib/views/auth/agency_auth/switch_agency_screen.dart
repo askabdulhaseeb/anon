@@ -56,21 +56,6 @@ class SwitchAgencyScreen extends StatelessWidget {
               ),
             ),
             const MyAgenciesList(),
-            // FutureBuilder<List<Agency>>(
-            //   future: AgencyAPI().myAgencies(),
-            //   builder: (
-            //     BuildContext context,
-            //     AsyncSnapshot<List<Agency>> snapshot,
-            //   ) {
-            //     if (snapshot.hasData) {
-            //       return const MyAgenciesList();
-            //     } else if (snapshot.hasError) {
-            //       return const MyAgenciesList();
-            //     } else {
-            //       return const ShowLoading();
-            //     }
-            //   },
-            // ),
           ],
         ),
       ),

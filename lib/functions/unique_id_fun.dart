@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import '../database/firebase/auth_methods.dart';
+
 class UniqueIdFun {
   static String generateRandomString({int length = 6}) {
     const String letterLowerCase = 'abcdefghijklmnopqrstuvwxyz';
@@ -11,5 +13,9 @@ class UniqueIdFun {
       final int indexRandom = Random.secure().nextInt(possibleChar.length);
       return possibleChar[indexRandom];
     }).join('').trim();
+  }
+
+  static String unique() {
+    return '${AuthMethods.uid}-${DateTime.now().microsecondsSinceEpoch}';
   }
 }

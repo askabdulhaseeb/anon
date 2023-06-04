@@ -5,8 +5,8 @@ import 'show_loading.dart';
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({
     required this.title,
-    required this.onTap,
     required this.isLoading,
+    required this.onTap,
     this.margin,
     this.padding,
     this.bgColor,

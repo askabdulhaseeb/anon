@@ -3,15 +3,15 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/firebase/auth_methods.dart';
-import '../../providers/app_theme_provider.dart';
-import '../../utilities/app_images.dart';
-import '../../utilities/custom_validators.dart';
-import '../../widgets/custom/custom_elevated_button.dart';
-import '../../widgets/custom/custom_textformfield.dart';
-import '../../widgets/custom/custom_toast.dart';
-import '../../widgets/custom/password_textformfield.dart';
-import 'agency_auth/switch_agency_screen.dart';
+import '../../../database/firebase/auth_methods.dart';
+import '../../../providers/app_theme_provider.dart';
+import '../../../utilities/app_images.dart';
+import '../../../utilities/custom_validators.dart';
+import '../../../widgets/custom/custom_elevated_button.dart';
+import '../../../widgets/custom/custom_textformfield.dart';
+import '../../../widgets/custom/custom_toast.dart';
+import '../../../widgets/custom/password_textformfield.dart';
+import '../agency_auth/switch_agency_screen.dart';
 import 'forget_password_screen.dart';
 import 'sign_up_screen.dart';
 

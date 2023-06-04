@@ -8,7 +8,7 @@ import 'database/local/local_db.dart';
 import 'firebase_options.dart';
 import 'providers/app_theme_provider.dart';
 import 'views/auth/agency_auth/switch_agency_screen.dart';
-import 'views/auth/sign_in_screen.dart';
+import 'views/auth/user_auth/sign_in_screen.dart';
 import 'views/main_screen/main_screen.dart';
 import 'widgets/custom/show_loading.dart';
 
