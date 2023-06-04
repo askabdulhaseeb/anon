@@ -104,8 +104,23 @@ class AgencyAPI {
     }
   }
 
-  Future<void> leaveAgency(
-      {required Agency value, required String userID}) async {
+  Future<void> updateRequest(Agency value) async {
+    try {
+      await _instance
+          .collection(_collection)
+          .doc(value.agencyID)
+          .update(value.updateRequest());
+      await LocalAgency().add(value);
+    } on FirebaseException catch (e) {
+      debugPrint("Failed with error '${e.code}': ${e.message}");
+      throw 'e.code';
+    }
+  }
+
+  Future<void> leaveAgency({
+    required Agency value,
+    required String userID,
+  }) async {
     value.onLeaveAgency(myUID: userID);
     try {
       await _instance

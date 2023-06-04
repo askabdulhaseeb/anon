@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import '../../enums/my_hive_type.dart';
+import '../../enums/user/user_type.dart';
 import '../../models/user/app_user.dart';
+import '../../models/user/number_detail.dart';
 import '../firebase/auth_methods.dart';
+import '../firebase/user_api.dart';
 
 class LocalUser {
   static Future<Box<AppUser>> get openBox async =>
@@ -26,6 +29,11 @@ class LocalUser {
     await box.put(value.uid, value);
   }
 
+  Future<void> add(AppUser value) async {
+    final Box<AppUser> box = await refresh();
+    await box.put(value.uid, value);
+  }
+
   Future<void> addAll(List<AppUser> value) async {
     final Box<AppUser> box = await refresh();
     try {
@@ -37,9 +45,32 @@ class LocalUser {
     }
   }
 
-  Future<AppUser?> user(String value) async {
+  Future<AppUser> user(String value) async {
     final Box<AppUser> box = await refresh();
-    return box.get(value);
+    final AppUser? result = box.get(value);
+    if (result == null) {
+      final AppUser? cloudUser = await UserAPI().user(value);
+      if (cloudUser == null) {
+        return AppUser(
+          uid: 'null',
+          agencyIDs: <String>[],
+          name: 'null',
+          phoneNumber: NumberDetails(
+              countryCode: 'PK',
+              number: '1234567',
+              completeNumber: '+923451234567',
+              isoCode: '-'),
+          email: 'null@user.com',
+          password: '-',
+          type: UserType.user,
+        );
+      } else {
+        add(cloudUser);
+        return cloudUser;
+      }
+    } else {
+      return result;
+    }
   }
 
   Future<void> switchAgency() async {

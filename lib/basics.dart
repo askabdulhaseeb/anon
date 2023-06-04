@@ -4,6 +4,7 @@ import 'package:provider/single_child_widget.dart';
 
 import 'providers/app_nav_provider.dart';
 import 'providers/app_theme_provider.dart';
+import 'views/agency_screens/agency_joining_request_screen.dart';
 import 'views/auth/agency_auth/agency_welcome_screen.dart';
 import 'views/auth/agency_auth/join_agency_screen.dart';
 import 'views/auth/agency_auth/switch_agency_screen.dart';
@@ -35,4 +36,7 @@ final Map<String, WidgetBuilder> myRoutes = <String, WidgetBuilder>{
   MainScreen.routeName: (_) => const MainScreen(),
   // Project
   CreateProjectScreen.routeName: (_) => const CreateProjectScreen(),
+  // Agency
+  AgencyJoiningRequestScreen.routeName: (_) =>
+      const AgencyJoiningRequestScreen(),
 };

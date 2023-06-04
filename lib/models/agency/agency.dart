@@ -120,9 +120,8 @@ class Agency extends HiveObject {
     );
   }
 
-  void requestAction({
+  void onAcceptRequest({
     required String uid,
-    required bool isAccepted,
     required UserDesignation designation,
   }) {
     final int index =
@@ -130,14 +129,20 @@ class Agency extends HiveObject {
     assert(index >= 0);
     final MemberDetail temp = pendingRequest[index];
     temp
-      ..isAccepted = isAccepted
+      ..isAccepted = true
       ..isPending = false
       ..designation = designation;
     members.toSet().add(uid);
     requestHistory.add(temp);
-    if (isAccepted) activeMembers.add(temp);
+    activeMembers.add(temp);
     pendingRequest
         .removeWhere((MemberDetail element) => element.uid == temp.uid);
+  }
+
+  void onRejectRequest({required String value}) {
+    if (!_canleave(value)) return;
+    members.remove(value);
+    pendingRequest.removeWhere((MemberDetail element) => element.uid == value);
   }
 
   void onJoinRequest({
@@ -154,15 +159,7 @@ class Agency extends HiveObject {
   }
 
   void onLeaveAgency({required String myUID}) {
-    final bool canLeave = activeMembers
-            .firstWhere(
-              (MemberDetail element) => element.uid == myUID,
-              orElse: () => MemberDetail(
-                  uid: myUID, designation: UserDesignation.employee),
-            )
-            .designation !=
-        UserDesignation.admin;
-    if (!canLeave) return;
+    if (!_canleave(myUID)) return;
     members.remove(myUID);
     pendingRequest.removeWhere((MemberDetail element) => element.uid == myUID);
     activeMembers.removeWhere((MemberDetail element) => element.uid == myUID);
@@ -178,6 +175,17 @@ class Agency extends HiveObject {
       'request_history':
           requestHistory.map((MemberDetail x) => x.toMap()).toList(),
     };
+  }
+
+  bool _canleave(String myUID) {
+    return activeMembers
+            .firstWhere(
+              (MemberDetail element) => element.uid == myUID,
+              orElse: () => MemberDetail(
+                  uid: myUID, designation: UserDesignation.employee),
+            )
+            .designation !=
+        UserDesignation.admin;
   }
 
   @override

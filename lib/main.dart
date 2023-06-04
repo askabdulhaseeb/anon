@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
             theme: AppThemes.light,
             darkTheme: AppThemes.dark,
             themeMode: appPro.themeMode,
+            // TODO: signin time refresh the agencies
             home: AuthMethods.getCurrentUser == null
                 ? const SignInScreen()
                 : Scaffold(
