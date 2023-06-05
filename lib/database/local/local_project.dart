@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../enums/my_hive_type.dart';
@@ -27,5 +28,15 @@ class LocalProject {
   Future<void> signOut() async {
     final Box<Project> box = await refresh();
     await box.clear();
+  }
+
+  ValueListenable<Box<Project>> listenable() {
+    final bool isOpen = Hive.box<Project>(MyHiveType.project.database).isOpen;
+    if (isOpen) {
+      return Hive.box<Project>(MyHiveType.project.database).listenable();
+    } else {
+      openBox;
+      return Hive.box<Project>(MyHiveType.project.database).listenable();
+    }
   }
 }

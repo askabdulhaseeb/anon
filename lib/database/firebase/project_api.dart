@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../models/project/project.dart';
@@ -16,6 +19,21 @@ class ProjectAPI {
     } catch (e) {
       debugPrint(e.toString());
       return false;
+    }
+  }
+
+  Future<String?> projectLogo({
+    required File file,
+    required String projectID,
+  }) async {
+    try {
+      TaskSnapshot snapshot = await FirebaseStorage.instance
+          .ref('project-logo/$projectID')
+          .putFile(file);
+      String url = await snapshot.ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      return null;
     }
   }
 }

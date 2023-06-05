@@ -7,7 +7,7 @@ import '../../models/agency/agency.dart';
 import '../../models/agency/member_detail.dart';
 import '../../models/user/app_user.dart';
 import '../custom/custom_elevated_button.dart';
-import '../custom/custom_network_image.dart';
+import '../custom/custom_profile_photo.dart';
 import '../custom/show_loading.dart';
 
 class UserPendingRequestTile extends StatefulWidget {
@@ -36,13 +36,9 @@ class _UserPendingRequestTileState extends State<UserPendingRequestTile> {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: CustomNetworkImage(
-                      imageURL: user.imageURL,
-                      size: 40,
-                      placeholder: user.name,
-                    ),
+                  CustomProfilePhoto(
+                    user.imageURL,
+                    name: user.name,
                   ),
                   const SizedBox(width: 10),
                   Expanded(

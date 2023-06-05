@@ -16,7 +16,7 @@ class MemberDetail {
     DateTime? responceTime,
   })  : isAccepted = isAccepted ?? false,
         isPending = isPending ?? true,
-        responcedBy = responcedBy = '',
+        responcedBy = responcedBy ?? '',
         requestTime = requestTime ?? DateTime.now(),
         responceTime = responceTime ?? DateTime.now();
 

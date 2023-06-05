@@ -8,7 +8,8 @@ class UniqueIdFun {
     const String letterUpperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     // don't user 0, it confuse users sometimes with 'o' and 'O'
     const String number = '123456789';
-    const String possibleChar = letterLowerCase + letterUpperCase + number;
+    final String possibleChar =
+        letterLowerCase + letterUpperCase + number + AuthMethods.uid;
     return List<String>.generate(length, (int index) {
       final int indexRandom = Random.secure().nextInt(possibleChar.length);
       return possibleChar[indexRandom];

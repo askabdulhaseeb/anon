@@ -13,6 +13,7 @@ class Project extends HiveObject {
     required this.title,
     required this.agencies,
     required this.logo,
+    this.description = '',
     List<String>? members,
     DateTime? startingTime,
     DateTime? endingTime,
@@ -38,11 +39,14 @@ class Project extends HiveObject {
   final String logo;
   @HiveField(7, defaultValue: <Note>[]) // Class Code: 31
   final List<Note> notes;
+  @HiveField(8, defaultValue: '')
+  final String description;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'pid': pid,
       'title': title,
+      'description': description,
       'agencies': agencies,
       'members': members,
       'starting_time': startingTime,
@@ -57,6 +61,7 @@ class Project extends HiveObject {
     return Project(
       pid: map['pid'] ?? '',
       title: map['title'] ?? '',
+      description: map['description'] ?? '',
       agencies: List<String>.from((map['agencies'] ?? <String>[])),
       members: List<String>.from((map['members'] ?? <String>[])),
       startingTime: TimeFun.parseTime(map['starting_time']),

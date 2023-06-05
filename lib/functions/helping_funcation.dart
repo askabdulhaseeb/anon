@@ -13,6 +13,15 @@ class HelpingFuncation {
     });
   }
 
+  String photoPlaceholder(String value) {
+    value.trim();
+    String temp = value[0];
+    value.contains(' ')
+        ? temp += value[value.lastIndexOf(' ') + 1]
+        : temp += value[1];
+    return temp;
+  }
+
   String numberInWords(String number) {
     String words = '';
     for (int i = 0; i < number.length; i++) {

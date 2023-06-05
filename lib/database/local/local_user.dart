@@ -51,19 +51,7 @@ class LocalUser {
     if (result == null) {
       final AppUser? cloudUser = await UserAPI().user(value);
       if (cloudUser == null) {
-        return AppUser(
-          uid: 'null',
-          agencyIDs: <String>[],
-          name: 'null',
-          phoneNumber: NumberDetails(
-              countryCode: 'PK',
-              number: '1234567',
-              completeNumber: '+923451234567',
-              isoCode: '-'),
-          email: 'null@user.com',
-          password: '-',
-          type: UserType.user,
-        );
+        return _null;
       } else {
         add(cloudUser);
         return cloudUser;
@@ -71,6 +59,25 @@ class LocalUser {
     } else {
       return result;
     }
+  }
+
+  Future<List<AppUser>> stringListToObjectList(List<String> value) async {
+    final Box<AppUser> box = await refresh();
+    List<AppUser> objectList = <AppUser>[];
+    for (String element in value) {
+      final AppUser? result = box.get(element);
+      if (result == null) {
+        final AppUser? cloudUser = await UserAPI().user(element);
+        if (cloudUser == null) {
+        } else {
+          add(cloudUser);
+          objectList.add(cloudUser);
+        }
+      } else {
+        objectList.add(result);
+      }
+    }
+    return objectList;
   }
 
   Future<void> switchAgency() async {
@@ -89,4 +96,18 @@ class LocalUser {
     final Box<AppUser> box = await refresh();
     await box.clear();
   }
+
+  AppUser get _null => AppUser(
+        uid: 'null',
+        agencyIDs: <String>[],
+        name: 'null',
+        phoneNumber: NumberDetails(
+            countryCode: 'PK',
+            number: '1234567',
+            completeNumber: '+923451234567',
+            isoCode: '-'),
+        email: 'null@user.com',
+        password: '-',
+        type: UserType.user,
+      );
 }
