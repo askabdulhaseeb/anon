@@ -81,6 +81,7 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
           focusNode: widget.focusNode,
           enableInteractiveSelection: true,
           enableSuggestions: true,
+          textCapitalization: TextCapitalization.sentences,
           keyboardType: widget.keyboardType == TextInputType.number
               ? const TextInputType.numberWithOptions(
                   signed: true, decimal: true)

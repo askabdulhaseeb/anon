@@ -9,7 +9,7 @@ class UniqueIdFun {
     // don't user 0, it confuse users sometimes with 'o' and 'O'
     const String number = '123456789';
     final String possibleChar =
-        letterLowerCase + letterUpperCase + number + AuthMethods.uid;
+        letterLowerCase + AuthMethods.uid + letterUpperCase + number;
     return List<String>.generate(length, (int index) {
       final int indexRandom = Random.secure().nextInt(possibleChar.length);
       return possibleChar[indexRandom];
@@ -18,5 +18,9 @@ class UniqueIdFun {
 
   static String unique() {
     return '${AuthMethods.uid}-${DateTime.now().microsecondsSinceEpoch}';
+  }
+
+  static String projectID(String agencyID) {
+    return '$agencyID-pro-${DateTime.now().microsecondsSinceEpoch}';
   }
 }

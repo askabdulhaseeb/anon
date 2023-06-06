@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../database/firebase/project_api.dart';
 import '../../database/local/local_agency.dart';
 import '../../database/local/local_project.dart';
 import '../../models/agency/agency.dart';
@@ -61,45 +62,51 @@ class _ProjectList extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<Agency?> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               final Agency? agency = snapshot.data;
-              return ValueListenableBuilder<Box<Project>>(
-                  valueListenable: LocalProject().listenable(),
-                  builder: (BuildContext context, Box<Project> box, _) {
-                    final List<Project> projects = box.values
-                        .toList()
-                        .cast<Project>()
-                        .where((Project element) =>
-                            element.agencies
-                                .contains(agency?.agencyID ?? 'null') &&
-                            element.title
-                                .toLowerCase()
-                                .contains(search.toLowerCase()))
-                        .toList();
-                    return ListView.builder(
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      primary: false,
-                      shrinkWrap: true,
-                      itemCount: projects.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final Project project = projects[index];
-                        return ListTile(
-                          leading: CustomProfilePhoto(
-                            project.logo,
-                            name: project.title,
-                          ),
-                          title: Text(
-                            project.title,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text('Members: ${project.members.length}'),
-                          onTap: () {
-                            Navigator.of(context).pushNamed(
-                                ProjectDashboardScreen.routeName,
-                                arguments: project.pid);
-                          },
-                        );
-                      },
-                    );
+              return FutureBuilder<bool>(
+                  future: ProjectAPI().refresh(agency?.agencyID ?? ''),
+                  builder: (BuildContext context, _) {
+                    return ValueListenableBuilder<Box<Project>>(
+                        valueListenable: LocalProject().listenable(),
+                        builder: (BuildContext context, Box<Project> box, _) {
+                          final List<Project> projects = box.values
+                              .toList()
+                              .cast<Project>()
+                              .where((Project element) =>
+                                  element.agencies
+                                      .contains(agency?.agencyID ?? 'null') &&
+                                  element.title
+                                      .toLowerCase()
+                                      .contains(search.toLowerCase()))
+                              .toList();
+                          return ListView.builder(
+                            keyboardDismissBehavior:
+                                ScrollViewKeyboardDismissBehavior.onDrag,
+                            primary: false,
+                            shrinkWrap: true,
+                            itemCount: projects.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final Project project = projects[index];
+                              return ListTile(
+                                leading: CustomProfilePhoto(
+                                  project.logo,
+                                  name: project.title,
+                                ),
+                                title: Text(
+                                  project.title,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                subtitle:
+                                    Text('Members: ${project.members.length}'),
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(
+                                      ProjectDashboardScreen.routeName,
+                                      arguments: project.pid);
+                                },
+                              );
+                            },
+                          );
+                        });
                   });
             } else if (snapshot.hasError) {
               return const Text('ERROR');

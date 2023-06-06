@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../enums/my_hive_type.dart';
 import '../../models/agency/agency.dart';
@@ -111,6 +113,17 @@ class LocalAgency {
       print('done');
     } catch (e) {
       debugPrint('Error: Local User - ${e.toString()}');
+    }
+  }
+
+
+  ValueListenable<Box<Agency>> listenable() {
+    final bool isOpen = Hive.box<Agency>(MyHiveType.agency.database).isOpen;
+    if (isOpen) {
+      return Hive.box<Agency>(MyHiveType.agency.database).listenable();
+    } else {
+      openBox;
+      return Hive.box<Agency>(MyHiveType.agency.database).listenable();
     }
   }
 

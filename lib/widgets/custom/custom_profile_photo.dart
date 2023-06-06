@@ -20,7 +20,7 @@ class CustomProfilePhoto extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(6),
-      child: url == null
+      child: url == null || (url?.isEmpty ?? true)
           ? _placeholder()
           : CachedNetworkImage(
               height: size,

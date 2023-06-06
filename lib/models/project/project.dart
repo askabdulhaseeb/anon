@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../database/firebase/auth_methods.dart';
@@ -57,19 +58,19 @@ class Project extends HiveObject {
   }
 
   // ignore: sort_constructors_first
-  factory Project.fromMap(Map<String, dynamic> map) {
+  factory Project.fromMap(DocumentSnapshot<Map<String, dynamic>> doc) {
     return Project(
-      pid: map['pid'] ?? '',
-      title: map['title'] ?? '',
-      description: map['description'] ?? '',
-      agencies: List<String>.from((map['agencies'] ?? <String>[])),
-      members: List<String>.from((map['members'] ?? <String>[])),
-      startingTime: TimeFun.parseTime(map['starting_time']),
-      endingTime: TimeFun.parseTime(map['ending_time']),
-      logo: map['logo'] ?? '',
+      pid: doc.data()?['pid'] ?? '',
+      title: doc.data()?['title'] ?? '',
+      description: doc.data()?['description'] ?? '',
+      agencies: List<String>.from((doc.data()?['agencies'] ?? <String>[])),
+      members: List<String>.from((doc.data()?['members'] ?? <String>[])),
+      startingTime: TimeFun.parseTime(doc.data()?['starting_time']),
+      endingTime: TimeFun.parseTime(doc.data()?['ending_time']),
+      logo: doc.data()?['logo'] ?? '',
       notes: List<Note>.from(
-        (map['notes'] as List<int>).map<Note>(
-          (int x) => Note.fromMap(x as Map<String, dynamic>),
+        (doc.data()?['notes'] as List<dynamic>).map<Note>(
+          (dynamic x) => Note.fromMap(x as Map<String, dynamic>),
         ),
       ),
     );

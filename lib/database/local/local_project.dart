@@ -20,9 +20,21 @@ class LocalProject {
     }
   }
 
+  Future<Project> project(String value) async {
+    final Box<Project> box = await refresh();
+    return box.get(value) ?? _null;
+  }
+
   Future<void> add(Project value) async {
     final Box<Project> box = await refresh();
     await box.put(value.pid, value);
+  }
+
+  Future<void> addAll(List<Project> value) async {
+    final Box<Project> box = await refresh();
+    for (Project element in value) {
+      await box.put(element.pid, element);
+    }
   }
 
   Future<void> signOut() async {
@@ -39,4 +51,11 @@ class LocalProject {
       return Hive.box<Project>(MyHiveType.project.database).listenable();
     }
   }
+
+  Project get _null => Project(
+        pid: 'null',
+        title: 'Null',
+        agencies: <String>[],
+        logo: '',
+      );
 }
