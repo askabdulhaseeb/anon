@@ -5,14 +5,14 @@ class CreateGroupScreen extends StatelessWidget {
   static const String routeName = '/create-group';
   @override
   Widget build(BuildContext context) {
-     final String projectID =
+    final String projectID =
         ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
       appBar: AppBar(
         title: Text('CreateGroupScreen'),
       ),
       body: Center(
-        child: Text('CreateGroupScreen'),
+        child: Text(projectID),
       ),
     );
   }
