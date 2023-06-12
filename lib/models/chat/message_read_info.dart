@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 import '../../functions/time_functions.dart';
 part 'message_read_info.g.dart';
 
-@HiveType(typeId: 421)
+@HiveType(typeId: 45)
 class MessageReadInfo {
   MessageReadInfo({
     required this.uid,

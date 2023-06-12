@@ -8,7 +8,7 @@ part of 'attachment_type.dart';
 
 class AttachmentTypeAdapter extends TypeAdapter<AttachmentType> {
   @override
-  final int typeId = 3100;
+  final int typeId = 33;
 
   @override
   AttachmentType read(BinaryReader reader) {

@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import '../../database/firebase/auth_methods.dart';
 import '../../database/firebase/chat_api.dart';
 import '../../database/local/local_project.dart';
-import '../../functions/time_functions.dart';
 import '../../models/chat/chat.dart';
 import '../../models/project/project.dart';
-import '../../widgets/custom/custom_profile_photo.dart';
+import '../../widgets/chat/chat_dashboard_tile.dart';
 import '../../widgets/custom/show_loading.dart';
 import 'create_chat_screen.dart';
 
@@ -120,27 +119,6 @@ class ProjectDashboardScreen extends StatelessWidget {
               }
             }),
       ),
-    );
-  }
-}
-
-class ChatDashboardTile extends StatelessWidget {
-  const ChatDashboardTile(this.chat, {super.key});
-  final Chat chat;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {},
-      contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-      leading: CustomProfilePhoto(chat.imageURL, name: chat.title),
-      title: Text(
-        chat.title,
-        maxLines: 1,
-        style: const TextStyle(fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(chat.lastMessage?.displayString ?? ''),
-      trailing: Text(TimeFun.timeInWords(chat.timestamp)),
     );
   }
 }

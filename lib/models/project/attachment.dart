@@ -5,7 +5,7 @@ import '../../functions/time_functions.dart';
 
 part 'attachment.g.dart';
 
-@HiveType(typeId: 310)
+@HiveType(typeId: 32)
 class Attachment {
   Attachment({
     required this.url,

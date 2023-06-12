@@ -8,6 +8,7 @@ import '../../models/chat/chat.dart';
 import '../../models/chat/message.dart';
 import '../../models/user/app_user.dart';
 import '../../widgets/custom/custom_toast.dart';
+import '../local/local_chat.dart';
 import 'auth_methods.dart';
 
 class ChatAPI {
@@ -48,6 +49,7 @@ class ChatAPI {
       for (DocumentSnapshot<Map<String, dynamic>> element in event.docs) {
         final Chat temp = Chat.fromMap(element.data()!);
         chats.add(temp);
+        LocalChat().addChat(temp);
       }
       return chats;
     });
@@ -60,7 +62,6 @@ class ChatAPI {
           .collection(_collection)
           .where('persons', arrayContains: AuthMethods.uid)
           .get();
-
       for (DocumentSnapshot<Map<String, dynamic>> element in docs.docs) {
         final Chat temp = Chat.fromMap(element.data()!);
         chats.add(temp);
@@ -122,6 +123,13 @@ class ChatAPI {
   //     CustomToast.errorToast(message: e.toString());
   //   }
   // }
+
+  Future<Chat?> chat(String chatID) async {
+    final DocumentSnapshot<Map<String, dynamic>> doc =
+        await _instance.collection(_collection).doc(chatID).get();
+    if (!doc.exists) return null;
+    return Chat.fromMap(doc.data()!);
+  }
 
   Future<String?> uploadAttachment({
     required File file,

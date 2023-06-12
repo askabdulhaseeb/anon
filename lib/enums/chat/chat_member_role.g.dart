@@ -8,16 +8,16 @@ part of 'chat_member_role.dart';
 
 class ChatMemberRoleAdapter extends TypeAdapter<ChatMemberRole> {
   @override
-  final int typeId = 410;
+  final int typeId = 43;
 
   @override
   ChatMemberRole read(BinaryReader reader) {
     switch (reader.readByte()) {
-      case 0:
+      case 3:
         return ChatMemberRole.admin;
-      case 1:
+      case 4:
         return ChatMemberRole.member;
-      case 2:
+      case 5:
         return ChatMemberRole.viewer;
       default:
         return ChatMemberRole.admin;
@@ -28,13 +28,13 @@ class ChatMemberRoleAdapter extends TypeAdapter<ChatMemberRole> {
   void write(BinaryWriter writer, ChatMemberRole obj) {
     switch (obj) {
       case ChatMemberRole.admin:
-        writer.writeByte(0);
+        writer.writeByte(3);
         break;
       case ChatMemberRole.member:
-        writer.writeByte(1);
+        writer.writeByte(4);
         break;
       case ChatMemberRole.viewer:
-        writer.writeByte(2);
+        writer.writeByte(5);
         break;
     }
   }

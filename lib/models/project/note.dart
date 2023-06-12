@@ -35,7 +35,7 @@ class Note extends HiveObject {
   String title;
   @HiveField(3)
   String description;
-  @HiveField(4) // Class Code: 310
+  @HiveField(4) // Class Code: 32 & 33
   final List<Attachment> attachments;
   @HiveField(5)
   final List<String> assignedTo;

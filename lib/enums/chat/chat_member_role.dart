@@ -1,13 +1,14 @@
 import 'package:hive/hive.dart';
 part 'chat_member_role.g.dart';
 
-@HiveType(typeId: 410)
+@HiveType(typeId: 43)
 enum ChatMemberRole {
-  @HiveField(0)
+  // 0,1,2 not for use
+  @HiveField(3, defaultValue: ChatMemberRole.admin)
   admin('admin', 'Admin'),
-  @HiveField(1)
+  @HiveField(4, defaultValue: ChatMemberRole.member)
   member('member', 'Member'),
-  @HiveField(2)
+  @HiveField(5, defaultValue: ChatMemberRole.viewer)
   viewer('viewer', 'View Only');
 
   const ChatMemberRole(this.json, this.title);

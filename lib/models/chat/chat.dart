@@ -34,11 +34,11 @@ class Chat extends HiveObject {
   final String projectID;
   @HiveField(3) // Class code: 31
   final List<Note> chatNotes;
-  @HiveField(4) // Class Code: 41
+  @HiveField(4) // Class Code: 41 & 43
   final List<ChatMember> members;
-  @HiveField(5) // Class Code: 42
+  @HiveField(5) // Class Code: 42, 44 & 45
   Message? lastMessage;
-  @HiveField(6) // Class Code: 42
+  @HiveField(6) // Class Code: 42, 44 & 45
   List<Message> unseenMessages;
   @HiveField(7)
   DateTime timestamp;

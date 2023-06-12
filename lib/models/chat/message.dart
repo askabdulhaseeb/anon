@@ -2,7 +2,6 @@ import 'package:hive/hive.dart';
 
 import '../../database/firebase/auth_methods.dart';
 import '../../enums/chat/message_type.dart';
-import '../../functions/encryption.dart';
 import '../../functions/time_functions.dart';
 import '../../functions/unique_id_fun.dart';
 import '../project/attachment.dart';
@@ -17,18 +16,16 @@ class Message extends HiveObject {
     required this.attachment,
     required this.sendTo,
     required this.sendToUIDs,
-    required String text,
-    required String displayString,
+    required this.text,
+    required this.displayString,
     String? messageID,
     DateTime? timestamp,
     String? sendBy,
     this.replyOf,
-    this.isLive = false,
+    this.isLive = true,
     this.refID,
-  })  : text = MyEncryption().encrypt(text, sendBy ?? AuthMethods.uid),
-        displayString =
-            MyEncryption().encrypt(displayString, sendBy ?? AuthMethods.uid),
-        messageID = messageID ?? UniqueIdFun.unique(),
+    this.isEncrypted = false,
+  })  : messageID = messageID ?? UniqueIdFun.messageID(chatID),
         timestamp = timestamp ?? DateTime.now(),
         sendBy = sendBy ?? AuthMethods.uid;
 
@@ -38,7 +35,7 @@ class Message extends HiveObject {
   final String text;
   @HiveField(2)
   final String displayString;
-  @HiveField(3) // Class Code: 420
+  @HiveField(3) // Class Code: 44
   final MessageType type;
   @HiveField(4) // Class Code: 310
   final List<Attachment> attachment;
@@ -46,7 +43,7 @@ class Message extends HiveObject {
   final String sendBy;
   @HiveField(6)
   final String? refID;
-  @HiveField(7) // Class Code: 421
+  @HiveField(7) // Class Code: 45
   final List<MessageReadInfo> sendTo;
   @HiveField(8)
   final List<String> sendToUIDs;
@@ -58,6 +55,8 @@ class Message extends HiveObject {
   final bool isLive;
   @HiveField(12, defaultValue: '')
   final String chatID;
+  @HiveField(13, defaultValue: true)
+  bool isEncrypted;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -73,17 +72,19 @@ class Message extends HiveObject {
       'reference_id': refID,
       'timestamp': timestamp,
       'reply_of': replyOf?.toMap(),
+      'is_encrypted': isEncrypted = false,
     };
   }
 
   // ignore: sort_constructors_first
   factory Message.fromMap(Map<String, dynamic> map) {
-    final String sendedBy = map['send_by'] ?? '';
+    final String sendedBy = map['send_by'] ?? AuthMethods.uid;
+    final bool isEnc = map['is_encrypted'];
     return Message(
       messageID: map['message_id'] ?? '',
       chatID: map['chat_id'] ?? '',
-      text: MyEncryption().decrypt(map['text'], sendedBy),
-      displayString: MyEncryption().decrypt(map['display_string'], sendedBy),
+      text: map['text'],
+      displayString: map['display_string'],
       sendToUIDs: List<String>.from((map['send_to_uids'] ?? <String>[])),
       type: MessageTypeConvertor().toEnum(map['type'] ?? MessageType.text.json),
       attachment: List<Attachment>.from(
@@ -98,6 +99,7 @@ class Message extends HiveObject {
       replyOf:
           map['reply_of'] != null ? Message.fromMap(map['reply_of']) : null,
       isLive: true,
+      isEncrypted: isEnc,
     );
   }
 }

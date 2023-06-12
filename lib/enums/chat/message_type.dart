@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 part 'message_type.g.dart';
 
-@HiveType(typeId: 420)
+@HiveType(typeId: 44)
 enum MessageType {
   @HiveField(0)
   text('Text', 'text'),

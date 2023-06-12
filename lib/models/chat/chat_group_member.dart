@@ -20,7 +20,7 @@ class ChatMember {
 
   @HiveField(0)
   final String uid;
-  @HiveField(1) // Class Code: 410
+  @HiveField(1) // Class Code: 43
   final ChatMemberRole role;
   @HiveField(2)
   final String addedBy;

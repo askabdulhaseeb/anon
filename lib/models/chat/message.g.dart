@@ -30,13 +30,14 @@ class MessageAdapter extends TypeAdapter<Message> {
       replyOf: fields[10] as Message?,
       isLive: fields[11] as bool,
       refID: fields[6] as String?,
+      isEncrypted: fields[13] == null ? true : fields[13] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Message obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.messageID)
       ..writeByte(1)
@@ -62,7 +63,9 @@ class MessageAdapter extends TypeAdapter<Message> {
       ..writeByte(11)
       ..write(obj.isLive)
       ..writeByte(12)
-      ..write(obj.chatID);
+      ..write(obj.chatID)
+      ..writeByte(13)
+      ..write(obj.isEncrypted);
   }
 
   @override

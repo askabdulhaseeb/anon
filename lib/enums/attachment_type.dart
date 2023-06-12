@@ -2,7 +2,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 part 'attachment_type.g.dart';
 
-@HiveType(typeId: 3100)
+@HiveType(typeId: 33)
 enum AttachmentType {
   @HiveField(0)
   photo('photo', 'Photo'),
