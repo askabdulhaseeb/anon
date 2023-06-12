@@ -19,10 +19,12 @@ class Project extends HiveObject {
     DateTime? startingTime,
     DateTime? endingTime,
     List<Note>? notes,
+    String? createdBy,
   })  : members = members ?? <String>[AuthMethods.uid],
         startingTime = startingTime ?? DateTime.now(),
         endingTime = endingTime ?? DateTime.now(),
-        notes = notes ?? <Note>[];
+        notes = notes ?? <Note>[],
+        createdBy = createdBy ?? AuthMethods.uid;
 
   @HiveField(0)
   final String pid;
@@ -42,6 +44,8 @@ class Project extends HiveObject {
   final List<Note> notes;
   @HiveField(8, defaultValue: '')
   final String description;
+  @HiveField(9, defaultValue: '')
+  final String createdBy;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -53,6 +57,7 @@ class Project extends HiveObject {
       'starting_time': startingTime,
       'ending_time': endingTime,
       'logo': logo,
+      'created_by': createdBy,
       'notes': notes.map((Note x) => x.toMap()).toList(),
     };
   }
@@ -68,6 +73,7 @@ class Project extends HiveObject {
       startingTime: TimeFun.parseTime(doc.data()?['starting_time']),
       endingTime: TimeFun.parseTime(doc.data()?['ending_time']),
       logo: doc.data()?['logo'] ?? '',
+      createdBy: doc.data()?['created_by'] ?? '',
       notes: List<Note>.from(
         (doc.data()?['notes'] as List<dynamic>).map<Note>(
           (dynamic x) => Note.fromMap(x as Map<String, dynamic>),

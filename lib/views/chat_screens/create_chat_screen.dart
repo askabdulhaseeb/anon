@@ -2,12 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../../database/firebase/project_api.dart';
-import '../../database/local/local_agency.dart';
-import '../../functions/helping_funcation.dart';
+import '../../database/firebase/auth_methods.dart';
+import '../../database/firebase/chat_api.dart';
+import '../../database/local/local_project.dart';
+import '../../database/local/local_user.dart';
+import '../../enums/chat/chat_member_role.dart';
+import '../../enums/chat/message_type.dart';
 import '../../functions/picker_functions.dart';
 import '../../functions/unique_id_fun.dart';
-import '../../models/agency/agency.dart';
+import '../../models/chat/chat.dart';
+import '../../models/chat/chat_group_member.dart';
+import '../../models/chat/message.dart';
+import '../../models/chat/message_read_info.dart';
+import '../../models/project/attachment.dart';
 import '../../models/project/project.dart';
 import '../../models/user/app_user.dart';
 import '../../utilities/custom_validators.dart';
@@ -16,18 +23,16 @@ import '../../widgets/custom/custom_elevated_button.dart';
 import '../../widgets/custom/custom_network_change_img_box.dart';
 import '../../widgets/custom/custom_profile_photo.dart';
 import '../../widgets/custom/custom_textformfield.dart';
-import '../../widgets/custom/custom_toast.dart';
-import '../chat_screens/chat_dashboard_screen.dart';
 
-class CreateProjectScreen extends StatefulWidget {
-  const CreateProjectScreen({Key? key}) : super(key: key);
-  static const String routeName = '/create-projct';
+class CreateChatScreen extends StatefulWidget {
+  const CreateChatScreen({Key? key}) : super(key: key);
+  static const String routeName = '/create-chat';
 
   @override
-  State<CreateProjectScreen> createState() => _CreateProjectScreenState();
+  State<CreateChatScreen> createState() => _CreateChatScreenState();
 }
 
-class _CreateProjectScreenState extends State<CreateProjectScreen> {
+class _CreateChatScreenState extends State<CreateChatScreen> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -36,11 +41,12 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   File? logo;
   bool isLoading = false;
   final List<AppUser> members = <AppUser>[];
-
   @override
   Widget build(BuildContext context) {
+    final String projectID =
+        ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
-      appBar: AppBar(title: const Text('New Project')),
+      appBar: AppBar(title: const Text('Create Chat')),
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Padding(
@@ -74,7 +80,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                   maxLength: 160,
                   readOnly: isLoading,
                   validator: (String? value) => null,
-                  onFieldSubmitted: (_) async => await addMember(),
+                  onFieldSubmitted: (_) async => await addMember(projectID),
                 ),
                 Row(
                   children: <Widget>[
@@ -132,7 +138,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                       ),
                     ),
                     TextButton.icon(
-                      onPressed: addMember,
+                      onPressed: () async => await addMember(projectID),
                       icon: const Icon(Icons.add),
                       label: const Text('Add Members'),
                     ),
@@ -141,9 +147,9 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                 // add member
                 const SizedBox(height: 16),
                 CustomElevatedButton(
-                  title: 'Start Project',
+                  title: 'Start Chat',
                   isLoading: isLoading,
-                  onTap: onStartProject,
+                  onTap: () async => await onStartChat(projectID),
                 ),
               ],
             ),
@@ -153,64 +159,72 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
     );
   }
 
-  onStartProject() async {
+  Future<void> onStartChat(String projectID) async {
     if (!_key.currentState!.validate()) return;
-    HelpingFuncation().dismissKeyboard(context);
     try {
       setState(() {
         isLoading = true;
       });
-      final Agency? agency = await LocalAgency().currentlySelected();
-      if (agency == null) {
-        CustomToast.errorToast(message: 'Reopen the Agency, please');
-        setState(() {
-          isLoading = false;
-        });
-        return;
-      }
-      final String pid = UniqueIdFun.unique();
+      final String chatID = UniqueIdFun.chatID(projectID);
       String url = '';
       if (logo != null) {
-        url = await ProjectAPI().projectLogo(file: logo!, projectID: pid) ?? '';
+        url = await ChatAPI()
+                .uploadAttachment(file: logo!, attachmentID: chatID) ??
+            '';
       }
-      final List<String> tempMember = members.map((e) => e.uid).toList();
-      Project project = Project(
-        pid: UniqueIdFun.unique(),
-        title: _title.text.trim(),
-        agencies: <String>[agency.agencyID],
-        description: _description.text.trim(),
-        logo: url,
-        members: tempMember,
+      final AppUser sender = await LocalUser().user(AuthMethods.uid);
+      members.add(sender);
+      final List<String> receivers =
+          members.map((AppUser e) => e.uid).toSet().toList();
+      final Message message = Message(
+        text: 'Create new chat',
+        chatID: chatID,
+        type: MessageType.announcement,
+        displayString: 'Create new chat',
+        attachment: <Attachment>[],
+        sendTo:
+            members.map((AppUser e) => MessageReadInfo(uid: e.uid)).toList(),
+        sendToUIDs: receivers,
       );
-      final bool added = await ProjectAPI().create(project);
-      if (added) {
-        if (!mounted) return;
-        Navigator.of(context).popAndPushNamed(
-          ProjectDashboardScreen.routeName,
-          arguments: pid,
-        );
-      }
+      final Chat chat = Chat(
+        imageURL: url,
+        persons: receivers,
+        projectID: projectID,
+        members: members
+            .map((AppUser e) => ChatMember(
+                uid: e.uid,
+                role: AuthMethods.uid == e.uid
+                    ? ChatMemberRole.admin
+                    : ChatMemberRole.member))
+            .toList(),
+        chatID: chatID,
+        description: _description.text,
+        title: _title.text,
+        lastMessage: message,
+      );
+      await ChatAPI()
+          .sendMessage(chat: chat, receiver: members, sender: sender);
+      if (!mounted) return;
+      Navigator.of(context).pop();
     } catch (e) {
-      CustomToast.errorToast(message: 'Something wents wrong');
-      setState(() {
-        isLoading = false;
-      });
+      print(e.toString());
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
-  Future<void> addMember() async {
-    final Agency? agency = await LocalAgency().currentlySelected();
-    if (agency == null) {
-      CustomToast.errorToast(message: 'Facing Error');
-      return;
-    }
+  Future<void> addMember(String projectID) async {
+    // final Agency? agency = await LocalAgency().currentlySelected();
+    if (isLoading) return;
+    final Project project = await LocalProject().project(projectID);
     if (!mounted) return;
     final List<AppUser>? result = await showModalBottomSheet<List<AppUser>>(
       context: context,
       isDismissible: false,
       isScrollControlled: true,
       builder: (BuildContext context) =>
-          AddableMemberWidget(users: agency.members, alreadyMember: members),
+          AddableMemberWidget(users: project.members, alreadyMember: members),
     );
     if (result == null) return;
     members.clear();

@@ -10,7 +10,7 @@ import '../../models/project/project.dart';
 import '../../widgets/custom/custom_profile_photo.dart';
 import '../../widgets/custom/show_loading.dart';
 import '../project_screens/create_project_screen.dart';
-import '../project_screens/project_dashboard_screen.dart';
+import '../chat_screens/chat_dashboard_screen.dart';
 
 class ProjectPage extends StatefulWidget {
   const ProjectPage({Key? key}) : super(key: key);
@@ -98,6 +98,7 @@ class _ProjectList extends StatelessWidget {
                                 ),
                                 subtitle:
                                     Text('Members: ${project.members.length}'),
+                                trailing: const Text('Next deadline'),
                                 onTap: () {
                                   Navigator.of(context).pushNamed(
                                       ProjectDashboardScreen.routeName,

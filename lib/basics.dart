@@ -12,10 +12,10 @@ import 'views/auth/user_auth/forget_password_screen.dart';
 import 'views/auth/agency_auth/start_agency_screen.dart';
 import 'views/auth/user_auth/sign_in_screen.dart';
 import 'views/auth/user_auth/sign_up_screen.dart';
-import 'views/chat_screens/create_group_screen.dart';
+import 'views/chat_screens/create_chat_screen.dart';
 import 'views/main_screen/main_screen.dart';
 import 'views/project_screens/create_project_screen.dart';
-import 'views/project_screens/project_dashboard_screen.dart';
+import 'views/chat_screens/chat_dashboard_screen.dart';
 
 List<SingleChildWidget> myProviders = <SingleChildWidget>[
   ChangeNotifierProvider<AppThemeProvider>.value(value: AppThemeProvider()),
@@ -43,5 +43,5 @@ final Map<String, WidgetBuilder> myRoutes = <String, WidgetBuilder>{
   AgencyJoiningRequestScreen.routeName: (_) =>
       const AgencyJoiningRequestScreen(),
   // Group
-  CreateGroupScreen.routeName: (_) => const CreateGroupScreen(),
+  CreateChatScreen.routeName: (_) => const CreateChatScreen(),
 };

@@ -21,6 +21,10 @@ class UniqueIdFun {
   }
 
   static String projectID(String agencyID) {
-    return '$agencyID-pro-${DateTime.now().microsecondsSinceEpoch}';
+    return '$agencyID-pro-${generateRandomString()}';
+  }
+
+  static String chatID(String proID) {
+    return '$proID-chat-${generateRandomString()}';
   }
 }

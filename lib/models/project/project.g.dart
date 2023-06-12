@@ -26,13 +26,14 @@ class ProjectAdapter extends TypeAdapter<Project> {
       startingTime: fields[4] as DateTime?,
       endingTime: fields[5] as DateTime?,
       notes: fields[7] == null ? [] : (fields[7] as List?)?.cast<Note>(),
+      createdBy: fields[9] == null ? '' : fields[9] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Project obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.pid)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class ProjectAdapter extends TypeAdapter<Project> {
       ..writeByte(7)
       ..write(obj.notes)
       ..writeByte(8)
-      ..write(obj.description);
+      ..write(obj.description)
+      ..writeByte(9)
+      ..write(obj.createdBy);
   }
 
   @override

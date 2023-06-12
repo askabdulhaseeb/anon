@@ -10,9 +10,12 @@ part 'chat.g.dart';
 @HiveType(typeId: 4)
 class Chat extends HiveObject {
   Chat({
+    required this.imageURL,
     required this.persons,
     required this.projectID,
     required this.members,
+    this.title = '',
+    this.description = '',
     this.lastMessage,
     String? chatID,
     List<Note>? chatNotes,
@@ -39,12 +42,21 @@ class Chat extends HiveObject {
   List<Message> unseenMessages;
   @HiveField(7)
   DateTime timestamp;
+  @HiveField(8, defaultValue: '')
+  String imageURL;
+  @HiveField(9, defaultValue: '')
+  String title;
+  @HiveField(10, defaultValue: '')
+  String description;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'chat_id': chatID,
-      'persons': persons,
       'project_id': projectID,
+      'persons': persons,
+      'title': title,
+      'description': description,
+      'image_url': imageURL,
       'notes': chatNotes.map((Note x) => x.toMap()).toList(),
       'members': members.map((ChatMember x) => x.toMap()).toList(),
       'last_message': lastMessage?.toMap(),
@@ -57,6 +69,9 @@ class Chat extends HiveObject {
   factory Chat.fromMap(Map<String, dynamic> map) {
     return Chat(
       chatID: map['chat_id'] ?? '',
+      imageURL: map['image_url'] ?? '',
+      title: map['title'] ?? '',
+      description: map['description'] ?? '',
       persons: List<String>.from((map['persons'] ?? <String>[])),
       projectID: map['project_id'] ?? '',
       chatNotes: List<Note>.from(map['notes']?.map(

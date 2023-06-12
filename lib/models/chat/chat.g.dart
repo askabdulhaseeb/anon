@@ -17,9 +17,12 @@ class ChatAdapter extends TypeAdapter<Chat> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Chat(
+      imageURL: fields[8] == null ? '' : fields[8] as String,
       persons: (fields[1] as List).cast<String>(),
       projectID: fields[2] as String,
       members: (fields[4] as List).cast<ChatMember>(),
+      title: fields[9] == null ? '' : fields[9] as String,
+      description: fields[10] == null ? '' : fields[10] as String,
       lastMessage: fields[5] as Message?,
       chatID: fields[0] as String?,
       chatNotes: (fields[3] as List?)?.cast<Note>(),
@@ -31,7 +34,7 @@ class ChatAdapter extends TypeAdapter<Chat> {
   @override
   void write(BinaryWriter writer, Chat obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.chatID)
       ..writeByte(1)
@@ -47,7 +50,13 @@ class ChatAdapter extends TypeAdapter<Chat> {
       ..writeByte(6)
       ..write(obj.unseenMessages)
       ..writeByte(7)
-      ..write(obj.timestamp);
+      ..write(obj.timestamp)
+      ..writeByte(8)
+      ..write(obj.imageURL)
+      ..writeByte(9)
+      ..write(obj.title)
+      ..writeByte(10)
+      ..write(obj.description);
   }
 
   @override

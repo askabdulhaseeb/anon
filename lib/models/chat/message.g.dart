@@ -17,12 +17,13 @@ class MessageAdapter extends TypeAdapter<Message> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Message(
-      text: fields[1] as String?,
+      chatID: fields[12] == null ? '' : fields[12] as String,
       type: fields[3] as MessageType,
-      displayString: fields[2] as String,
       attachment: (fields[4] as List).cast<Attachment>(),
       sendTo: (fields[7] as List).cast<MessageReadInfo>(),
       sendToUIDs: (fields[8] as List).cast<String>(),
+      text: fields[1] as String,
+      displayString: fields[2] as String,
       messageID: fields[0] as String?,
       timestamp: fields[9] as DateTime?,
       sendBy: fields[5] as String?,
@@ -35,7 +36,7 @@ class MessageAdapter extends TypeAdapter<Message> {
   @override
   void write(BinaryWriter writer, Message obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.messageID)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class MessageAdapter extends TypeAdapter<Message> {
       ..writeByte(10)
       ..write(obj.replyOf)
       ..writeByte(11)
-      ..write(obj.isLive);
+      ..write(obj.isLive)
+      ..writeByte(12)
+      ..write(obj.chatID);
   }
 
   @override

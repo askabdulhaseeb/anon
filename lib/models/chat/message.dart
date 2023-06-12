@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 
 import '../../database/firebase/auth_methods.dart';
 import '../../enums/chat/message_type.dart';
+import '../../functions/encryption.dart';
 import '../../functions/time_functions.dart';
 import '../../functions/unique_id_fun.dart';
 import '../project/attachment.dart';
@@ -11,26 +12,30 @@ part 'message.g.dart';
 @HiveType(typeId: 42)
 class Message extends HiveObject {
   Message({
-    required this.text,
+    required this.chatID,
     required this.type,
-    required this.displayString,
     required this.attachment,
     required this.sendTo,
     required this.sendToUIDs,
+    required String text,
+    required String displayString,
     String? messageID,
     DateTime? timestamp,
     String? sendBy,
     this.replyOf,
     this.isLive = false,
     this.refID,
-  })  : messageID = messageID ?? UniqueIdFun.unique(),
+  })  : text = MyEncryption().encrypt(text, sendBy ?? AuthMethods.uid),
+        displayString =
+            MyEncryption().encrypt(displayString, sendBy ?? AuthMethods.uid),
+        messageID = messageID ?? UniqueIdFun.unique(),
         timestamp = timestamp ?? DateTime.now(),
         sendBy = sendBy ?? AuthMethods.uid;
 
   @HiveField(0)
   final String messageID;
   @HiveField(1)
-  final String? text;
+  final String text;
   @HiveField(2)
   final String displayString;
   @HiveField(3) // Class Code: 420
@@ -51,10 +56,13 @@ class Message extends HiveObject {
   final Message? replyOf;
   @HiveField(11)
   final bool isLive;
+  @HiveField(12, defaultValue: '')
+  final String chatID;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'message_id': messageID,
+      'chat_id': chatID,
       'text': text,
       'display_string': displayString,
       'type': type.json,
@@ -70,16 +78,18 @@ class Message extends HiveObject {
 
   // ignore: sort_constructors_first
   factory Message.fromMap(Map<String, dynamic> map) {
+    final String sendedBy = map['send_by'] ?? '';
     return Message(
       messageID: map['message_id'] ?? '',
-      text: map['text'],
-      displayString: map['display_string'],
+      chatID: map['chat_id'] ?? '',
+      text: MyEncryption().decrypt(map['text'], sendedBy),
+      displayString: MyEncryption().decrypt(map['display_string'], sendedBy),
       sendToUIDs: List<String>.from((map['send_to_uids'] ?? <String>[])),
       type: MessageTypeConvertor().toEnum(map['type'] ?? MessageType.text.json),
       attachment: List<Attachment>.from(
           // ignore: always_specify_types
           map['attachment']?.map((x) => Attachment.fromMap(x))),
-      sendBy: map['send_by'] ?? '',
+      sendBy: sendedBy,
       refID: map['reference_id'],
       sendTo: List<MessageReadInfo>.from(map['send_to']?.map(
         (dynamic x) => MessageReadInfo.fromMap(x),
