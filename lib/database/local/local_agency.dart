@@ -1,8 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../enums/my_hive_type.dart';
@@ -110,7 +108,6 @@ class LocalAgency {
       for (Agency element in results) {
         await element.save();
       }
-      print('done');
     } catch (e) {
       debugPrint('Error: Local User - ${e.toString()}');
     }

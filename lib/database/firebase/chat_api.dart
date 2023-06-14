@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,18 +8,19 @@ import '../../models/chat/message.dart';
 import '../../models/user/app_user.dart';
 import '../../widgets/custom/custom_toast.dart';
 import '../local/local_chat.dart';
+import '../local/local_message.dart';
 import 'auth_methods.dart';
 
 class ChatAPI {
   static final FirebaseFirestore _instance = FirebaseFirestore.instance;
-  static const String _collection = 'chats';
-  static const String _subCollection = 'messages';
+  static const String _chatCollection = 'chats';
+  static const String _messageCollection = 'messages';
 
   Stream<List<Message>> messages(String chatID) {
     return _instance
-        .collection(_collection)
+        .collection(_chatCollection)
         .doc(chatID)
-        .collection(_subCollection)
+        .collection(_messageCollection)
         .orderBy('timestamp', descending: true)
         .snapshots()
         .map((QuerySnapshot<Map<String, dynamic>> event) {
@@ -28,9 +28,24 @@ class ChatAPI {
       for (DocumentSnapshot<Map<String, dynamic>> element in event.docs) {
         final Message temp = Message.fromMap(element.data()!);
         messages.add(temp);
+        LocalMessage().addMessage(temp);
       }
       return messages;
     });
+  }
+
+  Future<Message?> message({
+    required String chatID,
+    required String messageID,
+  }) async {
+    final DocumentSnapshot<Map<String, dynamic>> doc = await _instance
+        .collection(_chatCollection)
+        .doc(chatID)
+        .collection(_messageCollection)
+        .doc(messageID)
+        .get();
+    if (doc.exists) return null;
+    return Message.fromMap(doc.data()!);
   }
 
   Stream<List<Chat>> chats(String projectID) {
@@ -39,7 +54,7 @@ class ChatAPI {
     // Collection ID -> chat
     // Field Indexed -> persons Arrays is_group Ascending timestamp Descending
     return _instance
-        .collection(_collection)
+        .collection(_chatCollection)
         .where('persons', arrayContains: AuthMethods.uid)
         .where('project_id', isEqualTo: projectID)
         .orderBy('timestamp', descending: true)
@@ -55,23 +70,6 @@ class ChatAPI {
     });
   }
 
-  Future<List<Chat>> chatsAndGroups() async {
-    List<Chat> chats = <Chat>[];
-    try {
-      final QuerySnapshot<Map<String, dynamic>> docs = await _instance
-          .collection(_collection)
-          .where('persons', arrayContains: AuthMethods.uid)
-          .get();
-      for (DocumentSnapshot<Map<String, dynamic>> element in docs.docs) {
-        final Chat temp = Chat.fromMap(element.data()!);
-        chats.add(temp);
-      }
-    } catch (e) {
-      log('Chat API - ERROR: ${e.toString()}');
-    }
-    return chats;
-  }
-
   Future<void> sendMessage({
     required Chat chat,
     required List<AppUser> receiver,
@@ -81,14 +79,14 @@ class ChatAPI {
     try {
       if (newMessage != null) {
         await _instance
-            .collection(_collection)
+            .collection(_chatCollection)
             .doc(chat.chatID)
-            .collection(_subCollection)
+            .collection(_messageCollection)
             .doc(newMessage.messageID)
             .set(newMessage.toMap());
       }
       await _instance
-          .collection(_collection)
+          .collection(_chatCollection)
           .doc(chat.chatID)
           .set(chat.toMap());
       // if (receiver.deviceToken.isNotEmpty) {
@@ -109,13 +107,13 @@ class ChatAPI {
   //   try {
   //     if (newMessage != null) {
   //       await _instance
-  //           .collection(_collection)
+  //           .collection(_chatCollection)
   //           .doc(chat.chatID)
   //           .update(chat.addMembers());
   //       await _instance
-  //           .collection(_collection)
+  //           .collection(_chatCollection)
   //           .doc(chat.chatID)
-  //           .collection(_subCollection)
+  //           .collection(_messageCollection)
   //           .doc(newMessage.messageID)
   //           .set(newMessage.toMap());
   //     }
@@ -126,24 +124,24 @@ class ChatAPI {
 
   Future<Chat?> chat(String chatID) async {
     final DocumentSnapshot<Map<String, dynamic>> doc =
-        await _instance.collection(_collection).doc(chatID).get();
+        await _instance.collection(_chatCollection).doc(chatID).get();
     if (!doc.exists) return null;
     return Chat.fromMap(doc.data()!);
   }
 
-  Future<String?> uploadAttachment({
+  Future<(String path, String? url)> uploadAttachment({
     required File file,
     required String attachmentID,
   }) async {
     try {
-      TaskSnapshot snapshot = await FirebaseStorage.instance
-          .ref('$_collection/projects/$attachmentID}')
-          .putFile(file);
+      String tempPath = '$_chatCollection/projects/$attachmentID}';
+      TaskSnapshot snapshot =
+          await FirebaseStorage.instance.ref(tempPath).putFile(file);
       String url = (await snapshot.ref.getDownloadURL()).toString();
-      return url;
+      return (tempPath, url);
     } catch (e) {
       CustomToast.errorToast(message: e.toString());
-      return null;
+      return ('', null);
     }
   }
 

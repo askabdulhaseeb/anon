@@ -173,7 +173,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
       if (logo != null) {
         url = await ProjectAPI().projectLogo(file: logo!, projectID: pid) ?? '';
       }
-      final List<String> tempMember = members.map((e) => e.uid).toList();
+      final List<String> tempMember = members.map((AppUser e) => e.uid).toList();
       Project project = Project(
         pid: UniqueIdFun.unique(),
         title: _title.text.trim(),

@@ -10,6 +10,8 @@ class Attachment {
   Attachment({
     required this.url,
     required this.type,
+    required this.attachmentID,
+    required this.storagePath,
     String? postedBy,
     DateTime? timestamp,
   })  : postedBy = postedBy ?? AuthMethods.uid,
@@ -23,6 +25,10 @@ class Attachment {
   final String postedBy;
   @HiveField(3)
   final DateTime timestamp;
+  @HiveField(4, defaultValue: '')
+  final String attachmentID;
+  @HiveField(5, defaultValue: '')
+  final String storagePath;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -30,6 +36,8 @@ class Attachment {
       'type': type.json,
       'posted_by': postedBy,
       'timestamp': timestamp,
+      'attachment_id': attachmentID,
+      'storage_path': storagePath,
     };
   }
 
@@ -37,6 +45,8 @@ class Attachment {
   factory Attachment.fromMap(Map<String, dynamic> map) {
     return Attachment(
       url: map['url'] ?? '',
+      attachmentID: map['attachment_id'] ?? '',
+      storagePath: map['storage_path'] ?? '',
       type: AttachmentTypeConvertor()
           .toEnum(map['type'] ?? AttachmentType.other.json),
       postedBy: map['posted_by'] ?? '',

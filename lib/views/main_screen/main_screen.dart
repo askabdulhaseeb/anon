@@ -13,7 +13,7 @@ class MainScreen extends StatelessWidget {
   static const String routeName = '/main';
   @override
   Widget build(BuildContext context) {
-    List<Widget> _pages = const <Widget>[
+    List<Widget> pages = const <Widget>[
       ProjectPage(),
       Center(child: Text('TODO')),
       AgencyPage(),
@@ -31,7 +31,7 @@ class MainScreen extends StatelessWidget {
       ),
       body: Consumer<AppNavProvider>(
         builder: (BuildContext context, AppNavProvider appPro, _) {
-          return _pages[appPro.currentTap];
+          return pages[appPro.currentTap];
         },
       ),
       bottomNavigationBar: const MainBottomNavigationBar(),

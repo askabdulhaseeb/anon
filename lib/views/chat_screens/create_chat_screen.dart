@@ -166,11 +166,13 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
         isLoading = true;
       });
       final String chatID = UniqueIdFun.chatID(projectID);
-      String url = '';
+      String logoURL = '';
       if (logo != null) {
-        url = await ChatAPI()
-                .uploadAttachment(file: logo!, attachmentID: chatID) ??
-            '';
+        final (String _, String? url) =
+            await ChatAPI().uploadAttachment(file: logo!, attachmentID: chatID);
+        if (url != null) {
+          logoURL = url;
+        }
       }
       final AppUser sender = await LocalUser().user(AuthMethods.uid);
       members.add(sender);
@@ -187,7 +189,7 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
         sendToUIDs: receivers,
       );
       final Chat chat = Chat(
-        imageURL: url,
+        imageURL: logoURL,
         persons: receivers,
         projectID: projectID,
         members: members
