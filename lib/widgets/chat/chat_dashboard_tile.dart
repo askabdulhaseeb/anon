@@ -32,7 +32,10 @@ class ChatDashboardTile extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<Message> snapshot) {
           if (snapshot.hasData) {
             final Message? msg = snapshot.data;
-            return Text(msg?.displayString ?? '');
+            return Text(
+              msg?.displayString ?? 'Message issue',
+              style: const TextStyle(color: Colors.grey),
+            );
           } else {
             return const Text('');
           }
@@ -51,7 +54,10 @@ class ChatDashboardTile extends StatelessWidget {
                 Text(TimeFun.timeInWords(msg?.timestamp)),
                 if ((msg?.sendBy ?? '') == me &&
                     msg?.sendTo
-                            .firstWhere((MessageReadInfo e) => e.uid == me)
+                            .firstWhere(
+                              (MessageReadInfo e) => e.uid == me,
+                              orElse: () => MessageReadInfo(uid: ''),
+                            )
                             .seen ==
                         false)
                   Icon(Icons.circle, color: Theme.of(context).primaryColor)

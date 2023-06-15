@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../../database/firebase/auth_methods.dart';
 import '../../database/firebase/project_api.dart';
 import '../../database/local/local_agency.dart';
+import '../../database/local/local_user.dart';
 import '../../functions/helping_funcation.dart';
 import '../../functions/picker_functions.dart';
 import '../../functions/unique_id_fun.dart';
@@ -109,6 +111,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
+                                        if (isLoading) return;
                                         setState(() {
                                           members.remove(members[index]);
                                         });
@@ -132,7 +135,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                       ),
                     ),
                     TextButton.icon(
-                      onPressed: addMember,
+                      onPressed: isLoading ? null : addMember,
                       icon: const Icon(Icons.add),
                       label: const Text('Add Members'),
                     ),
@@ -169,11 +172,16 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
         return;
       }
       final String pid = UniqueIdFun.unique();
+      final AppUser me = await LocalUser().user(AuthMethods.uid);
       String url = '';
       if (logo != null) {
         url = await ProjectAPI().projectLogo(file: logo!, projectID: pid) ?? '';
       }
-      final List<String> tempMember = members.map((AppUser e) => e.uid).toList();
+      if (!members.any((AppUser element) => element.uid == me.uid)) {
+        members.add(me);
+      }
+      final List<String> tempMember =
+          members.map((AppUser e) => e.uid).toSet().toList();
       Project project = Project(
         pid: UniqueIdFun.unique(),
         title: _title.text.trim(),
@@ -199,6 +207,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   }
 
   Future<void> addMember() async {
+    if (isLoading) return;
     final Agency? agency = await LocalAgency().currentlySelected();
     if (agency == null) {
       CustomToast.errorToast(message: 'Facing Error');

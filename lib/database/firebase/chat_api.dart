@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../../enums/chat/message_type.dart';
 import '../../enums/user/user_type.dart';
 import '../../models/chat/chat.dart';
+import '../../models/chat/message.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/number_detail.dart';
 import '../../widgets/custom/custom_toast.dart';
@@ -77,8 +79,18 @@ class ChatAPI {
         .doc(newChat.chatID)
         .set(newChat.toMap());
     if (newChat.lastMessage != null) {
+      final Message msg = Message(
+        chatID: newChat.chatID,
+        projectID: newChat.projectID,
+        type: MessageType.announcement,
+        attachment: [],
+        sendTo: [],
+        sendToUIDs: [],
+        text: '',
+        displayString: 'Created New Chat',
+      );
       await MessageAPI().sendMessage(
-        newMessage: newChat.lastMessage!,
+        newMessage: newChat.lastMessage ?? msg,
         receiver: receiver,
         sender: sender ??
             AppUser(
