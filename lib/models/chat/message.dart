@@ -12,6 +12,7 @@ part 'message.g.dart';
 class Message extends HiveObject {
   Message({
     required this.chatID,
+    required this.projectID,
     required this.type,
     required this.attachment,
     required this.sendTo,
@@ -23,7 +24,6 @@ class Message extends HiveObject {
     String? sendBy,
     this.replyOf,
     this.isLive = true,
-    this.refID,
     this.isEncrypted = false,
   })  : messageID = messageID ?? UniqueIdFun.messageID(chatID),
         timestamp = timestamp ?? DateTime.now(),
@@ -41,8 +41,7 @@ class Message extends HiveObject {
   final List<Attachment> attachment;
   @HiveField(5)
   final String sendBy;
-  @HiveField(6)
-  final String? refID;
+  // 6 not for use
   @HiveField(7) // Class Code: 45
   final List<MessageReadInfo> sendTo;
   @HiveField(8)
@@ -57,11 +56,14 @@ class Message extends HiveObject {
   final String chatID;
   @HiveField(13, defaultValue: true)
   bool isEncrypted;
+  @HiveField(14, defaultValue: '')
+  final String projectID;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'message_id': messageID,
       'chat_id': chatID,
+      'project_id': projectID,
       'text': text,
       'display_string': displayString,
       'type': type.json,
@@ -69,7 +71,6 @@ class Message extends HiveObject {
       'send_by': sendBy,
       'send_to': sendTo.map((MessageReadInfo x) => x.toMap()).toList(),
       'send_to_uids': sendToUIDs,
-      'reference_id': refID,
       'timestamp': timestamp,
       'reply_of': replyOf?.toMap(),
       'is_encrypted': isEncrypted = false,
@@ -83,6 +84,7 @@ class Message extends HiveObject {
     return Message(
       messageID: map['message_id'] ?? '',
       chatID: map['chat_id'] ?? '',
+      projectID: map['project_id'] ?? '',
       text: map['text'],
       displayString: map['display_string'],
       sendToUIDs: List<String>.from((map['send_to_uids'] ?? <String>[])),
@@ -91,7 +93,6 @@ class Message extends HiveObject {
           // ignore: always_specify_types
           map['attachment']?.map((x) => Attachment.fromMap(x))),
       sendBy: sendedBy,
-      refID: map['reference_id'],
       sendTo: List<MessageReadInfo>.from(map['send_to']?.map(
         (dynamic x) => MessageReadInfo.fromMap(x),
       )),

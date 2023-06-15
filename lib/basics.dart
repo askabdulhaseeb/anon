@@ -15,6 +15,7 @@ import 'views/auth/user_auth/sign_in_screen.dart';
 import 'views/auth/user_auth/sign_up_screen.dart';
 import 'views/chat_screens/chat_screen.dart';
 import 'views/chat_screens/create_chat_screen.dart';
+import 'views/chat_screens/message_media__full_screen.dart';
 import 'views/main_screen/main_screen.dart';
 import 'views/project_screens/create_project_screen.dart';
 import 'views/chat_screens/chat_dashboard_screen.dart';
@@ -49,4 +50,5 @@ final Map<String, WidgetBuilder> myRoutes = <String, WidgetBuilder>{
   CreateChatScreen.routeName: (_) => const CreateChatScreen(),
   // Chat
   ChatScreen.routeName: (_) => const ChatScreen(),
+  MessageMediaFullScreen.routeName: (_) => const MessageMediaFullScreen(),
 };

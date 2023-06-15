@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 import '../../database/firebase/auth_methods.dart';
 import '../../database/firebase/chat_api.dart';
+import '../../database/firebase/message_api.dart';
 import '../../database/local/local_project.dart';
 import '../../models/chat/chat.dart';
+import '../../models/chat/message.dart';
 import '../../models/project/project.dart';
 import '../../widgets/chat/chat_dashboard_tile.dart';
 import '../../widgets/custom/show_loading.dart';
@@ -95,13 +97,22 @@ class ProjectDashboardScreen extends StatelessWidget {
                               .where((Chat element) =>
                                   element.title.contains(search))
                               .toList();
-                          return ListView.builder(
-                            primary: false,
-                            shrinkWrap: true,
-                            itemCount: filterChat.length,
-                            itemBuilder: (BuildContext context, int index) =>
-                                ChatDashboardTile(filterChat[index]),
-                          );
+                          return StreamBuilder<List<Message>>(
+                              stream:
+                                  MessageAPI().messagesByProjectID(projectID),
+                              builder: (
+                                BuildContext context,
+                                AsyncSnapshot<List<Message>> snapshot,
+                              ) {
+                                return ListView.builder(
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  itemCount: filterChat.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) =>
+                                          ChatDashboardTile(filterChat[index]),
+                                );
+                              });
                         } else if (snapshot.hasError) {
                           debugPrint('CHAT ERROR: ${snapshot.error}');
                           return const Text('ERROR');

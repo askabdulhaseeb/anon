@@ -21,6 +21,7 @@ class AttachmentAdapter extends TypeAdapter<Attachment> {
       type: fields[1] as AttachmentType,
       attachmentID: fields[4] == null ? '' : fields[4] as String,
       storagePath: fields[5] == null ? '' : fields[5] as String,
+      canDeleteOn: fields[6] as DateTime?,
       postedBy: fields[2] as String?,
       timestamp: fields[3] as DateTime?,
     );
@@ -29,7 +30,7 @@ class AttachmentAdapter extends TypeAdapter<Attachment> {
   @override
   void write(BinaryWriter writer, Attachment obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.url)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class AttachmentAdapter extends TypeAdapter<Attachment> {
       ..writeByte(4)
       ..write(obj.attachmentID)
       ..writeByte(5)
-      ..write(obj.storagePath);
+      ..write(obj.storagePath)
+      ..writeByte(6)
+      ..write(obj.canDeleteOn);
   }
 
   @override

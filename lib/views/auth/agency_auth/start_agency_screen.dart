@@ -56,6 +56,7 @@ class _StartAgencyScreenState extends State<StartAgencyScreen> {
                 CustomTextFormField(
                   controller: _name,
                   hint: 'Agency Name',
+                  keyboardType: TextInputType.name,
                   focusNode: nameNode,
                   readOnly: isLoading,
                   validator: (String? value) => CustomValidator.agency(value),

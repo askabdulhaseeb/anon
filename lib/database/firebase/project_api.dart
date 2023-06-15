@@ -4,9 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../enums/chat/chat_member_role.dart';
+import '../../models/chat/chat.dart';
+import '../../models/chat/chat_group_member.dart';
 import '../../models/project/project.dart';
+import '../../models/user/app_user.dart';
 import '../local/local_project.dart';
 import 'auth_methods.dart';
+import 'chat_api.dart';
 
 class ProjectAPI {
   static const String _collection = 'projects';
@@ -16,6 +21,20 @@ class ProjectAPI {
     try {
       await _instance.collection(_collection).doc(value.pid).set(value.toMap());
       await LocalProject().add(value);
+      final String me = AuthMethods.uid;
+      ChatAPI().startChat(
+        newChat: Chat(
+          imageURL: '',
+          persons: <String>[me],
+          projectID: value.pid,
+          members: <ChatMember>[
+            ChatMember(uid: me, role: ChatMemberRole.admin),
+          ],
+          title: 'General',
+        ),
+        receiver: <AppUser>[],
+        sender: null,
+      );
       return true;
     } catch (e) {
       debugPrint(e.toString());
@@ -29,7 +48,6 @@ class ProjectAPI {
       final QuerySnapshot<Map<String, dynamic>> docs = await _instance
           .collection(_collection)
           .where('agencies', arrayContains: agencyID)
-          // .where('members', arrayContains: myUID)
           .get();
       final List<Project> tempResult = <Project>[];
       for (DocumentSnapshot<Map<String, dynamic>> element in docs.docs) {
@@ -38,7 +56,9 @@ class ProjectAPI {
           tempResult.add(temp);
         }
       }
-      LocalProject().addAll(tempResult);
+      if (tempResult.isNotEmpty) {
+        await LocalProject().addAll(tempResult);
+      }
       return true;
     } catch (e) {
       debugPrint(e.toString());

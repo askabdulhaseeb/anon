@@ -18,12 +18,19 @@ class TimeFun {
     return diff;
   }
 
+  static DateTime timeAfterDays(int numOfDays) {
+    DateTime now = DateTime.now();
+    now.add(Duration(days: numOfDays));
+    return now;
+  }
+
   static String timeInDigits(DateTime value) {
     return DateFormat.jm().format(value);
   }
 
-  static String timeInWords(DateTime value) {
+  static String timeInWords(DateTime? value) {
     DateTime now = DateTime.now();
+    if (value == null) return 'null';
     Duration diff = value.difference(now);
     String time = '';
 

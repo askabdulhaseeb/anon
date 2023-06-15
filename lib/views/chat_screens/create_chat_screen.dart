@@ -168,8 +168,10 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
       final String chatID = UniqueIdFun.chatID(projectID);
       String logoURL = '';
       if (logo != null) {
-        final (String _, String? url) =
-            await ChatAPI().uploadAttachment(file: logo!, attachmentID: chatID);
+        final String? url = await ChatAPI().uploadChatLogo(
+          file: logo!,
+          chatID: chatID,
+        );
         if (url != null) {
           logoURL = url;
         }
@@ -181,6 +183,7 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
       final Message message = Message(
         text: 'Create new chat',
         chatID: chatID,
+        projectID: projectID,
         type: MessageType.announcement,
         displayString: 'Create new chat',
         attachment: <Attachment>[],
@@ -205,7 +208,7 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
         lastMessage: message,
       );
       await ChatAPI()
-          .sendMessage(chat: chat, receiver: members, sender: sender);
+          .startChat(newChat: chat, receiver: members, sender: sender);
       if (!mounted) return;
       Navigator.of(context).pop();
     } catch (e) {

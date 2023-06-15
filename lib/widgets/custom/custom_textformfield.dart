@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
     required TextEditingController? controller,
-    this.keyboardType,
+    TextCapitalization? textCapitalization,
+    TextInputType? keyboardType,
     this.textInputAction,
     this.onChanged,
     this.focusNode,
@@ -27,10 +28,13 @@ class CustomTextFormField extends StatefulWidget {
     this.border,
     Key? key,
   })  : _controller = controller,
+        textCapitalization = textCapitalization ?? TextCapitalization.sentences,
+        keyboardType = keyboardType ?? TextInputType.text,
         super(key: key);
   final TextEditingController? _controller;
-  final TextInputType? keyboardType;
+  final TextInputType keyboardType;
   final TextInputAction? textInputAction;
+  final TextCapitalization textCapitalization;
   final void Function(String)? onChanged;
   final FocusNode? focusNode;
   final Widget? prefixIcon;
@@ -81,13 +85,15 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
           focusNode: widget.focusNode,
           enableInteractiveSelection: true,
           enableSuggestions: true,
-          textCapitalization: TextCapitalization.sentences,
+          textCapitalization: widget.keyboardType == TextInputType.name
+              ? TextCapitalization.words
+              : widget.textCapitalization,
           keyboardType: widget.keyboardType == TextInputType.number
               ? const TextInputType.numberWithOptions(
                   signed: true, decimal: true)
               : widget.maxLines! > 1
                   ? TextInputType.multiline
-                  : widget.keyboardType ?? TextInputType.text,
+                  : widget.keyboardType,
           textInputAction: widget.maxLines! > 1
               ? TextInputAction.newline
               : widget.textInputAction ?? TextInputAction.next,

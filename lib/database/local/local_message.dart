@@ -6,7 +6,7 @@ import '../../enums/my_hive_type.dart';
 import '../../models/chat/message.dart';
 import '../../models/chat/message_read_info.dart';
 import '../../models/project/attachment.dart';
-import '../firebase/chat_api.dart';
+import '../firebase/message_api.dart';
 
 class LocalMessage {
   static Future<Box<Message>> get openBox async =>
@@ -37,18 +37,16 @@ class LocalMessage {
     final Box<Message> box = await refresh();
     final Message? msg = box.get(messageID);
     if (msg != null) return msg;
-    final Message? result =
-        await ChatAPI().message(chatID: chatID, messageID: messageID);
+    final Message? result = await MessageAPI().message(messageID: messageID);
     if (result != null) return result;
-    return Message(
-      chatID: chatID,
-      type: MessageType.text,
-      attachment: <Attachment>[],
-      sendTo: <MessageReadInfo>[],
-      sendToUIDs: <String>[],
-      text: 'null',
-      displayString: 'null',
-    );
+    return _null(chatID);
+  }
+
+  Future<Message> lastMessage(String chatID) async {
+    final Box<Message> box = await refresh();
+    return box.values.lastWhere((Message element) => element.chatID == chatID,
+        orElse: () => _null(chatID));
+
   }
 
   Future<void> signOut() async {
@@ -65,4 +63,15 @@ class LocalMessage {
       return Hive.box<Message>(MyHiveType.message.database).listenable();
     }
   }
+
+  Message _null(String chatID) => Message(
+        chatID: chatID,
+        projectID: '',
+        type: MessageType.text,
+        attachment: <Attachment>[],
+        sendTo: <MessageReadInfo>[],
+        sendToUIDs: <String>[],
+        text: 'null',
+        displayString: 'null',
+      );
 }

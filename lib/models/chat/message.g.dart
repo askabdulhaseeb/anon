@@ -18,6 +18,7 @@ class MessageAdapter extends TypeAdapter<Message> {
     };
     return Message(
       chatID: fields[12] == null ? '' : fields[12] as String,
+      projectID: fields[14] == null ? '' : fields[14] as String,
       type: fields[3] as MessageType,
       attachment: (fields[4] as List).cast<Attachment>(),
       sendTo: (fields[7] as List).cast<MessageReadInfo>(),
@@ -29,7 +30,6 @@ class MessageAdapter extends TypeAdapter<Message> {
       sendBy: fields[5] as String?,
       replyOf: fields[10] as Message?,
       isLive: fields[11] as bool,
-      refID: fields[6] as String?,
       isEncrypted: fields[13] == null ? true : fields[13] as bool,
     );
   }
@@ -50,8 +50,6 @@ class MessageAdapter extends TypeAdapter<Message> {
       ..write(obj.attachment)
       ..writeByte(5)
       ..write(obj.sendBy)
-      ..writeByte(6)
-      ..write(obj.refID)
       ..writeByte(7)
       ..write(obj.sendTo)
       ..writeByte(8)
@@ -65,7 +63,9 @@ class MessageAdapter extends TypeAdapter<Message> {
       ..writeByte(12)
       ..write(obj.chatID)
       ..writeByte(13)
-      ..write(obj.isEncrypted);
+      ..write(obj.isEncrypted)
+      ..writeByte(14)
+      ..write(obj.projectID);
   }
 
   @override

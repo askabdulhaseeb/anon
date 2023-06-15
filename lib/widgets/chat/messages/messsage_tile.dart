@@ -1,8 +1,5 @@
-import 'package:devmarkaz/widgets/chat/messages/reference_message_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:math' as math;
 
 import '../../../database/firebase/auth_methods.dart';
 import '../../../database/local/local_user.dart';
@@ -11,6 +8,8 @@ import '../../../models/chat/message.dart';
 import '../../../models/user/app_user.dart';
 import '../../../providers/chat_provider.dart';
 import 'announcement_message_widget.dart';
+import 'message_media_attachment_widget.dart';
+import 'reference_message_widget.dart';
 
 class MessageTile extends StatelessWidget {
   const MessageTile(this.message, {super.key});
@@ -20,6 +19,16 @@ class MessageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isMe = message.sendBy == AuthMethods.uid;
+    Widget swipReply = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Text(
+        'Swip to reply',
+        style: TextStyle(
+          color: Theme.of(context).disabledColor,
+          fontSize: 11,
+        ),
+      ),
+    );
     return message.type == MessageType.announcement
         ? AnnouncementMessageWidget(text: message.text)
         : GestureDetector(
@@ -31,14 +40,7 @@ class MessageTile extends StatelessWidget {
                   isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                if (isMe)
-                  Transform.rotate(
-                    angle: 180 * math.pi / 180,
-                    child: IconButton(
-                      onPressed: () => onReply(context),
-                      icon: const Icon(CupertinoIcons.reply),
-                    ),
-                  ),
+                if (isMe) swipReply,
                 ClipRRect(
                   borderRadius: BorderRadius.circular(_borderRadius),
                   child: Container(
@@ -86,31 +88,18 @@ class MessageTile extends StatelessWidget {
                               }
                             },
                           ),
-                        if (message.refID != null)
-                          ReferenceMessageWidget(
-                            messageID: message.refID ?? '',
-                            chatID: message.chatID,
-                          ),
-                        Text(message.text),
+                        if (message.replyOf != null)
+                          ReferenceMessageWidget(message: message.replyOf!),
+                        if (message.attachment.isNotEmpty)
+                          MessageMediaAttachmentWidget(message: message),
+                        if (message.text.isNotEmpty) Text(message.text),
                       ],
                     ),
                   ),
                 ),
-                if (!isMe)
-                  Transform.rotate(
-                    angle: 180 * math.pi / 180,
-                    child: IconButton(
-                      onPressed: () => onReply(context),
-                      icon: const Icon(CupertinoIcons.reply),
-                    ),
-                  ),
+                if (!isMe) swipReply,
               ],
             ),
           );
-  }
-
-  onReply(BuildContext context) {
-    Provider.of<ChatProvider>(context, listen: false)
-        .onAttachedMessageUpdate(message);
   }
 }

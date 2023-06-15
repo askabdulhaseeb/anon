@@ -12,6 +12,7 @@ class Attachment {
     required this.type,
     required this.attachmentID,
     required this.storagePath,
+    this.canDeleteOn,
     String? postedBy,
     DateTime? timestamp,
   })  : postedBy = postedBy ?? AuthMethods.uid,
@@ -19,7 +20,7 @@ class Attachment {
 
   @HiveField(0)
   final String url;
-  @HiveField(1) // Class Code: 3100
+  @HiveField(1) // Class Code: 33
   final AttachmentType type;
   @HiveField(2)
   final String postedBy;
@@ -29,6 +30,8 @@ class Attachment {
   final String attachmentID;
   @HiveField(5, defaultValue: '')
   final String storagePath;
+  @HiveField(6, defaultValue: null)
+  final DateTime? canDeleteOn;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -38,6 +41,7 @@ class Attachment {
       'timestamp': timestamp,
       'attachment_id': attachmentID,
       'storage_path': storagePath,
+      'can_delete_on': canDeleteOn,
     };
   }
 
@@ -51,6 +55,7 @@ class Attachment {
           .toEnum(map['type'] ?? AttachmentType.other.json),
       postedBy: map['posted_by'] ?? '',
       timestamp: TimeFun.parseTime(map['timestamp']),
+      canDeleteOn: TimeFun.parseTime(map['can_delete_on']),
     );
   }
 }

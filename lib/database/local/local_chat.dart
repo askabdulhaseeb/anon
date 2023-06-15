@@ -31,6 +31,18 @@ class LocalChat {
     }
   }
 
+  Future<void> addAllChat(List<Chat> value) async {
+    try {
+      final Box<Chat> box = await refresh();
+      await box.clear();
+      for (Chat element in value) {
+        box.put(element.chatID, element);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   Future<Chat> chat(String chatID) async {
     final Box<Chat> box = await refresh();
     final Chat? result = box.get(chatID);

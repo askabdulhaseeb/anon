@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/firebase/chat_api.dart';
+import '../../database/firebase/message_api.dart';
 import '../../database/local/local_chat.dart';
 import '../../models/chat/chat.dart';
 import '../../models/chat/message.dart';
@@ -26,9 +26,10 @@ class ChatScreen extends StatelessWidget {
           appBar: AppBar(title: _AppBar(chatID: chatID)),
           body: Column(
             children: <Widget>[
+              
               Expanded(
                 child: StreamBuilder<List<Message>>(
-                  stream: ChatAPI().messages(chatID),
+                  stream: MessageAPI().messages(chatID),
                   builder: (
                     BuildContext context,
                     AsyncSnapshot<List<Message>> snapshot,

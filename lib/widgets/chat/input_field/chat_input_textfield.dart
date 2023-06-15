@@ -63,7 +63,10 @@ class ChatInputTextField extends StatelessWidget {
                     );
                   },
                   splashRadius: 16,
-                  icon: const Icon(Icons.attachment_rounded),
+                  icon: const RotationTransition(
+                    turns: AlwaysStoppedAnimation<double>(45 / 360),
+                    child: Icon(Icons.attachment_rounded),
+                  ),
                 ),
                 Expanded(
                   child: TextFormField(
@@ -94,6 +97,12 @@ class ChatInputTextField extends StatelessWidget {
                 ),
               ],
             ),
+            const Center(
+              child: Text(
+                '''Please don't share your personal info here''',
+                style: TextStyle(color: Colors.red),
+              ),
+            )
           ],
         );
       }),
