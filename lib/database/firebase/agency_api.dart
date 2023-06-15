@@ -78,10 +78,12 @@ class AgencyAPI {
 
   Future<Agency?> joinAgency(String value) async {
     try {
-      final DocumentSnapshot<Map<String, dynamic>> doc =
-          await _instance.collection(_collection).doc(value).get();
-      if (!doc.exists) return null;
-      final Agency result = Agency.fromMap(doc);
+      final QuerySnapshot<Map<String, dynamic>> doc = await _instance
+          .collection(_collection)
+          .where('agency_code', isEqualTo: value)
+          .get();
+      if (doc.docs.isEmpty) return null;
+      final Agency result = Agency.fromMap(doc.docs[0]);
       final String myUID = AuthMethods.uid;
       if (result.activeMembers
           .any((MemberDetail element) => element.uid == myUID)) {
@@ -145,7 +147,9 @@ class AgencyAPI {
         final Agency temp = Agency.fromMap(element);
         result.add(temp);
       }
-      await LocalAgency().addAll(result);
+      if (result.isNotEmpty) {
+        await LocalAgency().addAll(result);
+      }
     } on FirebaseException catch (e) {
       debugPrint("Failed with error '${e.code}': ${e.message}");
       throw 'e.code';

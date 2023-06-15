@@ -73,7 +73,8 @@ class _SignInScreenState extends State<SignInScreen> {
                 CustomTextFormField(
                   controller: _email,
                   hint: 'Email: Ex. example@domain.com',
-                  autoFocus: _isLoading,
+                  autoFocus: true,
+                  readOnly: _isLoading,
                   keyboardType: TextInputType.emailAddress,
                   validator: (String? value) => CustomValidator.email(value),
                   onFieldSubmitted: (_) =>

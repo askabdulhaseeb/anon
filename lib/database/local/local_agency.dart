@@ -31,6 +31,7 @@ class LocalAgency {
 
   Future<void> addAll(List<Agency> value) async {
     final Box<Agency> box = await refresh();
+    await box.clear();
     try {
       for (int i = 0; i < value.length; i++) {
         await box.put(value[i].agencyID, value[i]);
@@ -112,7 +113,6 @@ class LocalAgency {
       debugPrint('Error: Local User - ${e.toString()}');
     }
   }
-
 
   ValueListenable<Box<Agency>> listenable() {
     final bool isOpen = Hive.box<Agency>(MyHiveType.agency.database).isOpen;

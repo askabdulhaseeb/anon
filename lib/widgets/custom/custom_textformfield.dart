@@ -87,7 +87,9 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
           enableSuggestions: true,
           textCapitalization: widget.keyboardType == TextInputType.name
               ? TextCapitalization.words
-              : widget.textCapitalization,
+              : widget.keyboardType == TextInputType.emailAddress
+                  ? TextCapitalization.none
+                  : widget.textCapitalization,
           keyboardType: widget.keyboardType == TextInputType.number
               ? const TextInputType.numberWithOptions(
                   signed: true, decimal: true)

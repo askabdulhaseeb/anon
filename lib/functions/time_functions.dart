@@ -9,7 +9,7 @@ class TimeFun {
         ? DateTime.now()
         : Platform.isIOS
             ? (date as Timestamp).toDate()
-            : (date as DateTime);
+            : (date as Timestamp).toDate();
   }
 
   static Duration timeDuration(DateTime value) {

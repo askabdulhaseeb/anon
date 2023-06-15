@@ -74,7 +74,7 @@ class AppUser extends HiveObject {
       'uid': uid,
       'agency_ids': agencyIDs,
       'name': name,
-      'nickName': nickName,
+      'nick_name': nickName,
       'type': type.json,
       'auth_type': authType.json,
       'phone_number': phoneNumber.toMap(),
@@ -99,7 +99,7 @@ class AppUser extends HiveObject {
       uid: doc.data()?['uid'] ?? '',
       agencyIDs: List<String>.from((doc.data()?['agency_ids'] ?? <String>[])),
       name: doc.data()?['name'] ?? '',
-      nickName: doc.data()?['nickName'] ?? '',
+      nickName: doc.data()?['nick_name'] ?? '',
       type:
           UserTypeConvertor().toEnum(doc.data()?['type'] ?? UserType.user.json),
       authType: AuthTypeConvertor()

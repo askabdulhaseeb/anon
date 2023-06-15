@@ -9,7 +9,7 @@ import '../../models/agency/member_detail.dart';
 import '../../views/auth/agency_auth/join_agency_screen.dart';
 import '../../views/main_screen/main_screen.dart';
 import '../custom/custom_elevated_button.dart';
-import '../custom/custom_network_image.dart';
+import '../custom/custom_profile_photo.dart';
 import '../custom/show_loading.dart';
 
 class MyAgenciesList extends StatelessWidget {
@@ -18,57 +18,59 @@ class MyAgenciesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Agency>>(
-      future: AgencyAPI().myAgencies(),
-      builder: (BuildContext context, AsyncSnapshot<void> refreshSnapshot) {
-        return FutureBuilder<Box<Agency>>(
-          future: LocalAgency().refresh(),
-          builder: (BuildContext context, AsyncSnapshot<Box<Agency>> snapshot) {
-            if (snapshot.hasData) {
-              final Box<Agency> openedBox = snapshot.data!;
-              return ValueListenableBuilder<Box<Agency>>(
-                valueListenable: openedBox.listenable(),
-                builder: (BuildContext context, Box<Agency> box, _) {
-                  final List<Agency> agencies = box.values.toList().cast<Agency>();
-                  return Expanded(
-                    child: agencies.isEmpty
-                        ? const _NoAgencyAvailable()
-                        : Padding(
-                            padding: const EdgeInsets.only(top: 24),
-                            child: ListView.builder(
-                              primary: false,
-                              shrinkWrap: true,
-                              itemCount: agencies.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return index == 0
-                                    ? Column(
-                                        children: <Widget>[
-                                          Text(
-                                            'Choose Agency',
-                                            style: TextStyle(
-                                              fontSize: 36,
-                                              fontWeight: FontWeight.w600,
-                                              color:
-                                                  Theme.of(context).disabledColor,
+        future: AgencyAPI().myAgencies(),
+        builder: (BuildContext context, AsyncSnapshot<void> refreshSnapshot) {
+          return FutureBuilder<Box<Agency>>(
+            future: LocalAgency().refresh(),
+            builder:
+                (BuildContext context, AsyncSnapshot<Box<Agency>> snapshot) {
+              if (snapshot.hasData) {
+                final Box<Agency> openedBox = snapshot.data!;
+                return ValueListenableBuilder<Box<Agency>>(
+                  valueListenable: openedBox.listenable(),
+                  builder: (BuildContext context, Box<Agency> box, _) {
+                    final List<Agency> agencies =
+                        box.values.toList().cast<Agency>();
+                    return Expanded(
+                      child: agencies.isEmpty
+                          ? const _NoAgencyAvailable()
+                          : Padding(
+                              padding: const EdgeInsets.only(top: 24),
+                              child: ListView.builder(
+                                primary: false,
+                                shrinkWrap: true,
+                                itemCount: agencies.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return index == 0
+                                      ? Column(
+                                          children: <Widget>[
+                                            Text(
+                                              'Choose Agency',
+                                              style: TextStyle(
+                                                fontSize: 36,
+                                                fontWeight: FontWeight.w600,
+                                                color: Theme.of(context)
+                                                    .disabledColor,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 20),
-                                          _AgencyTile(agency: agencies[index]),
-                                        ],
-                                      )
-                                    : _AgencyTile(agency: agencies[index]);
-                              },
+                                            const SizedBox(height: 20),
+                                            _AgencyTile(
+                                                agency: agencies[index]),
+                                          ],
+                                        )
+                                      : _AgencyTile(agency: agencies[index]);
+                                },
+                              ),
                             ),
-                          ),
-                  );
-                },
-              );
-            } else {
-              return const ShowLoading();
-            }
-          },
-        );
-      }
-    );
+                    );
+                  },
+                );
+              } else {
+                return const ShowLoading();
+              }
+            },
+          );
+        });
   }
 }
 
@@ -97,9 +99,9 @@ class _AgencyTile extends StatelessWidget {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: CustomNetworkImage(
-                size: 56,
-                imageURL: agency.logoURL,
+              child: CustomProfilePhoto(
+                agency.logoURL,
+                name: agency.agencyCode,
               ),
             ),
             const SizedBox(width: 8),

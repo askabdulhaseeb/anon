@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../database/firebase/agency_api.dart';
 import '../../../database/firebase/auth_methods.dart';
 import '../../../widgets/auth/my_agencies_list.dart';
+import 'join_agency_screen.dart';
 
 class SwitchAgencyScreen extends StatelessWidget {
   const SwitchAgencyScreen({Key? key}) : super(key: key);
@@ -49,10 +49,10 @@ class SwitchAgencyScreen extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: TextButton.icon(
                 onPressed: () async {
-                  await AgencyAPI().myAgencies();
+                  Navigator.of(context).pushNamed(JoinAgencyScreen.routeName);
                 },
-                icon: const Icon(Icons.refresh),
-                label: const Text('Refresh Agencies'),
+                icon: const Icon(Icons.add),
+                label: const Text('Join New Agency'),
               ),
             ),
             const MyAgenciesList(),
