@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'show_loading.dart';
 
-class CustomElevatedButton extends StatelessWidget {
-  const CustomElevatedButton({
+class CustomIconElevatedButton extends StatelessWidget {
+  const CustomIconElevatedButton({
     required this.title,
+    required this.icon,
     required this.isLoading,
     required this.onTap,
+    this.isExpanded = true,
     this.margin,
     this.padding,
     this.bgColor,
@@ -18,7 +20,9 @@ class CustomElevatedButton extends StatelessWidget {
   }) : super(key: key);
   final String title;
   final VoidCallback onTap;
+  final IconData icon;
   final bool isLoading;
+  final bool isExpanded;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
   final Color? bgColor;
@@ -32,7 +36,7 @@ class CustomElevatedButton extends StatelessWidget {
     return isLoading
         ? const ShowLoading()
         : Container(
-            constraints: const BoxConstraints(maxWidth: 400),
+            constraints: const BoxConstraints(maxWidth: 400, minWidth: 80),
             margin: margin ?? const EdgeInsets.symmetric(vertical: 6),
             decoration: BoxDecoration(
               color: bgColor ?? Theme.of(context).primaryColor,
@@ -46,16 +50,23 @@ class CustomElevatedButton extends StatelessWidget {
                 borderRadius: borderRadius ?? BorderRadius.circular(8),
                 onTap: onTap,
                 child: Container(
-                  padding: padding ?? const EdgeInsets.symmetric(vertical: 10),
+                  padding: padding ?? const EdgeInsets.all(10),
                   alignment: Alignment.center,
-                  child: Text(
-                    title,
-                    style: textStyle ??
-                        TextStyle(
-                          color: textColor ?? Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
+                  child: Row(
+                    mainAxisSize:
+                        isExpanded ? MainAxisSize.max : MainAxisSize.min,
+                    children: <Widget>[
+                      Icon(icon, color: textColor ?? Colors.white),
+                      Text(
+                        title,
+                        style: textStyle ??
+                            TextStyle(
+                              color: textColor ?? Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                      ),
+                    ],
                   ),
                 ),
               ),

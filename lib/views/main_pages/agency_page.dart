@@ -23,7 +23,6 @@ class AgencyPage extends StatelessWidget {
                   final Agency agency = snapshot.data ??
                       Agency(agencyID: '', agencyCode: '', name: '');
                   final String me = AuthMethods.uid;
-
                   return agency.agencyID.isNotEmpty &&
                           agency.activeMembers
                                   .firstWhere(

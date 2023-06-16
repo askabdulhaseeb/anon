@@ -36,9 +36,11 @@ class AppThemes {
     useMaterial3: true,
     appBarTheme: const AppBarTheme(
       centerTitle: false,
+      elevation: 0,
+      backgroundColor: Colors.transparent,
       surfaceTintColor: _darkScaffoldColor,
       titleTextStyle: TextStyle(
-        color: _primary,
+        color: _lightScaffoldColor,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
@@ -70,9 +72,11 @@ class AppThemes {
     useMaterial3: true,
     appBarTheme: const AppBarTheme(
       centerTitle: false,
+      elevation: 0,
+      backgroundColor: Colors.transparent,
       surfaceTintColor: _lightScaffoldColor,
       titleTextStyle: TextStyle(
-        color: _primary,
+        color: _darkScaffoldColor,
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),

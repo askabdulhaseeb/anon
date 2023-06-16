@@ -9,7 +9,7 @@ class CustomNetworkChangeImageBox extends StatelessWidget {
     this.file,
     this.url,
     this.title = 'Upload Image',
-    this.size = 80,
+    this.size = 40,
     Key? key,
   }) : super(key: key);
   final String? url;
@@ -26,23 +26,22 @@ class CustomNetworkChangeImageBox extends StatelessWidget {
       child: Center(
         child: Column(
           children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                height: size,
-                width: size,
-                color: Theme.of(context).primaryColor,
-                child: file != null
-                    ? Image.file(file!)
-                    : url == null || url == ''
-                        ? const FittedBox(
-                            child: Icon(Icons.person, color: Colors.white))
-                        : SizedBox(
-                            height: double.infinity,
-                            width: double.infinity,
-                            child: Image.network(url!, fit: BoxFit.cover),
+            CircleAvatar(
+              radius: size,
+              backgroundColor: Theme.of(context).primaryColor,
+              child: file != null
+                  ? Image.file(file!)
+                  : url == null || url == ''
+                      ? const SizedBox.expand(
+                          child: FittedBox(
+                            child: Icon(Icons.person, color: Colors.white),
                           ),
-              ),
+                        )
+                      : SizedBox(
+                          height: double.infinity,
+                          width: double.infinity,
+                          child: Image.network(url!, fit: BoxFit.cover),
+                        ),
             ),
             TextButton(
               onPressed: isDisable ? null : onTap,

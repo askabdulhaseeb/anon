@@ -7,44 +7,46 @@ import '../../database/local/local_agency.dart';
 import '../../database/local/local_project.dart';
 import '../../models/agency/agency.dart';
 import '../../models/project/project.dart';
-import '../../widgets/custom/custom_profile_photo.dart';
+import '../../widgets/custom/custom_icon_elevated_custom.dart';
+import '../../widgets/custom/custom_square_photo.dart';
 import '../../widgets/custom/show_loading.dart';
-import '../project_screens/create_project_screen.dart';
 import '../chat_screens/chat_dashboard_screen.dart';
 
-class ProjectPage extends StatefulWidget {
+class ProjectPage extends StatelessWidget {
   const ProjectPage({Key? key}) : super(key: key);
 
   @override
-  State<ProjectPage> createState() => _ProjectPageState();
-}
-
-class _ProjectPageState extends State<ProjectPage> {
-  String search = '';
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        ListTile(
-          onTap: () =>
-              Navigator.of(context).pushNamed(CreateProjectScreen.routeName),
-          leading: const Icon(Icons.now_widgets_outlined),
-          title: const Text('Now Project'),
-          subtitle: const Text('Tab here to start a new project'),
-        ),
-        const Divider(),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: CupertinoSearchTextField(
-            onChanged: (String? value) {
-              setState(() {
-                search = value ?? '';
-              });
-            },
+    String search = '';
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: <Widget>[
+          const SizedBox(height: 16),
+          Container(),
+          CustomIconElevatedButton(
+            title: 'Start New Project',
+            icon: Icons.add,
+            isLoading: false,
+            onTap: () {},
           ),
-        ),
-        _ProjectList(search: search),
-      ],
+          const Divider(),
+          const SizedBox(height: 6),
+          StatefulBuilder(builder: (
+            BuildContext context,
+            void Function(void Function()) setState,
+          ) {
+            return CupertinoSearchTextField(
+              onChanged: (String? value) {
+                setState(() {
+                  search = value ?? '';
+                });
+              },
+            );
+          }),
+          _ProjectList(search: search),
+        ],
+      ),
     );
   }
 }
@@ -87,7 +89,8 @@ class _ProjectList extends StatelessWidget {
                             itemBuilder: (BuildContext context, int index) {
                               final Project project = projects[index];
                               return ListTile(
-                                leading: CustomProfilePhoto(
+                                contentPadding: const EdgeInsets.all(0),
+                                leading: CustomSquarePhoto(
                                   project.logo,
                                   name: project.title,
                                 ),

@@ -38,25 +38,12 @@ class ProjectDashboardScreen extends StatelessWidget {
               }
             }),
         actions: <Widget>[
-          FutureBuilder<Project>(
-              future: LocalProject().project(projectID),
-              builder: (BuildContext context, AsyncSnapshot<Project> snapshot) {
-                if (snapshot.hasData) {
-                  return ((snapshot.data?.createdBy ?? '') == AuthMethods.uid)
-                      ? TextButton(
-                          onPressed: () => Navigator.of(context).pushNamed(
-                            CreateChatScreen.routeName,
-                            arguments: projectID,
-                          ),
-                          child: const Text('Create Chat'),
-                        )
-                      : const SizedBox();
-                } else if (snapshot.hasError) {
-                  return const Text('–ERROR-');
-                } else {
-                  return const ShowLoading();
-                }
-              }),
+          IconButton(
+            onPressed: () {
+              onMoreOption(context, projectID);
+            },
+            icon: Icon(Icons.adaptive.more),
+          ),
         ],
       ),
       body: Padding(
@@ -130,6 +117,32 @@ class ProjectDashboardScreen extends StatelessWidget {
               }
             }),
       ),
+    );
+  }
+
+  onMoreOption(BuildContext context, String projectID) {
+    showBottomSheet(
+      context: context,
+      builder: (BuildContext context) => FutureBuilder<Project>(
+          future: LocalProject().project(projectID),
+          builder: (BuildContext context, AsyncSnapshot<Project> snapshot) {
+            if (snapshot.hasData) {
+              return ((snapshot.data?.createdBy ?? '') == AuthMethods.uid)
+                  ? ListTile(
+                      onTap: () => Navigator.of(context).pushNamed(
+                        CreateChatScreen.routeName,
+                        arguments: projectID,
+                      ),
+                      leading: const Icon(CupertinoIcons.add_circled),
+                      title: const Text('Create Chat'),
+                    )
+                  : const SizedBox();
+            } else if (snapshot.hasError) {
+              return const Text('–ERROR-');
+            } else {
+              return const ShowLoading();
+            }
+          }),
     );
   }
 }

@@ -27,49 +27,41 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: RichText(
-          text: TextSpan(
-            children: <TextSpan>[
-              TextSpan(
-                text: 'Hi, ',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Theme.of(context).disabledColor,
-                ),
-              ),
-              TextSpan(
-                text: '${AuthMethods.getCurrentUser?.displayName ?? 'null'} ',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => AuthMethods().signout(context),
-            child: const Text('Sign Out', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Join Agency')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _key,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32),
-                child: Text(
-                  'To be the part of any agency please enter the agency code below',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Hi, ',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Theme.of(context).disabledColor,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          '${AuthMethods.getCurrentUser?.displayName ?? 'null'} ',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'To be the part of any agency please enter the agency code below',
+                style: TextStyle(),
               ),
               TextFormField(
                 controller: _agencyCode,
@@ -87,7 +79,7 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
                 ),
               ),
               CustomElevatedButton(
-                title: 'Join Agency',
+                title: 'Join Agency'.toUpperCase(),
                 isLoading: _isLoading,
                 onTap: onJoinAgency,
               ),

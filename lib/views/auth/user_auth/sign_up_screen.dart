@@ -120,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 16),
                 CustomElevatedButton(
-                  title: 'Register',
+                  title: 'Register'.toUpperCase(),
                   isLoading: _isLoading,
                   onTap: onRegister,
                 ),
@@ -151,7 +151,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           isoCode: _number.countryISOCode,
         ),
       );
-      assert(user != null);
+      if (user == null) throw ('Issue in register');
       if (!mounted) return;
       Navigator.of(context).pushNamedAndRemoveUntil(
           JoinAgencyScreen.routeName, (Route<dynamic> route) => false);

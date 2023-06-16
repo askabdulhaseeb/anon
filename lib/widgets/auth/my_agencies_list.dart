@@ -6,10 +6,8 @@ import '../../database/firebase/auth_methods.dart';
 import '../../database/local/local_agency.dart';
 import '../../models/agency/agency.dart';
 import '../../models/agency/member_detail.dart';
-import '../../views/auth/agency_auth/join_agency_screen.dart';
 import '../../views/main_screen/main_screen.dart';
-import '../custom/custom_elevated_button.dart';
-import '../custom/custom_profile_photo.dart';
+import '../custom/custom_square_photo.dart';
 import '../custom/show_loading.dart';
 
 class MyAgenciesList extends StatelessWidget {
@@ -31,38 +29,35 @@ class MyAgenciesList extends StatelessWidget {
                   builder: (BuildContext context, Box<Agency> box, _) {
                     final List<Agency> agencies =
                         box.values.toList().cast<Agency>();
-                    return Expanded(
-                      child: agencies.isEmpty
-                          ? const _NoAgencyAvailable()
-                          : Padding(
-                              padding: const EdgeInsets.only(top: 24),
-                              child: ListView.builder(
-                                primary: false,
-                                shrinkWrap: true,
-                                itemCount: agencies.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return index == 0
-                                      ? Column(
-                                          children: <Widget>[
-                                            Text(
-                                              'Choose Agency',
-                                              style: TextStyle(
-                                                fontSize: 36,
-                                                fontWeight: FontWeight.w600,
-                                                color: Theme.of(context)
-                                                    .disabledColor,
-                                              ),
+                    return agencies.isEmpty
+                        ? const _NoAgencyAvailable()
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 24),
+                            child: ListView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              itemCount: agencies.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return index == 0
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          const Text(
+                                            'Choose Agency',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
                                             ),
-                                            const SizedBox(height: 20),
-                                            _AgencyTile(
-                                                agency: agencies[index]),
-                                          ],
-                                        )
-                                      : _AgencyTile(agency: agencies[index]);
-                                },
-                              ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          _AgencyTile(agency: agencies[index]),
+                                        ],
+                                      )
+                                    : _AgencyTile(agency: agencies[index]);
+                              },
                             ),
-                    );
+                          );
                   },
                 );
               } else {
@@ -99,7 +94,7 @@ class _AgencyTile extends StatelessWidget {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: CustomProfilePhoto(
+              child: CustomSquarePhoto(
                 agency.logoURL,
                 name: agency.agencyCode,
               ),
@@ -141,17 +136,11 @@ class _NoAgencyAvailable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Column(
         children: <Widget>[
-          const SizedBox(height: 120),
-          const Text('Not agency found'),
-          CustomElevatedButton(
-            isLoading: false,
-            onTap: () =>
-                Navigator.of(context).pushNamed(JoinAgencyScreen.routeName),
-            title: 'Join or start agency',
-          ),
+          SizedBox(height: 120),
+          Text('Not agency found'),
         ],
       ),
     );
