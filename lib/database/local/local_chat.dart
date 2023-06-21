@@ -62,6 +62,12 @@ class LocalChat {
     return result;
   }
 
+  Future<void> updateMembers(Chat value) async {
+    final Box<Chat> box = await refresh();
+    await box.put(value.chatID, value);
+    await ChatAPI().updateMembers(value);
+  }
+
   Future<void> signOut() async {
     final Box<Chat> box = await refresh();
     await box.clear();

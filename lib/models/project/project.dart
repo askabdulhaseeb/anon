@@ -48,6 +48,8 @@ class Project extends HiveObject {
   final String createdBy;
 
   Map<String, dynamic> toMap() {
+    final String me = AuthMethods.uid;
+    if (!members.contains(me)) members.add(me);
     return <String, dynamic>{
       'pid': pid,
       'title': title,
@@ -60,6 +62,12 @@ class Project extends HiveObject {
       'created_by': createdBy,
       'notes': notes.map((Note x) => x.toMap()).toList(),
     };
+  }
+
+  Map<String, dynamic> toUpdateMembers() {
+    final String me = AuthMethods.uid;
+    if (!members.contains(me)) members.add(me);
+    return <String, dynamic>{'members': members};
   }
 
   // ignore: sort_constructors_first

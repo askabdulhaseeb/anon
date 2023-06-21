@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../database/firebase/auth_methods.dart';
 import '../../database/firebase/chat_api.dart';
 import '../../database/firebase/message_api.dart';
 import '../../database/local/local_project.dart';
@@ -10,6 +9,7 @@ import '../../models/chat/message.dart';
 import '../../models/project/project.dart';
 import '../../widgets/chat/chat_dashboard_tile.dart';
 import '../../widgets/custom/show_loading.dart';
+import '../project_screens/project_detail_screen.dart';
 import 'create_chat_screen.dart';
 
 class ProjectDashboardScreen extends StatelessWidget {
@@ -38,12 +38,14 @@ class ProjectDashboardScreen extends StatelessWidget {
               }
             }),
         actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              onMoreOption(context, projectID);
-            },
-            icon: Icon(Icons.adaptive.more),
-          ),
+          Builder(builder: (BuildContext context) {
+            return IconButton(
+              onPressed: () {
+                onMoreOption(context, projectID);
+              },
+              icon: Icon(Icons.adaptive.more),
+            );
+          }),
         ],
       ),
       body: Padding(
@@ -127,16 +129,45 @@ class ProjectDashboardScreen extends StatelessWidget {
           future: LocalProject().project(projectID),
           builder: (BuildContext context, AsyncSnapshot<Project> snapshot) {
             if (snapshot.hasData) {
-              return ((snapshot.data?.createdBy ?? '') == AuthMethods.uid)
-                  ? ListTile(
-                      onTap: () => Navigator.of(context).pushNamed(
-                        CreateChatScreen.routeName,
-                        arguments: projectID,
-                      ),
-                      leading: const Icon(CupertinoIcons.add_circled),
-                      title: const Text('Create Chat'),
-                    )
-                  : const SizedBox();
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Close'),
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.add),
+                    dense: false,
+                    title: const Text('Create New Chat Section'),
+                    onTap: () => Navigator.of(context).popAndPushNamed(
+                      CreateChatScreen.routeName,
+                      arguments: projectID,
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.group),
+                    dense: false,
+                    title: const Text('Project and Member Management'),
+                    onTap: () => Navigator.of(context).popAndPushNamed(
+                      ProjectDetailScreen.routeName,
+                      arguments: projectID,
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.delete, color: Colors.red),
+                    dense: false,
+                    title: const Text(
+                      'Remove Project',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onTap: () {},
+                  ),
+                ],
+              );
             } else if (snapshot.hasError) {
               return const Text('–ERROR-');
             } else {

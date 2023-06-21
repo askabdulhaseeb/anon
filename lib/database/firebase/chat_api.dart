@@ -7,6 +7,8 @@ import '../../enums/chat/message_type.dart';
 import '../../enums/user/user_type.dart';
 import '../../models/chat/chat.dart';
 import '../../models/chat/message.dart';
+import '../../models/chat/message_read_info.dart';
+import '../../models/project/attachment.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/number_detail.dart';
 import '../../widgets/custom/custom_toast.dart';
@@ -83,9 +85,9 @@ class ChatAPI {
         chatID: newChat.chatID,
         projectID: newChat.projectID,
         type: MessageType.announcement,
-        attachment: [],
-        sendTo: [],
-        sendToUIDs: [],
+        attachment: <Attachment>[],
+        sendTo: <MessageReadInfo>[],
+        sendToUIDs: <String>[],
         text: '',
         displayString: 'Created New Chat',
       );
@@ -107,25 +109,22 @@ class ChatAPI {
     }
   }
 
-  // Future<void> addMembers(Chat chat) async {
-  //   final Message? newMessage = chat.lastMessage;
-  //   try {
-  //     if (newMessage != null) {
-  //       await _instance
-  //           .collection(_collection)
-  //           .doc(chat.chatID)
-  //           .update(chat.addMembers());
-  //       await _instance
-  //           .collection(_collection)
-  //           .doc(chat.chatID)
-  //           .collection(_messageCollection)
-  //           .doc(newMessage.messageID)
-  //           .set(newMessage.toMap());
-  //     }
-  //   } catch (e) {
-  //     CustomToast.errorToast(message: e.toString());
-  //   }
-  // }
+  Future<void> updateMembers(Chat value) async {
+    try {
+      await _instance
+          .collection(_collection)
+          .doc(value.chatID)
+          .update(value.toAddMember());
+      // await _instance
+      //     .collection(_collection)
+      //     .doc(chat.chatID)
+      //     .collection(_messageCollection)
+      //     .doc(newMessage.messageID)
+      //     .set(newMessage.toMap());
+    } catch (e) {
+      CustomToast.errorToast(message: e.toString());
+    }
+  }
 
   Future<Chat?> chat(String chatID) async {
     final DocumentSnapshot<Map<String, dynamic>> doc =

@@ -1,5 +1,8 @@
+import 'package:devmarkaz/models/chat/target_string.dart';
 import 'package:hive/hive.dart';
 
+import '../../database/firebase/auth_methods.dart';
+import '../../enums/chat/chat_member_role.dart';
 import '../../functions/time_functions.dart';
 import '../../functions/unique_id_fun.dart';
 import '../project/note.dart';
@@ -21,10 +24,12 @@ class Chat extends HiveObject {
     List<Note>? chatNotes,
     List<Message>? unseenMessages,
     DateTime? timestamp,
+    List<TargetString>? targetString,
   })  : chatID = chatID ?? UniqueIdFun.unique(),
         chatNotes = chatNotes ?? <Note>[],
         unseenMessages = unseenMessages ?? <Message>[],
-        timestamp = timestamp ?? DateTime.now();
+        timestamp = timestamp ?? DateTime.now(),
+        targetString = targetString ?? <TargetString>[];
 
   @HiveField(0)
   final String chatID;
@@ -48,8 +53,15 @@ class Chat extends HiveObject {
   String title;
   @HiveField(10, defaultValue: '')
   String description;
+  @HiveField(11) // Class Code: 46 & 47
+  final List<TargetString> targetString;
 
   Map<String, dynamic> toMap() {
+    final String me = AuthMethods.uid;
+    if (!persons.contains(me)) persons.add(me);
+    if (!members.any((ChatMember element) => element.uid == me)) {
+      members.add(ChatMember(uid: me, role: ChatMemberRole.admin));
+    }
     return <String, dynamic>{
       'chat_id': chatID,
       'project_id': projectID,
@@ -62,6 +74,18 @@ class Chat extends HiveObject {
       'last_message': lastMessage?.toMap(),
       'unseen_message': unseenMessages.map((Message x) => x.toMap()).toList(),
       'timestamp': timestamp,
+    };
+  }
+
+  Map<String, dynamic> toAddMember() {
+    final String me = AuthMethods.uid;
+    if (!persons.contains(me)) persons.add(me);
+    if (!members.any((ChatMember element) => element.uid == me)) {
+      members.add(ChatMember(uid: me, role: ChatMemberRole.admin));
+    }
+    return <String, dynamic>{
+      'persons': persons,
+      'members': members.map((ChatMember x) => x.toMap()).toList(),
     };
   }
 

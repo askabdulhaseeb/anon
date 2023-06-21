@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../../utilities/app_images.dart';
+
 class CustomNetworkChangeImageBox extends StatelessWidget {
   const CustomNetworkChangeImageBox({
     required this.onTap,
@@ -26,22 +28,14 @@ class CustomNetworkChangeImageBox extends StatelessWidget {
       child: Center(
         child: Column(
           children: <Widget>[
-            CircleAvatar(
-              radius: size,
-              backgroundColor: Theme.of(context).primaryColor,
+            SizedBox(
+              height: 80,
+              width: 80,
               child: file != null
                   ? Image.file(file!)
                   : url == null || url == ''
-                      ? const SizedBox.expand(
-                          child: FittedBox(
-                            child: Icon(Icons.person, color: Colors.white),
-                          ),
-                        )
-                      : SizedBox(
-                          height: double.infinity,
-                          width: double.infinity,
-                          child: Image.network(url!, fit: BoxFit.cover),
-                        ),
+                      ? Image.asset(AppImages.uploadImageIcon)
+                      : Image.network(url!, fit: BoxFit.cover),
             ),
             TextButton(
               onPressed: isDisable ? null : onTap,

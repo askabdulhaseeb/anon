@@ -55,35 +55,40 @@ class MainScreen extends StatelessWidget {
   onMoreOption(BuildContext context) {
     showBottomSheet(
       context: context,
-      builder: (BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text(
-                'Close',
-                style: TextStyle(fontWeight: FontWeight.bold),
+      builder: (BuildContext context) =>
+          Builder(builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text(
+                  'Close',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ),
-          ),
-          ListTile(
-            onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                SwitchAgencyScreen.routeName, (Route<dynamic> route) => false),
-            leading: const Icon(CupertinoIcons.arrow_right_arrow_left),
-            title: const Text('Switch Agency'),
-          ),
-          ListTile(
-            onTap: () => AuthMethods().signout(context),
-            leading: const Icon(
-              CupertinoIcons.square_arrow_left,
-              color: Colors.red,
+            ListTile(
+              onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                  SwitchAgencyScreen.routeName,
+                  (Route<dynamic> route) => false),
+              leading: const Icon(CupertinoIcons.arrow_right_arrow_left),
+              title: const Text('Switch Agency'),
             ),
-            title: const Text('Sign out', style: TextStyle(color: Colors.red)),
-          )
-        ],
-      ),
+            ListTile(
+              onTap: () => AuthMethods().signout(context),
+              leading: const Icon(
+                CupertinoIcons.square_arrow_left,
+                color: Colors.red,
+              ),
+              title:
+                  const Text('Sign out', style: TextStyle(color: Colors.red)),
+            )
+          ],
+        );
+      }),
     );
   }
 }

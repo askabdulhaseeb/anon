@@ -228,8 +228,11 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
       context: context,
       isDismissible: false,
       isScrollControlled: true,
-      builder: (BuildContext context) =>
-          AddableMemberWidget(users: project.members, alreadyMember: members),
+      builder: (BuildContext context) => AddableMemberWidget(
+        users: project.members,
+        unRemoveableUID: project.createdBy,
+        alreadyMember: members,
+      ),
     );
     if (result == null) return;
     members.clear();

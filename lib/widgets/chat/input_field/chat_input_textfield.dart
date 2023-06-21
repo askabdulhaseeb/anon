@@ -18,13 +18,9 @@ class ChatInputTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OutlineInputBorder outlineInputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(24),
-      borderSide: const BorderSide(color: Colors.grey),
-    );
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      color: Theme.of(context).dividerColor.withOpacity(0.5),
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Consumer<ChatProvider>(
           builder: (BuildContext context, ChatProvider chatPro, _) {
         final List<File> files = chatPro.files;
@@ -63,9 +59,9 @@ class ChatInputTextField extends StatelessWidget {
                     );
                   },
                   splashRadius: 16,
-                  icon: const RotationTransition(
-                    turns: AlwaysStoppedAnimation<double>(45 / 360),
-                    child: Icon(Icons.attachment_rounded),
+                  icon: Icon(
+                    Icons.add_box_rounded,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
                 Expanded(
@@ -76,14 +72,13 @@ class ChatInputTextField extends StatelessWidget {
                     maxLines: 5,
                     minLines: 1,
                     textCapitalization: TextCapitalization.sentences,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Write message here...',
-                      contentPadding: const EdgeInsets.symmetric(
+                      contentPadding: EdgeInsets.symmetric(
                         vertical: 0,
                         horizontal: 12,
                       ),
-                      focusedBorder: outlineInputBorder,
-                      border: outlineInputBorder,
+                      border: InputBorder.none,
                     ),
                   ),
                 ),
@@ -97,12 +92,6 @@ class ChatInputTextField extends StatelessWidget {
                 ),
               ],
             ),
-            const Center(
-              child: Text(
-                '''Please don't share your personal info here''',
-                style: TextStyle(color: Colors.red),
-              ),
-            )
           ],
         );
       }),

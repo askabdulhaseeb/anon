@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../enums/my_hive_type.dart';
 import '../../models/project/project.dart';
+import '../firebase/project_api.dart';
 
 class LocalProject {
   static Future<Box<Project>> get openBox async =>
@@ -36,6 +37,13 @@ class LocalProject {
     for (Project element in value) {
       await box.put(element.pid, element);
     }
+  }
+
+  Future<void> updateMembers(Project value) async {
+    final Box<Project> box = await refresh();
+    debugPrint('Local Project: Start updating Project Member');
+    await box.put(value.pid, value);
+    await ProjectAPI().updateMembers(value);
   }
 
   Future<void> signOut() async {

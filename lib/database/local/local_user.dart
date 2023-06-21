@@ -61,21 +61,31 @@ class LocalUser {
     }
   }
 
+  AppUser userWithoutFuture(String value) {
+    final AppUser? result =
+        Hive.box<AppUser>(MyHiveType.user.database).get(value);
+    return result ?? _null;
+  }
+
   Future<List<AppUser>> stringListToObjectList(List<String> value) async {
     final Box<AppUser> box = await refresh();
     List<AppUser> objectList = <AppUser>[];
-    for (String element in value) {
-      final AppUser? result = box.get(element);
-      if (result == null) {
-        final AppUser? cloudUser = await UserAPI().user(element);
-        if (cloudUser == null) {
+    try {
+      for (String element in value) {
+        final AppUser? result = box.get(element);
+        if (result == null) {
+          final AppUser? cloudUser = await UserAPI().user(element);
+          if (cloudUser == null) {
+          } else {
+            add(cloudUser);
+            objectList.add(cloudUser);
+          }
         } else {
-          add(cloudUser);
-          objectList.add(cloudUser);
+          objectList.add(result);
         }
-      } else {
-        objectList.add(result);
       }
+    } catch (e) {
+      debugPrint('Local User: String to Object - ERROR: ${e.toString()}');
     }
     return objectList;
   }

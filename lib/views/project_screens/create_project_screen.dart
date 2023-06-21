@@ -100,36 +100,44 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                                 separatorBuilder: (_, __) =>
                                     const SizedBox(width: 10),
                                 itemBuilder:
-                                    (BuildContext context, int index) => Stack(
-                                  alignment: Alignment.topRight,
-                                  clipBehavior: Clip.none,
-                                  children: <Widget>[
-                                    CustomProfilePhoto(
-                                      members[index].imageURL,
-                                      name: members[index].name,
-                                      size: 50,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (isLoading) return;
-                                        setState(() {
-                                          members.remove(members[index]);
-                                        });
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                        ),
-                                        child: const Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
+                                    (BuildContext context, int index) =>
+                                        SizedBox(
+                                  width: 50,
+                                  child: Stack(
+                                    alignment: Alignment.topRight,
+                                    // clipBehavior: Clip.none,
+                                    children: <Widget>[
+                                      CustomProfilePhoto(
+                                        members[index].imageURL,
+                                        name: members[index].name,
+                                        size: 50,
+                                      ),
+                                      Positioned(
+                                        top: -6,
+                                        right: -6,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            if (isLoading) return;
+                                            setState(() {
+                                              members.remove(members[index]);
+                                            });
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: const Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                       ),
@@ -142,14 +150,21 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                   ],
                 ),
                 // add member
+                // TODO: milestone, payment, attachments
                 const SizedBox(height: 16),
-                CustomElevatedButton(
-                  title: 'Start Project',
-                  isLoading: isLoading,
-                  onTap: onStartProject,
-                ),
               ],
             ),
+          ),
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 32),
+        child: SizedBox(
+          height: 60,
+          child: CustomElevatedButton(
+            title: 'Start Project',
+            isLoading: isLoading,
+            onTap: onStartProject,
           ),
         ),
       ),
@@ -218,8 +233,8 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
       context: context,
       isDismissible: false,
       isScrollControlled: true,
-      builder: (BuildContext context) =>
-          AddableMemberWidget(users: agency.members, alreadyMember: members),
+      builder: (BuildContext context) => AddableMemberWidget(
+          users: agency.members, alreadyMember: members, unRemoveableUID: ''),
     );
     if (result == null) return;
     members.clear();

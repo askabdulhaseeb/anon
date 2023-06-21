@@ -11,6 +11,7 @@ import '../../widgets/custom/custom_icon_elevated_custom.dart';
 import '../../widgets/custom/custom_square_photo.dart';
 import '../../widgets/custom/show_loading.dart';
 import '../chat_screens/chat_dashboard_screen.dart';
+import '../project_screens/create_project_screen.dart';
 
 class ProjectPage extends StatelessWidget {
   const ProjectPage({Key? key}) : super(key: key);
@@ -28,7 +29,8 @@ class ProjectPage extends StatelessWidget {
             title: 'Start New Project',
             icon: Icons.add,
             isLoading: false,
-            onTap: () {},
+            onTap: () =>
+                Navigator.of(context).pushNamed(CreateProjectScreen.routeName),
           ),
           const Divider(),
           const SizedBox(height: 6),

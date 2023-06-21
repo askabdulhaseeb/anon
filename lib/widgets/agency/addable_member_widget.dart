@@ -10,11 +10,13 @@ class AddableMemberWidget extends StatefulWidget {
   const AddableMemberWidget({
     required this.users,
     required this.alreadyMember,
+    required this.unRemoveableUID,
     this.title = 'Project Member',
     Key? key,
   }) : super(key: key);
   final List<String> users;
   final List<AppUser> alreadyMember;
+  final String unRemoveableUID;
   final String title;
   @override
   State<AddableMemberWidget> createState() => _AddableMemberWidgetState();
@@ -102,7 +104,9 @@ class _AddableMemberWidgetState extends State<AddableMemberWidget> {
                               setState(() {
                                 newAdded.any(
                                         (AppUser element) => user == element)
-                                    ? newAdded.remove(user)
+                                    ? user.uid == widget.unRemoveableUID
+                                        ? null
+                                        : newAdded.remove(user)
                                     : newAdded.add(user);
                               });
                             },
@@ -110,6 +114,8 @@ class _AddableMemberWidgetState extends State<AddableMemberWidget> {
                         },
                       );
                     } else if (snapshot.hasError) {
+                      debugPrint(
+                          'Addable Member Bottom Sheet: ERROR: ${snapshot.error}');
                       return const Center(child: Text('ERROR'));
                     } else {
                       return const ShowLoading();
@@ -135,30 +141,40 @@ class _UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ListTile(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Row(
-          children: <Widget>[
-            CustomProfilePhoto(user.imageURL, name: user.name),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    user.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(user.email, style: const TextStyle(color: Colors.grey))
-                ],
-              ),
-            ),
-            Icon(isSelected ? Icons.circle : Icons.circle_outlined),
-          ],
-        ),
+      leading: CustomProfilePhoto(user.imageURL, name: user.name),
+      title: Text(
+        user.name,
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ),
+      subtitle: Text(user.email, style: const TextStyle(color: Colors.grey)),
+      trailing: Icon(isSelected ? Icons.circle : Icons.circle_outlined),
     );
+    // return GestureDetector(
+    //   onTap: onTap,
+    //   child: Padding(
+    //     padding: const EdgeInsets.symmetric(vertical: 6),
+    //     child: Row(
+    //       children: <Widget>[
+    //         CustomProfilePhoto(user.imageURL, name: user.name),
+    //         const SizedBox(width: 8),
+    //         Expanded(
+    //           child: Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             children: <Widget>[
+    //               Text(
+    //                 user.name,
+    //                 style: const TextStyle(fontWeight: FontWeight.bold),
+    //               ),
+    //               Text(user.email, style: const TextStyle(color: Colors.grey))
+    //             ],
+    //           ),
+    //         ),
+    //         Icon(isSelected ? Icons.circle : Icons.circle_outlined),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

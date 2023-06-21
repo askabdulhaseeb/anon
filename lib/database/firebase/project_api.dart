@@ -66,6 +66,17 @@ class ProjectAPI {
     }
   }
 
+  Future<void> updateMembers(Project value) async {
+    try {
+      await _instance
+          .collection(_collection)
+          .doc(value.pid)
+          .update(value.toUpdateMembers());
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<String?> projectLogo({
     required File file,
     required String projectID,
