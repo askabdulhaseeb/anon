@@ -10,12 +10,13 @@ part 'milestone.g.dart';
 class Milestone extends HiveObject {
   Milestone({
     required this.milestoneID,
-    required this.projectID,
+    // required this.projectID,
     required this.title,
-    required this.description,
-    required this.deadline,
+    // required this.description,
     required this.payment,
+    required this.index,
     this.completedTime,
+    this.deadline,
     this.currency = 'USD',
     DateTime? startingTime,
     String? createdBy,
@@ -32,20 +33,20 @@ class Milestone extends HiveObject {
 
   @HiveField(0)
   final String milestoneID;
-  @HiveField(1)
-  final String projectID;
+  // @HiveField(1)
+  // final String projectID;
   @HiveField(2)
   final String title;
-  @HiveField(3)
-  final String description;
+  // @HiveField(3)
+  // final String description;
   @HiveField(4)
-  final DateTime deadline;
+  DateTime? deadline;
   @HiveField(5)
   final DateTime startingTime;
   @HiveField(6)
-  final DateTime? completedTime;
+  DateTime? completedTime;
   @HiveField(7)
-  final double payment;
+  double payment;
   @HiveField(8)
   final String currency;
   @HiveField(9)
@@ -56,13 +57,16 @@ class Milestone extends HiveObject {
   final List<MilestoneHistory> history;
   @HiveField(12)
   final bool isCompleted;
+  @HiveField(13, defaultValue: 0)
+  final int index;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'milestone_id': milestoneID,
-      'project_id': projectID,
+      'index': index,
+      // 'project_id': projectID,
       'title': title,
-      'description': description,
+      // 'description': description,
       'deadline': deadline,
       'starting_time': startingTime,
       'completed_time': completedTime,
@@ -79,9 +83,10 @@ class Milestone extends HiveObject {
   factory Milestone.fromMap(Map<String, dynamic> map) {
     return Milestone(
       milestoneID: map['milestone_id'] ?? '',
-      projectID: map['project_id'] ?? '',
+      index: map['index'] ?? 0,
+      // projectID: map['project_id'] ?? '',
       title: map['title'] ?? '',
-      description: map['description'] ?? '',
+      // description: map['description'] ?? '',
       deadline: TimeFun.parseTime(map['deadline']),
       startingTime: TimeFun.parseTime(map['starting_time']),
       completedTime: map['completed_time'] != null

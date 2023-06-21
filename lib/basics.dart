@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'providers/app_nav_provider.dart';
 import 'providers/app_theme_provider.dart';
 import 'providers/chat_provider.dart';
+import 'providers/new_project_provider.dart';
 import 'views/agency_screens/agency_joining_request_screen.dart';
 import 'views/auth/agency_auth/agency_welcome_screen.dart';
 import 'views/auth/agency_auth/join_agency_screen.dart';
@@ -24,8 +25,8 @@ import 'views/project_screens/project_detail_screen.dart';
 final List<ChangeNotifierProvider<ChangeNotifier>> myProviders =
     <ChangeNotifierProvider<ChangeNotifier>>[
   ChangeNotifierProvider<AppThemeProvider>.value(value: AppThemeProvider()),
-  ChangeNotifierProvider<AppNavProvider>(
-      create: (BuildContext context) => AppNavProvider()),
+  ChangeNotifierProvider<AppNavProvider>.value(value: AppNavProvider()),
+  ChangeNotifierProvider<NewProjectProvider>.value(value: NewProjectProvider()),
   ChangeNotifierProvider<ChatProvider>.value(value: ChatProvider()),
 ];
 

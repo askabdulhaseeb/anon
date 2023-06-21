@@ -28,6 +28,44 @@ class TimeFun {
     return DateFormat.jm().format(value);
   }
 
+  static String timeleft(DateTime? value) {
+    DateTime now = DateTime.now();
+    Duration diff = value?.difference(now) ?? const Duration();
+    int inSec = diff.inSeconds.abs();
+    int inMints = diff.inMinutes.abs();
+    int inHour = diff.inHours.abs();
+    int inDays = diff.inDays.abs();
+    String time = '';
+    if (inDays > 365) {
+      time = (diff.inDays.abs() / 365).toStringAsFixed(0);
+      inDays = inDays ~/ 365;
+      time += '$inDays:';
+    } else {
+      time += '$inDays:';
+    }
+    if (inHour > 23) {
+      time += '${(inHour.abs() % 24).toStringAsFixed(0)}:';
+    } else {
+      time += '00:';
+    }
+    if (inMints > 59) {
+      time += '${(inMints.abs() % 59).toStringAsFixed(0)}:';
+    } else {
+      time += '00:';
+    }
+    if (inSec > 59) {
+      time += (inSec.abs() % 59).toStringAsFixed(0);
+    } else {
+      time += '00';
+    }
+    return time;
+  }
+
+  static String deadlineDate(DateTime? value) {
+    DateTime now = DateTime.now();
+    return DateFormat.yMEd().format(value ?? now);
+  }
+
   static String timeInWords(DateTime? value) {
     DateTime now = DateTime.now();
     if (value == null) return 'null';

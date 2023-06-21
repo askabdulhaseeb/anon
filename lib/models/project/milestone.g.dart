@@ -18,12 +18,11 @@ class MilestoneAdapter extends TypeAdapter<Milestone> {
     };
     return Milestone(
       milestoneID: fields[0] as String,
-      projectID: fields[1] as String,
       title: fields[2] as String,
-      description: fields[3] as String,
-      deadline: fields[4] as DateTime,
       payment: fields[7] as double,
+      index: fields[13] == null ? 0 : fields[13] as int,
       completedTime: fields[6] as DateTime?,
+      deadline: fields[4] as DateTime?,
       currency: fields[8] as String,
       startingTime: fields[5] as DateTime?,
       createdBy: fields[9] as String?,
@@ -36,15 +35,11 @@ class MilestoneAdapter extends TypeAdapter<Milestone> {
   @override
   void write(BinaryWriter writer, Milestone obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.milestoneID)
-      ..writeByte(1)
-      ..write(obj.projectID)
       ..writeByte(2)
       ..write(obj.title)
-      ..writeByte(3)
-      ..write(obj.description)
       ..writeByte(4)
       ..write(obj.deadline)
       ..writeByte(5)
@@ -62,7 +57,9 @@ class MilestoneAdapter extends TypeAdapter<Milestone> {
       ..writeByte(11)
       ..write(obj.history)
       ..writeByte(12)
-      ..write(obj.isCompleted);
+      ..write(obj.isCompleted)
+      ..writeByte(13)
+      ..write(obj.index);
   }
 
   @override
