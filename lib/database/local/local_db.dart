@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../enums/attachment_type.dart';
 import '../../enums/chat/chat_member_role.dart';
 import '../../enums/chat/message_type.dart';
+import '../../enums/project/milestone_history_type.dart';
 import '../../enums/user/auth_type.dart';
 import '../../enums/user/user_designation.dart';
 import '../../enums/user/user_type.dart';
@@ -14,6 +16,10 @@ import '../../models/chat/chat.dart';
 import '../../models/chat/chat_group_member.dart';
 import '../../models/chat/message.dart';
 import '../../models/chat/message_read_info.dart';
+import '../../models/project/attachment.dart';
+import '../../models/project/milestone.dart';
+import '../../models/project/milestone_history.dart';
+import '../../models/project/note.dart';
 import '../../models/project/project.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/device_token.dart';
@@ -44,14 +50,20 @@ class LocalDB {
     //
     // Type: Project 3
     Hive.registerAdapter(ProjectAdapter()); // 3
+    Hive.registerAdapter(NoteAdapter()); // 31
+    Hive.registerAdapter(AttachmentAdapter()); // 32
+    Hive.registerAdapter(AttachmentTypeAdapter()); // 33
+    Hive.registerAdapter(MilestoneAdapter()); // 34
+    Hive.registerAdapter(MilestoneHistoryAdapter()); // 35
+    Hive.registerAdapter(MilestoneHistoryTypeAdapter()); // 36
     //
     // Type: Chat 4
     Hive.registerAdapter(ChatAdapter()); // 4
     Hive.registerAdapter(ChatMemberAdapter()); // 41
-    Hive.registerAdapter(ChatMemberRoleAdapter()); // 411
     Hive.registerAdapter(MessageAdapter()); // 42
-    Hive.registerAdapter(MessageTypeAdapter()); // 420
-    Hive.registerAdapter(MessageReadInfoAdapter()); // 421
+    Hive.registerAdapter(ChatMemberRoleAdapter()); // 43
+    Hive.registerAdapter(MessageTypeAdapter()); // 44
+    Hive.registerAdapter(MessageReadInfoAdapter()); // 45
 
     //
     // Open Boxes

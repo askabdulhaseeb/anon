@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../database/firebase/auth_methods.dart';
 import '../../functions/time_functions.dart';
+import 'milestone.dart';
 import 'note.dart';
 
 part 'project.g.dart';
@@ -15,6 +16,7 @@ class Project extends HiveObject {
     required this.agencies,
     required this.logo,
     this.description = '',
+    List<Milestone>? milestone,
     List<String>? members,
     DateTime? startingTime,
     DateTime? endingTime,
@@ -24,7 +26,8 @@ class Project extends HiveObject {
         startingTime = startingTime ?? DateTime.now(),
         endingTime = endingTime ?? DateTime.now(),
         notes = notes ?? <Note>[],
-        createdBy = createdBy ?? AuthMethods.uid;
+        createdBy = createdBy ?? AuthMethods.uid,
+        milestone = milestone ?? <Milestone>[];
 
   @HiveField(0)
   final String pid;
@@ -46,6 +49,9 @@ class Project extends HiveObject {
   final String description;
   @HiveField(9, defaultValue: '')
   final String createdBy;
+  @HiveField(10, defaultValue: <Milestone>[]) // Class Code: 33
+  final List<Milestone> milestone;
+  // payment, payment detail
 
   Map<String, dynamic> toMap() {
     final String me = AuthMethods.uid;
@@ -61,6 +67,7 @@ class Project extends HiveObject {
       'logo': logo,
       'created_by': createdBy,
       'notes': notes.map((Note x) => x.toMap()).toList(),
+      'milestone': milestone.map((Milestone x) => x.toMap()).toList(),
     };
   }
 
@@ -85,6 +92,11 @@ class Project extends HiveObject {
       notes: List<Note>.from(
         (doc.data()?['notes'] as List<dynamic>).map<Note>(
           (dynamic x) => Note.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
+      milestone: List<Milestone>.from(
+        (doc.data()?['milestone'] ?? <dynamic>[]).map<Milestone>(
+          (dynamic x) => Milestone.fromMap(x as Map<String, dynamic>),
         ),
       ),
     );

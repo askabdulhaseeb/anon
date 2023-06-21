@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 
 import 'providers/app_nav_provider.dart';
 import 'providers/app_theme_provider.dart';
@@ -22,7 +21,8 @@ import 'views/project_screens/create_project_screen.dart';
 import 'views/chat_screens/chat_dashboard_screen.dart';
 import 'views/project_screens/project_detail_screen.dart';
 
-final myProviders = [
+final List<ChangeNotifierProvider<ChangeNotifier>> myProviders =
+    <ChangeNotifierProvider<ChangeNotifier>>[
   ChangeNotifierProvider<AppThemeProvider>.value(value: AppThemeProvider()),
   ChangeNotifierProvider<AppNavProvider>(
       create: (BuildContext context) => AppNavProvider()),
