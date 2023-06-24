@@ -36,7 +36,7 @@ class Milestone extends HiveObject {
   // @HiveField(1)
   // final String projectID;
   @HiveField(2)
-  final String title;
+  String title;
   // @HiveField(3)
   // final String description;
   @HiveField(4)

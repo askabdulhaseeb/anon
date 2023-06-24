@@ -81,6 +81,8 @@ class NewProjectProvider extends ChangeNotifier {
     if (result == null) return;
     members.clear();
     members.addAll(result);
+    // ignore: use_build_context_synchronously
+    FocusScope.of(context).requestFocus(_byProjectAmountNode);
   }
 
   Future<void> attachMedia(BuildContext context) async {
@@ -124,6 +126,12 @@ class NewProjectProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void onMilestoneUpdate(List<Milestone> value) {
+    _milestones.clear();
+    _milestones.addAll(value);
+    notifyListeners();
+  }
+
   void onRemoveMember(AppUser value) {
     members.remove(value);
     notifyListeners();
@@ -162,6 +170,7 @@ class NewProjectProvider extends ChangeNotifier {
   TextEditingController get description => _description;
   FocusNode get titleNode => _titleNode;
   FocusNode get descriptionNode => _descriptionNode;
+  FocusNode get byProjectAmountNode => _byProjectAmountNode;
   bool get isLoading => _isLoading;
   List<AppUser> get members => _members;
   List<Milestone> get milestones => _milestones;
@@ -173,6 +182,7 @@ class NewProjectProvider extends ChangeNotifier {
   final TextEditingController _description = TextEditingController();
   final FocusNode _titleNode = FocusNode();
   final FocusNode _descriptionNode = FocusNode();
+  final FocusNode _byProjectAmountNode = FocusNode();
   bool _isLoading = false;
   final List<AppUser> _members = <AppUser>[];
   final List<Milestone> _milestones = <Milestone>[];

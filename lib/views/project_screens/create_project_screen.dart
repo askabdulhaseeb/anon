@@ -69,6 +69,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                           await newProjPro.addMember(context),
                     ),
                     const NewProjectAddMemberWidget(),
+                    const Divider(),
                     const NewProjectPaymentTypeWidget(),
                     // TODO: milestone, payment, attachments
                     const SizedBox(height: 300),

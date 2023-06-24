@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../functions/time_functions.dart';
+import '../../models/project/milestone.dart';
 import '../../providers/new_project_provider.dart';
+import 'project_milestone_input_bottom_sheet.dart';
 
 class NewProjectPaymentTypeWidget extends StatelessWidget {
   const NewProjectPaymentTypeWidget({super.key});
@@ -82,9 +84,23 @@ class NewProjectPaymentTypeWidget extends StatelessWidget {
               'By Milestones (Multiple Deadlines)',
               style: TextStyle(fontWeight: FontWeight.w500),
             ),
-            subtitle: const Text('time'),
-            onTap: () {
+            subtitle:
+                Text('No. of Milestones: ${newProjPro.milestones.length}'),
+            onTap: () async {
               newProjPro.onHasMilestoneUpdate(true);
+              final List<Milestone>? milestones =
+                  await showModalBottomSheet<List<Milestone>>(
+                context: context,
+                isScrollControlled: true,
+                enableDrag: false,
+                builder: (BuildContext context) =>
+                    ProjectMilestoneInputBottomSheet(
+                  milestones: newProjPro.milestones,
+                ),
+              );
+              if (milestones == null) return;
+              print(milestones.length);
+              newProjPro.onMilestoneUpdate(milestones);
             },
           ),
         ],
