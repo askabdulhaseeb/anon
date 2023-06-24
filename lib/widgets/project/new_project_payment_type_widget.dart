@@ -93,6 +93,7 @@ class NewProjectPaymentTypeWidget extends StatelessWidget {
                 context: context,
                 isScrollControlled: true,
                 enableDrag: false,
+                isDismissible: false,
                 builder: (BuildContext context) =>
                     ProjectMilestoneInputBottomSheet(
                   milestones: newProjPro.milestones,

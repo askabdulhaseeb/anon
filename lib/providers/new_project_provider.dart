@@ -127,8 +127,12 @@ class NewProjectProvider extends ChangeNotifier {
   }
 
   void onMilestoneUpdate(List<Milestone> value) {
-    _milestones.clear();
-    _milestones.addAll(value);
+    for (Milestone ele in value) {
+      if (!_milestones.any((Milestone element) => element == ele)) {
+        _milestones.add(ele);
+      }
+    }
+    print(_milestones.length);
     notifyListeners();
   }
 
@@ -138,7 +142,9 @@ class NewProjectProvider extends ChangeNotifier {
   }
 
   void onHasMilestoneUpdate(bool value) {
-    _milestones.clear();
+    if (!value) {
+      _milestones.clear();
+    }
     _hasMilestone = value;
     notifyListeners();
   }

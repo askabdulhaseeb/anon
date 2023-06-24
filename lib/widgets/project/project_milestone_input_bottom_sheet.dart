@@ -18,9 +18,9 @@ class _ProjectMilestoneInputBottomSheetState
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.8,
-      maxChildSize: 0.9,
-      minChildSize: 0.2,
+      initialChildSize: 0.9,
+      maxChildSize: 0.95,
+      minChildSize: 0.4,
       expand: false,
       builder: (BuildContext context, ScrollController scrollController) {
         return SingleChildScrollView(
@@ -34,7 +34,7 @@ class _ProjectMilestoneInputBottomSheetState
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     TextButton(
-                      onPressed: () => Navigator.of(context).pop([]),
+                      onPressed: () => Navigator.of(context).pop(null),
                       child: const Text(
                         'Cancel',
                         style: TextStyle(color: Colors.red),
@@ -65,7 +65,11 @@ class _ProjectMilestoneInputBottomSheetState
                   itemBuilder: (BuildContext context, int index) =>
                       MilestoneInputTile(
                     widget.milestones[index],
-                    onChange: (String title, DateTime deadline, String amount) {
+                    onChange: (
+                      String title,
+                      DateTime? deadline,
+                      String amount,
+                    ) {
                       widget.milestones[index].title = title;
                       widget.milestones[index].deadline = deadline;
                       widget.milestones[index].payment =
@@ -106,7 +110,7 @@ class _ProjectMilestoneInputBottomSheetState
 class MilestoneInputTile extends StatefulWidget {
   const MilestoneInputTile(this.milestone, {required this.onChange, super.key});
   final Milestone milestone;
-  final Function(String title, DateTime deadline, String amount) onChange;
+  final Function(String title, DateTime? deadline, String amount) onChange;
 
   @override
   State<MilestoneInputTile> createState() => _MilestoneInputTileState();
@@ -123,7 +127,9 @@ class _MilestoneInputTileState extends State<MilestoneInputTile> {
   @override
   void initState() {
     _title = TextEditingController(text: widget.milestone.title);
-    _amount = TextEditingController(text: widget.milestone.payment.toString());
+    _amount = TextEditingController(
+      text: widget.milestone.payment > 0 ? '${widget.milestone.payment}' : '',
+    );
     deadline = widget.milestone.deadline;
     super.initState();
   }
@@ -140,6 +146,8 @@ class _MilestoneInputTileState extends State<MilestoneInputTile> {
             focusNode: titleNode,
             showSuffixIcon: false,
             hint: 'Title',
+            onChanged: (String p0) =>
+                widget.onChange(p0, deadline, _amount.text),
             onFieldSubmitted: (_) =>
                 FocusScope.of(context).requestFocus(amountNode),
           ),
@@ -160,9 +168,11 @@ class _MilestoneInputTileState extends State<MilestoneInputTile> {
             controller: _amount,
             focusNode: amountNode,
             textAlign: TextAlign.end,
+            onChanged: (String p0) =>
+                widget.onChange(_title.text, deadline, p0),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             showSuffixIcon: false,
-            hint: 'Amount',
+            hint: '\$0.0',
           ),
         ),
       ],
