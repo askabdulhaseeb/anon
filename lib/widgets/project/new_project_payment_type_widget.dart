@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../functions/time_functions.dart';
 import '../../models/project/milestone.dart';
 import '../../providers/new_project_provider.dart';
-import 'project_milestone_input_bottom_sheet.dart';
+import 'milestone/project_milestone_input_bottom_sheet.dart';
 
 class NewProjectPaymentTypeWidget extends StatelessWidget {
   const NewProjectPaymentTypeWidget({super.key});

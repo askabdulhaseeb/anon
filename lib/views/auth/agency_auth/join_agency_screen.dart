@@ -32,79 +32,84 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _key,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              RichText(
-                text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'Hi, ',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Theme.of(context).disabledColor,
-                      ),
-                    ),
-                    TextSpan(
-                      text:
-                          '${AuthMethods.getCurrentUser?.displayName ?? 'null'} ',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'To be the part of any agency please enter the agency code below',
-                style: TextStyle(),
-              ),
-              TextFormField(
-                controller: _agencyCode,
-                autocorrect: true,
-                style: const TextStyle(fontSize: 48),
-                textAlign: TextAlign.center,
-                autofocus: true,
-                textInputAction: TextInputAction.done,
-                onFieldSubmitted: (_) async => await onJoinAgency(),
-                validator: (String? value) => CustomValidator.agency(value),
-                decoration: InputDecoration(
-                  hintText: 'Agency Code',
-                  hintStyle: TextStyle(color: Theme.of(context).disabledColor),
-                  border: InputBorder.none,
-                ),
-              ),
-              CustomElevatedButton(
-                title: 'Join Agency'.toUpperCase(),
-                isLoading: _isLoading,
-                onTap: onJoinAgency,
-              ),
-              const SizedBox(height: 12),
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                      style: Theme.of(context).textTheme.bodySmall,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(
                       children: <TextSpan>[
-                        const TextSpan(text: '''Start your own agency? '''),
                         TextSpan(
-                          text: 'Start Agency',
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => Navigator.of(context)
-                                .pushNamed(StartAgencyScreen.routeName),
+                          text: 'Hi, ',
                           style: TextStyle(
+                            fontSize: 18,
+                            color: Theme.of(context).disabledColor,
+                          ),
+                        ),
+                        TextSpan(
+                          text:
+                              '${AuthMethods.getCurrentUser?.displayName ?? 'null'} ',
+                          style: TextStyle(
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
-                      ]),
-                ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'To be the part of any agency please enter the agency code below',
+                    style: TextStyle(),
+                  ),
+                  TextFormField(
+                    controller: _agencyCode,
+                    autocorrect: true,
+                    style: const TextStyle(fontSize: 48),
+                    textAlign: TextAlign.center,
+                    autofocus: true,
+                    textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (_) async => await onJoinAgency(),
+                    validator: (String? value) => CustomValidator.agency(value),
+                    decoration: InputDecoration(
+                      hintText: 'Agency Code',
+                      hintStyle:
+                          TextStyle(color: Theme.of(context).disabledColor),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                  CustomElevatedButton(
+                    title: 'Join Agency'.toUpperCase(),
+                    isLoading: _isLoading,
+                    onTap: onJoinAgency,
+                  ),
+                  const SizedBox(height: 12),
+                  Center(
+                    child: RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.bodySmall,
+                          children: <TextSpan>[
+                            const TextSpan(text: '''Start your own agency? '''),
+                            TextSpan(
+                              text: 'Start Agency',
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => Navigator.of(context)
+                                    .pushNamed(StartAgencyScreen.routeName),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ]),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
               ),
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
         ),
       ),
