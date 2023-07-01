@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,6 +13,26 @@ class HelpingFuncation {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('$text copied')));
     });
+  }
+
+  Color randomColor() {
+    List<Color> colors = <Color>[
+      Colors.blue,
+      Colors.brown,
+      Colors.cyan,
+      Colors.green,
+      Colors.grey,
+      Colors.indigo,
+      Colors.lime,
+      Colors.orange,
+      Colors.pink,
+      Colors.red,
+      Colors.purple,
+      Colors.teal,
+      Colors.yellow,
+    ];
+    final int indexRandom = Random.secure().nextInt(colors.length);
+    return colors[indexRandom];
   }
 
   String photoPlaceholder(String value) {

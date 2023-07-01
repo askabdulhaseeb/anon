@@ -66,7 +66,6 @@ class Milestone extends HiveObject {
       'index': index,
       // 'project_id': projectID,
       'title': title,
-      // 'description': description,
       'deadline': deadline,
       'starting_time': startingTime,
       'completed_time': completedTime,
@@ -92,7 +91,8 @@ class Milestone extends HiveObject {
       completedTime: map['completed_time'] != null
           ? TimeFun.parseTime(map['completed_time'])
           : null,
-      payment: map['payment'] ?? 0.0,
+      payment:
+          map['created_by'] != AuthMethods.uid ? 0.0 : map['payment'] ?? 0.0,
       currency: map['currency'] ?? 'USD',
       createdBy: map['created_by'] ?? '',
       assignTo: List<String>.from((map['assign_to'] as List<String>)),

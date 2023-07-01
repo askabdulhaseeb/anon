@@ -103,7 +103,19 @@ class _ProjectList extends StatelessWidget {
                                 ),
                                 subtitle:
                                     Text('Members: ${project.members.length}'),
-                                trailing: const Text('Next deadline'),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    Text(
+                                      'Deadline',
+                                      style: TextStyle(
+                                        color: Theme.of(context).disabledColor,
+                                      ),
+                                    ),
+                                    Text(project.nextDeadline()),
+                                  ],
+                                ),
                                 onTap: () {
                                   Navigator.of(context).pushNamed(
                                       ProjectDashboardScreen.routeName,

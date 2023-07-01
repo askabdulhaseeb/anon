@@ -71,26 +71,18 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                     const NewProjectAddMemberWidget(),
                     const Divider(),
                     const NewProjectPaymentTypeWidget(),
+                    const SizedBox(height: 16),
+                    CustomElevatedButton(
+                      title: 'Start Project',
+                      isLoading: newProjPro.isLoading,
+                      onTap: () => newProjPro.onStartProject(context, _key),
+                    ),
                     // TODO: milestone, payment, attachments
                     const SizedBox(height: 300),
                   ],
                 );
               }),
             ),
-          ),
-        ),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(left: 32),
-          child: SizedBox(
-            height: 60,
-            child: Consumer<NewProjectProvider>(builder:
-                (BuildContext context, NewProjectProvider newProjPro, _) {
-              return CustomElevatedButton(
-                title: 'Start Project',
-                isLoading: newProjPro.isLoading,
-                onTap: () => newProjPro.onStartProject(context, _key),
-              );
-            }),
           ),
         ),
       ),

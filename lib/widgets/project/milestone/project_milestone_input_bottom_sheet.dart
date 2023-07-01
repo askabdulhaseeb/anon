@@ -75,28 +75,32 @@ class _ProjectMilestoneInputBottomSheetState
                       widget.milestones[index].payment =
                           double.tryParse(amount) ?? 0.0;
                     },
+                    onRemove: () => setState(() {
+                      widget.milestones.removeWhere(
+                        (Milestone element) =>
+                            element.milestoneID ==
+                            widget.milestones[index].milestoneID,
+                      );
+                    }),
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      widget.milestones.add(
-                        Milestone(
-                          milestoneID:
-                              (widget.milestones.length + 1).toString(),
-                          title: '',
-                          payment: 0,
-                          index: widget.milestones.length,
-                        ),
-                      );
-                    });
-                  },
-                  icon: const Icon(CupertinoIcons.add, size: 18),
-                  label: const Text('Add Milestone'),
-                ),
+              const Divider(),
+              TextButton.icon(
+                onPressed: () {
+                  setState(() {
+                    widget.milestones.add(
+                      Milestone(
+                        milestoneID: (widget.milestones.length + 1).toString(),
+                        title: '',
+                        payment: 0,
+                        index: widget.milestones.length,
+                      ),
+                    );
+                  });
+                },
+                icon: const Icon(CupertinoIcons.add, size: 18),
+                label: const Text('Add Milestone'),
               ),
               const SizedBox(height: 400),
             ],

@@ -101,4 +101,15 @@ class Project extends HiveObject {
       ),
     );
   }
+
+  String nextDeadline() {
+    if (milestone.isEmpty) return 'NA';
+    final Milestone result = milestone.firstWhere(
+      (Milestone element) => element.isCompleted == false,
+      orElse: () =>
+          Milestone(milestoneID: 'null', title: 'null', payment: 0, index: -1),
+    );
+    if (result.index == -1) return 'Completed';
+    return TimeFun.deadlineDate(result.deadline);
+  }
 }

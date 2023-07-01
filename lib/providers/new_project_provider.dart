@@ -47,6 +47,9 @@ class NewProjectProvider extends ChangeNotifier {
         description: _description.text.trim(),
         logo: url,
         members: tempMember,
+        milestone: _milestones,
+        endingTime: _milestones.last.deadline,
+        startingTime: _milestones.first.deadline,
       );
       final bool added = await ProjectAPI().create(project);
       if (added) {
@@ -146,6 +149,9 @@ class NewProjectProvider extends ChangeNotifier {
       _milestones.clear();
     }
     _hasMilestone = value;
+    if (_hasMilestone) {
+      _milestones.clear();
+    }
     notifyListeners();
   }
 
