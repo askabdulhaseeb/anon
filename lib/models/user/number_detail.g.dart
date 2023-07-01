@@ -17,10 +17,10 @@ class NumberDetailsAdapter extends TypeAdapter<NumberDetails> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return NumberDetails(
-      countryCode: fields[0] as String,
-      number: fields[1] as String,
-      completeNumber: fields[2] as String,
-      isoCode: fields[3] as String,
+      countryCode: fields[0] as String?,
+      number: fields[1] as String?,
+      completeNumber: fields[2] as String?,
+      isoCode: fields[3] as String?,
       timestamp: fields[4] as DateTime?,
     );
   }

@@ -71,7 +71,12 @@ class PickerFunctions {
   }
 
   Future<bool> _request() async {
-    await <Permission>[Permission.photos, Permission.mediaLibrary].request();
+    if (!await Permission.photos.isGranted) {
+      await Permission.photos.request();
+    }
+    if (!await Permission.mediaLibrary.isGranted) {
+      await Permission.mediaLibrary.request();
+    }
     final PermissionStatus status1 = await Permission.photos.status;
     final PermissionStatus status2 = await Permission.mediaLibrary.status;
     return status1.isGranted && status2.isGranted;

@@ -97,6 +97,7 @@ class _AgencyTile extends StatelessWidget {
               child: CustomSquarePhoto(
                 agency.logoURL,
                 name: agency.agencyCode,
+                defaultColor: Colors.grey.value,
               ),
             ),
             const SizedBox(width: 8),

@@ -94,6 +94,7 @@ class _ProjectList extends StatelessWidget {
                                 contentPadding: const EdgeInsets.all(0),
                                 leading: CustomSquarePhoto(
                                   project.logo,
+                                  defaultColor: project.defaultColor,
                                   name: project.title,
                                 ),
                                 title: Text(

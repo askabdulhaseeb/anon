@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import '../../enums/user/auth_type.dart';
@@ -19,7 +18,7 @@ class AppUser extends HiveObject {
     required this.email,
     required this.password,
     required this.type,
-    Color? bgColor,
+    int? defaultColor,
     String? nickName,
     AuthType? authType,
     String? imageURL,
@@ -30,7 +29,7 @@ class AppUser extends HiveObject {
         authType = authType ?? AuthType.email,
         imageURL = imageURL ?? '',
         deviceToken = deviceToken ?? <MyDeviceToken>[],
-        bgColor = bgColor ?? HelpingFuncation().randomColor(),
+        defaultColor = defaultColor ?? HelpingFuncation().randomColor(),
         notAllowedWords = notAllowedWords ??
             <String>[
               'on Whatsapp',
@@ -71,8 +70,9 @@ class AppUser extends HiveObject {
   final bool status;
   @HiveField(14)
   final List<String> agencyIDs;
-  @HiveField(15)
-  final Color bgColor;
+  // 15 not in use
+  @HiveField(16, defaultValue: 808080)
+  final int defaultColor;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -88,7 +88,7 @@ class AppUser extends HiveObject {
       'image_url': imageURL,
       'devices_token': deviceToken.map((MyDeviceToken x) => x.toMap()).toList(),
       'not_allowed_words': notAllowedWords,
-      'assigned_color': bgColor,
+      'default_color': defaultColor,
       'status': status,
     };
   }
@@ -115,8 +115,8 @@ class AppUser extends HiveObject {
       email: doc.data()?['email'] ?? '',
       password: doc.data()?['password'] ?? '',
       imageURL: doc.data()?['image_url'] ?? '',
-      bgColor:
-          doc.data()?['assigned_color'] ?? HelpingFuncation().randomColor(),
+      defaultColor:
+          doc.data()?['default_color'] ?? HelpingFuncation().randomColor(),
       deviceToken: dtData,
       notAllowedWords:
           List<String>.from((doc.data()?['not_allowed_words'] ?? <String>[])),

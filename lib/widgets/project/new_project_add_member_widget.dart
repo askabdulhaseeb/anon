@@ -41,8 +41,7 @@ class NewProjectAddMemberWidget extends StatelessWidget {
                             // clipBehavior: Clip.none,
                             children: <Widget>[
                               CustomProfilePhoto(
-                                members[index].imageURL,
-                                name: members[index].name,
+                                members[index],
                                 size: 50,
                               ),
                               Positioned(

@@ -7,7 +7,7 @@ import '../../models/chat/chat.dart';
 import '../../models/chat/message.dart';
 import '../../models/chat/message_read_info.dart';
 import '../../views/chat_screens/chat_screen.dart';
-import '../custom/custom_profile_photo.dart';
+import '../custom/chat_tile_image_widget.dart';
 
 class ChatDashboardTile extends StatelessWidget {
   const ChatDashboardTile(this.chat, {super.key});
@@ -21,7 +21,7 @@ class ChatDashboardTile extends StatelessWidget {
             .pushNamed(ChatScreen.routeName, arguments: chat.chatID);
       },
       contentPadding: const EdgeInsets.symmetric(horizontal: 0),
-      leading: CustomProfilePhoto(chat.imageURL, name: chat.title),
+      leading: ChatTileImageWidget(chat),
       title: Text(
         chat.title,
         maxLines: 1,

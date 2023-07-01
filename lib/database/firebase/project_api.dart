@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../enums/chat/chat_member_role.dart';
 import '../../models/chat/chat.dart';
@@ -17,7 +18,7 @@ class ProjectAPI {
   static const String _collection = 'projects';
   static final FirebaseFirestore _instance = FirebaseFirestore.instance;
 
-  Future<bool> create(Project value) async {
+  Future<bool> create(BuildContext context, Project value) async {
     try {
       await _instance.collection(_collection).doc(value.pid).set(value.toMap());
       await LocalProject().add(value);
@@ -31,6 +32,8 @@ class ProjectAPI {
             ChatMember(uid: me, role: ChatMemberRole.admin),
           ],
           title: 'General',
+          // ignore: use_build_context_synchronously
+          defaultColor: Theme.of(context).primaryColor.value,
         ),
         receiver: <AppUser>[],
         sender: null,

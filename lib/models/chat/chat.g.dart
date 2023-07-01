@@ -24,6 +24,7 @@ class ChatAdapter extends TypeAdapter<Chat> {
       title: fields[9] == null ? '' : fields[9] as String,
       description: fields[10] == null ? '' : fields[10] as String,
       lastMessage: fields[5] as Message?,
+      defaultColor: fields[12] == null ? 808080 : fields[12] as int?,
       chatID: fields[0] as String?,
       chatNotes: (fields[3] as List?)?.cast<Note>(),
       unseenMessages: (fields[6] as List?)?.cast<Message>(),
@@ -35,7 +36,7 @@ class ChatAdapter extends TypeAdapter<Chat> {
   @override
   void write(BinaryWriter writer, Chat obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.chatID)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class ChatAdapter extends TypeAdapter<Chat> {
       ..writeByte(10)
       ..write(obj.description)
       ..writeByte(11)
-      ..write(obj.targetString);
+      ..write(obj.targetString)
+      ..writeByte(12)
+      ..write(obj.defaultColor);
   }
 
   @override

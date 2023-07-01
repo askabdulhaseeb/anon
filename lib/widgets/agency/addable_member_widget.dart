@@ -143,7 +143,7 @@ class _UserTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      leading: CustomProfilePhoto(user.imageURL, name: user.name),
+      leading: CustomProfilePhoto(user),
       title: Text(
         user.name,
         style: const TextStyle(fontWeight: FontWeight.bold),

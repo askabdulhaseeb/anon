@@ -51,6 +51,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                   CustomSquarePhoto(
                     chat.imageURL,
                     name: chat.title,
+                    defaultColor: chat.defaultColor,
                     size: 80,
                   ),
                   if (canEdit)

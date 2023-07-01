@@ -107,7 +107,11 @@ class _AppBar extends StatelessWidget {
                 .pushNamed(ChatDetailScreen.routeName, arguments: chatID),
             child: Row(
               children: <Widget>[
-                CustomSquarePhoto(chat.imageURL, name: chat.title),
+                CustomSquarePhoto(
+                  chat.imageURL,
+                  name: chat.title,
+                  defaultColor: chat.defaultColor,
+                ),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

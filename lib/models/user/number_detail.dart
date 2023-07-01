@@ -6,12 +6,16 @@ part 'number_detail.g.dart';
 @HiveType(typeId: 14)
 class NumberDetails {
   NumberDetails({
-    required this.countryCode,
-    required this.number,
-    required this.completeNumber,
-    required this.isoCode,
+    String? countryCode,
+    String? number,
+    String? completeNumber,
+    String? isoCode,
     DateTime? timestamp,
-  }) : timestamp = timestamp ?? DateTime.now();
+  })  : countryCode = countryCode ?? '',
+        number = number ?? '',
+        completeNumber = completeNumber ?? '',
+        isoCode = isoCode = '',
+        timestamp = timestamp ?? DateTime.now();
 
   @HiveField(0)
   final String countryCode;
@@ -44,6 +48,4 @@ class NumberDetails {
       timestamp: TimeFun.parseTime(map['timestamp']),
     );
   }
-
-  
 }

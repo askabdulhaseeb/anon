@@ -24,6 +24,7 @@ class AppUserAdapter extends TypeAdapter<AppUser> {
       email: fields[8] as String,
       password: fields[9] as String,
       type: fields[5] as UserType,
+      defaultColor: fields[16] == null ? 808080 : fields[16] as int?,
       nickName: fields[3] as String?,
       authType: fields[6] as AuthType?,
       imageURL: fields[10] as String?,
@@ -36,7 +37,7 @@ class AppUserAdapter extends TypeAdapter<AppUser> {
   @override
   void write(BinaryWriter writer, AppUser obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.uid)
       ..writeByte(2)
@@ -62,7 +63,9 @@ class AppUserAdapter extends TypeAdapter<AppUser> {
       ..writeByte(13)
       ..write(obj.status)
       ..writeByte(14)
-      ..write(obj.agencyIDs);
+      ..write(obj.agencyIDs)
+      ..writeByte(16)
+      ..write(obj.defaultColor);
   }
 
   @override

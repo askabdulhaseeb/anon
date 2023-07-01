@@ -55,6 +55,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     children: <Widget>[
                       CustomSquarePhoto(
                         project.logo,
+                        defaultColor: project.defaultColor,
                         name: project.title,
                         size: 80,
                       ),

@@ -109,8 +109,7 @@ class _CreateChatScreenState extends State<CreateChatScreen> {
                                   clipBehavior: Clip.none,
                                   children: <Widget>[
                                     CustomProfilePhoto(
-                                      members[index].imageURL,
-                                      name: members[index].name,
+                                      members[index],
                                       size: 50,
                                     ),
                                     GestureDetector(

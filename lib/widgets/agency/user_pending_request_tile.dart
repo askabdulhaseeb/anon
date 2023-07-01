@@ -36,10 +36,7 @@ class _UserPendingRequestTileState extends State<UserPendingRequestTile> {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 children: <Widget>[
-                  CustomProfilePhoto(
-                    user.imageURL,
-                    name: user.name,
-                  ),
+                  CustomProfilePhoto(user),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(

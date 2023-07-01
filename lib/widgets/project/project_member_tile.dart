@@ -22,7 +22,7 @@ class ProjectMemberTile extends StatelessWidget {
           final AppUser user = snapshot.data!;
           return ListTile(
             contentPadding: const EdgeInsets.all(0),
-            leading: CustomProfilePhoto(user.imageURL, name: user.name),
+            leading: CustomProfilePhoto(user),
             title: Text(user.name),
             trailing: me == uid || canEdit
                 ? IconButton(

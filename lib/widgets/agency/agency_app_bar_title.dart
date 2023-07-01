@@ -22,7 +22,11 @@ class AgencyNameAppBarTitle extends StatelessWidget {
                   .copyToClipboard(context, result.agencyCode),
               child: Row(
                 children: <Widget>[
-                  CustomSquarePhoto(result.logoURL, name: result.name),
+                  CustomSquarePhoto(
+                    result.logoURL,
+                    name: result.name,
+                    defaultColor: Colors.grey.value,
+                  ),
                   const SizedBox(width: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

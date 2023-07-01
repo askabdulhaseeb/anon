@@ -15,7 +15,7 @@ class HelpingFuncation {
     });
   }
 
-  Color randomColor() {
+  int randomColor() {
     List<Color> colors = <Color>[
       Colors.blue,
       Colors.brown,
@@ -32,7 +32,7 @@ class HelpingFuncation {
       Colors.yellow,
     ];
     final int indexRandom = Random.secure().nextInt(colors.length);
-    return colors[indexRandom];
+    return colors[indexRandom].value;
   }
 
   String photoPlaceholder(String value) {

@@ -22,7 +22,7 @@ class ChatMemberTile extends StatelessWidget {
             snapshot.connectionState == ConnectionState.done) {
           final AppUser user = snapshot.data!;
           return ListTile(
-            leading: CustomProfilePhoto(user.imageURL, name: user.name),
+            leading: CustomProfilePhoto(user),
             title: Text(user.name),
             trailing: me == member.uid || canEdit
                 ? IconButton(

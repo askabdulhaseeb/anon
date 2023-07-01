@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../database/firebase/auth_methods.dart';
+import '../../../database/local/local_user.dart';
+import '../../../models/user/app_user.dart';
 import '../../../widgets/auth/my_agencies_list.dart';
 import '../../../widgets/custom/custom_profile_photo.dart';
+import '../../../widgets/custom/show_loading.dart';
 import 'join_agency_screen.dart';
 
 class SwitchAgencyScreen extends StatelessWidget {
@@ -17,10 +20,16 @@ class SwitchAgencyScreen extends StatelessWidget {
         elevation: 0,
         title: Row(
           children: <Widget>[
-            CustomProfilePhoto(
-              AuthMethods.getCurrentUser?.photoURL,
-              name: AuthMethods.getCurrentUser?.displayName ?? 'Null',
-            ),
+            FutureBuilder<AppUser>(
+                future: LocalUser().user(AuthMethods.uid),
+                builder:
+                    (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
+                  if (snapshot.hasData) {
+                    return CustomProfilePhoto(snapshot.data!);
+                  } else {
+                    return const ShowLoading();
+                  }
+                }),
             const SizedBox(width: 10),
             Expanded(
               child: RichText(

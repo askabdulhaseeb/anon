@@ -51,7 +51,8 @@ class NewProjectProvider extends ChangeNotifier {
         endingTime: _milestones.last.deadline,
         startingTime: _milestones.first.deadline,
       );
-      final bool added = await ProjectAPI().create(project);
+      // ignore: use_build_context_synchronously
+      final bool added = await ProjectAPI().create(context, project);
       if (added) {
         // ignore: use_build_context_synchronously
         Navigator.of(context).popAndPushNamed(

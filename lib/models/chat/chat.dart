@@ -1,8 +1,10 @@
 import 'package:devmarkaz/models/chat/target_string.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 import '../../database/firebase/auth_methods.dart';
 import '../../enums/chat/chat_member_role.dart';
+import '../../functions/helping_funcation.dart';
 import '../../functions/time_functions.dart';
 import '../../functions/unique_id_fun.dart';
 import '../project/note.dart';
@@ -20,6 +22,7 @@ class Chat extends HiveObject {
     this.title = '',
     this.description = '',
     this.lastMessage,
+    int? defaultColor,
     String? chatID,
     List<Note>? chatNotes,
     List<Message>? unseenMessages,
@@ -29,6 +32,7 @@ class Chat extends HiveObject {
         chatNotes = chatNotes ?? <Note>[],
         unseenMessages = unseenMessages ?? <Message>[],
         timestamp = timestamp ?? DateTime.now(),
+        defaultColor = defaultColor ?? HelpingFuncation().randomColor(),
         targetString = targetString ?? <TargetString>[];
 
   @HiveField(0)
@@ -55,6 +59,8 @@ class Chat extends HiveObject {
   String description;
   @HiveField(11) // Class Code: 46 & 47
   final List<TargetString> targetString;
+  @HiveField(12, defaultValue: 808080)
+  final int defaultColor;
 
   Map<String, dynamic> toMap() {
     final String me = AuthMethods.uid;
@@ -73,6 +79,7 @@ class Chat extends HiveObject {
       'members': members.map((ChatMember x) => x.toMap()).toList(),
       'last_message': lastMessage?.toMap(),
       'unseen_message': unseenMessages.map((Message x) => x.toMap()).toList(),
+      'default_color': defaultColor,
       'timestamp': timestamp,
     };
   }
@@ -98,6 +105,7 @@ class Chat extends HiveObject {
       description: map['description'] ?? '',
       persons: List<String>.from((map['persons'] ?? <String>[])),
       projectID: map['project_id'] ?? '',
+      defaultColor: map['default_color'] ?? Colors.grey.value,
       chatNotes: List<Note>.from(map['notes']?.map(
         (dynamic x) => Note.fromMap(x),
       )),

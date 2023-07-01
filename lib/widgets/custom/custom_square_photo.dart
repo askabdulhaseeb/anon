@@ -7,12 +7,14 @@ class CustomSquarePhoto extends StatelessWidget {
   const CustomSquarePhoto(
     this.url, {
     required this.name,
+    required this.defaultColor,
     this.fit = BoxFit.cover,
     this.size = 44,
     super.key,
   });
   final String? url;
   final String name;
+  final int defaultColor;
   final double size;
   final BoxFit? fit;
 
@@ -40,7 +42,7 @@ class CustomSquarePhoto extends StatelessWidget {
       height: size,
       width: size,
       padding: EdgeInsets.all(size / 8),
-      color: Colors.grey,
+      color: Color(defaultColor),
       child: FittedBox(
         child: Text(
           HelpingFuncation().photoPlaceholder(name.toUpperCase()),
