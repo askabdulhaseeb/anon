@@ -132,7 +132,8 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
         Navigator.of(context).pushNamedAndRemoveUntil(
             MainScreen.routeName, (Route<dynamic> route) => false);
       } else {
-        CustomToast.successToast(message: 'Request Sended');
+        if (!mounted) return;
+        CustomToast.errorSnackBar(context, text: 'Request Sended');
         if (!mounted) return;
         Navigator.of(context).pushNamedAndRemoveUntil(
             SwitchAgencyScreen.routeName, (Route<dynamic> route) => false);

@@ -185,7 +185,7 @@ class _SignInScreenState extends State<SignInScreen> {
       if (!mounted) return;
       Navigator.of(context).pushNamed(ForgetPasswordScreen.routeName);
     } catch (e) {
-      CustomToast.errorToast(message: e.toString());
+      CustomToast.errorSnackBar(context, text: e.toString());
     }
   }
 }

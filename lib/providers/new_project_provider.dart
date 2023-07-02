@@ -25,7 +25,8 @@ class NewProjectProvider extends ChangeNotifier {
       onIsLoadingUpdate(true);
       final Agency? agency = await LocalAgency().currentlySelected();
       if (agency == null) {
-        CustomToast.errorToast(message: 'Reopen the Agency, please');
+        // ignore: use_build_context_synchronously
+        CustomToast.errorSnackBar(context,text: 'Reopen the Agency, please');
         onIsLoadingUpdate(false);
         return;
       }
@@ -62,7 +63,7 @@ class NewProjectProvider extends ChangeNotifier {
         reset();
       }
     } catch (e) {
-      CustomToast.errorToast(message: 'Something wents wrong');
+      CustomToast.errorSnackBar(context,text: 'Something wents wrong');
       onIsLoadingUpdate(false);
     }
   }
@@ -71,7 +72,8 @@ class NewProjectProvider extends ChangeNotifier {
     if (isLoading) return;
     final Agency? agency = await LocalAgency().currentlySelected();
     if (agency == null) {
-      CustomToast.errorToast(message: 'Facing Error');
+      // ignore: use_build_context_synchronously
+      CustomToast.errorSnackBar(context,text: 'Facing Error');
       return;
     }
     // ignore: use_build_context_synchronously

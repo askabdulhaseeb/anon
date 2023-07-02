@@ -6,11 +6,9 @@ import 'package:flutter/material.dart';
 
 import '../../enums/user/user_type.dart';
 import '../../functions/encryption.dart';
-import '../../functions/firebase_exceptions.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/number_detail.dart';
 import '../../views/auth/user_auth/sign_in_screen.dart';
-import '../../widgets/custom/custom_toast.dart';
 import '../local/local_db.dart';
 import '../local/local_user.dart';
 import 'user_api.dart';
@@ -56,10 +54,9 @@ class AuthMethods {
       await UserAPI().register(appUser);
       await LocalUser().signIn(appUser);
       return user;
-    } on FirebaseAuthException catch (e) {
-      CustomToast.errorToast(message: CustomExceptions.auth(e));
+    } on FirebaseAuthException catch (_) {
+      rethrow;
     }
-    return null;
   }
 
   Future<User?> loginWithEmailAndPassword(String email, String password) async {
@@ -74,28 +71,26 @@ class AuthMethods {
       assert(appUser != null);
       await LocalUser().signIn(appUser!);
       return user;
-    } on FirebaseAuthException catch (e) {
-      CustomToast.errorToast(message: CustomExceptions.auth(e));
+    } on FirebaseAuthException catch (_) {
+      rethrow;
     }
-    return null;
   }
 
   Future<bool> forgetPassword(String email) async {
     try {
       _auth.sendPasswordResetEmail(email: email.trim());
       return true;
-    } on FirebaseAuthException catch (e) {
-      CustomToast.errorToast(message: CustomExceptions.auth(e));
+    } on FirebaseAuthException catch (_) {
+      rethrow;
     }
-    return false;
   }
 
   Future<void> deleteAccount() async {
     await FirebaseFirestore.instance.collection('users').doc(uid).delete();
     try {
       await _auth.currentUser!.delete();
-    } on FirebaseAuthException catch (e) {
-      CustomToast.errorToast(message: CustomExceptions.auth(e));
+    } on FirebaseAuthException catch (_) {
+      rethrow;
     }
   }
 

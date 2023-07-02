@@ -11,7 +11,6 @@ import '../../models/chat/message_read_info.dart';
 import '../../models/project/attachment.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/number_detail.dart';
-import '../../widgets/custom/custom_toast.dart';
 import '../local/local_chat.dart';
 import 'auth_methods.dart';
 import 'message_api.dart';
@@ -122,7 +121,7 @@ class ChatAPI {
       //     .doc(newMessage.messageID)
       //     .set(newMessage.toMap());
     } catch (e) {
-      CustomToast.errorToast(message: e.toString());
+      rethrow;
     }
   }
 
@@ -144,8 +143,7 @@ class ChatAPI {
       String url = (await snapshot.ref.getDownloadURL()).toString();
       return url;
     } catch (e) {
-      CustomToast.errorToast(message: e.toString());
-      return null;
+      rethrow;
     }
   }
 

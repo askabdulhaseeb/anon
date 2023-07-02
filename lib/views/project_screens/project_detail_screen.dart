@@ -110,7 +110,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     if (isLoading) return;
     final Agency? agency = await LocalAgency().currentlySelected();
     if (agency == null) {
-      CustomToast.errorToast(message: 'Facing Error');
+      if (!mounted) return;
+      CustomToast.errorSnackBar(context, text: 'Facing Error');
       return;
     }
     if (!mounted) return;

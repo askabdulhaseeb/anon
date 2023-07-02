@@ -102,7 +102,7 @@ class _StartAgencyScreenState extends State<StartAgencyScreen> {
         arguments: code,
       );
     } catch (e) {
-      CustomToast.errorToast(message: 'Sonething goes wrong');
+      CustomToast.errorSnackBar(context,text: 'Sonething goes wrong');
     }
     setState(() {
       isLoading = false;

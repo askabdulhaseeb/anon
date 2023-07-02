@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../models/chat/message.dart';
 import '../../models/user/app_user.dart';
-import '../../widgets/custom/custom_toast.dart';
 import '../local/local_message.dart';
 
 class MessageAPI {
@@ -82,7 +81,6 @@ class MessageAPI {
       String url = (await snapshot.ref.getDownloadURL()).toString();
       return (tempPath, url);
     } catch (e) {
-      CustomToast.errorToast(message: e.toString());
       return ('', null);
     }
   }
