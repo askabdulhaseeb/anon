@@ -7,6 +7,7 @@ import '../../enums/attachment_type.dart';
 import '../../enums/chat/chat_member_role.dart';
 import '../../enums/chat/message_type.dart';
 import '../../enums/project/milestone_history_type.dart';
+import '../../enums/project/milestone_status.dart';
 import '../../enums/user/auth_type.dart';
 import '../../enums/user/user_designation.dart';
 import '../../enums/user/user_type.dart';
@@ -56,6 +57,7 @@ class LocalDB {
     Hive.registerAdapter(MilestoneAdapter()); // 34
     Hive.registerAdapter(MilestoneHistoryAdapter()); // 35
     Hive.registerAdapter(MilestoneHistoryTypeAdapter()); // 36
+    Hive.registerAdapter(MilestoneStatusAdapter()); // 37
     //
     // Type: Chat 4
     Hive.registerAdapter(ChatAdapter()); // 4

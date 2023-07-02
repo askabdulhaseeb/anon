@@ -98,14 +98,13 @@ class Project extends HiveObject {
       defaultColor: doc.data()?['default_color'] ?? Colors.grey.value,
       createdBy: doc.data()?['created_by'] ?? '',
       notes: List<Note>.from(
-        (doc.data()?['notes'] as List<dynamic>).map<Note>(
-          (dynamic x) => Note.fromMap(x as Map<String, dynamic>),
-        ),
+        ((doc.data()?['notes'] ?? <dynamic>[]) as List<dynamic>)
+            .map<Note>((dynamic x) => Note.fromMap(x as Map<String, dynamic>)),
       ),
       milestone: List<Milestone>.from(
-        (doc.data()?['milestone'] ?? <dynamic>[]).map<Milestone>(
-          (dynamic x) => Milestone.fromMap(x as Map<String, dynamic>),
-        ),
+        ((doc.data()?['milestone'] ?? <dynamic>[]) as List<dynamic>)
+            .map<Milestone>(
+                (dynamic x) => Milestone.fromMap(x as Map<String, dynamic>)),
       ),
     );
   }

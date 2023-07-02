@@ -112,10 +112,12 @@ class Chat extends HiveObject {
       lastMessage: map['last_message'] != null
           ? Message.fromMap(map['last_message'])
           : null,
-      unseenMessages: List<Message>.from(map['unseen_message']?.map(
+      unseenMessages: List<Message>.from(
+          (map['unseen_message'] as List<dynamic>).map<Message>(
         (dynamic x) => Message.fromMap(x),
       )),
-      members: List<ChatMember>.from(map['members']?.map(
+      members: List<ChatMember>.from(
+          (map['members'] as List<dynamic>).map<ChatMember>(
         (dynamic x) => ChatMember.fromMap(x),
       )),
       timestamp: TimeFun.parseTime(map['timestamp']),

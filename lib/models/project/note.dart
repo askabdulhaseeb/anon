@@ -78,7 +78,7 @@ class Note extends HiveObject {
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       attachments: attach,
-      assignedTo: List<String>.from((map['assigned_to'] ?? <String>[])),
+      assignedTo: List<String>.from(map['assigned_to'] ?? <String>[]),
       createdBy: map['created_by'] ?? '',
       createdTime: TimeFun.parseTime(map['created_time']),
       deadline: TimeFun.parseTime(map['deadline']),

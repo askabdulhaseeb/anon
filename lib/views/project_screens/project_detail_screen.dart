@@ -11,6 +11,7 @@ import '../../widgets/agency/addable_member_widget.dart';
 import '../../widgets/custom/custom_square_photo.dart';
 import '../../widgets/custom/custom_toast.dart';
 import '../../widgets/custom/text_field_like_widget.dart';
+import '../../widgets/project/milestone/project_milestone_display_tile.dart';
 import '../../widgets/project/project_member_tile.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
@@ -41,6 +42,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             }
           },
         ),
+        // members view
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<Project>(
@@ -74,26 +76,62 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       //           .toList(),
                       //     ),
                       //   ),
-                      canEdit
-                          ? Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton.icon(
-                                onPressed: () => addMember(project),
-                                icon: const Icon(Icons.add),
-                                label: const Text('Add Member'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: TextFieldLikeWidget(
+                          child: Column(
+                            children: <Widget>[
+                              if (canEdit)
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton.icon(
+                                    onPressed: () => addMember(project),
+                                    icon: const Icon(Icons.add),
+                                    label: const Text('Update Milestone'),
+                                  ),
+                                ),
+                              ListView.builder(
+                                primary: false,
+                                shrinkWrap: true,
+                                itemCount: project.milestone.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ProjectMilestoneDisplayTile(
+                                    milestone: project.milestone[index],
+                                    canEdit: canEdit,
+                                  );
+                                },
                               ),
-                            )
-                          : const SizedBox(height: 16),
-                      ListView.builder(
-                        primary: false,
-                        shrinkWrap: true,
-                        itemCount: project.members.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ProjectMemberTile(
-                            project.members[index],
-                            canEdit: canEdit,
-                          );
-                        },
+                            ],
+                          ),
+                        ),
+                      ),
+                      TextFieldLikeWidget(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            canEdit
+                                ? Align(
+                                    alignment: Alignment.centerRight,
+                                    child: TextButton.icon(
+                                      onPressed: () => addMember(project),
+                                      icon: const Icon(Icons.add),
+                                      label: const Text('Add Member'),
+                                    ),
+                                  )
+                                : const SizedBox(height: 16),
+                            ListView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              itemCount: project.members.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ProjectMemberTile(
+                                  project.members[index],
+                                  canEdit: canEdit,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

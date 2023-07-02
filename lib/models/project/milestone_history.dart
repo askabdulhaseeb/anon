@@ -34,7 +34,7 @@ class MilestoneHistory {
     return MilestoneHistory(
       actionTime: TimeFun.parseTime(map['action_time']),
       type: MilestoneHistoryTypeConvertor()
-          .toEnum(map['type'] ?? MilestoneHistoryType.cancel),
+          .toEnum(map['type'] ?? MilestoneHistoryType.cancel.json),
       actionBy: map['action_by'] ?? '',
     );
   }

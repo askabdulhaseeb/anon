@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<AppThemeProvider>(
         builder: (BuildContext context, AppThemeProvider appPro, _) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'Dev Markaz',
             theme: AppThemes.light,
             darkTheme: AppThemes.dark,

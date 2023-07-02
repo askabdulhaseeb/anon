@@ -28,6 +28,9 @@ class MilestoneAdapter extends TypeAdapter<Milestone> {
       createdBy: fields[9] as String?,
       assignTo: (fields[10] as List?)?.cast<String>(),
       history: (fields[11] as List?)?.cast<MilestoneHistory>(),
+      status: fields[14] == null
+          ? MilestoneStatus.inActive
+          : fields[14] as MilestoneStatus?,
       isCompleted: fields[12] as bool,
     );
   }
@@ -35,7 +38,7 @@ class MilestoneAdapter extends TypeAdapter<Milestone> {
   @override
   void write(BinaryWriter writer, Milestone obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.milestoneID)
       ..writeByte(2)
@@ -59,7 +62,9 @@ class MilestoneAdapter extends TypeAdapter<Milestone> {
       ..writeByte(12)
       ..write(obj.isCompleted)
       ..writeByte(13)
-      ..write(obj.index);
+      ..write(obj.index)
+      ..writeByte(14)
+      ..write(obj.status);
   }
 
   @override

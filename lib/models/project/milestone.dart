@@ -2,6 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../database/firebase/auth_methods.dart';
 import '../../enums/project/milestone_history_type.dart';
+import '../../enums/project/milestone_status.dart';
 import '../../functions/time_functions.dart';
 import 'milestone_history.dart';
 part 'milestone.g.dart';
@@ -22,10 +23,12 @@ class Milestone extends HiveObject {
     String? createdBy,
     List<String>? assignTo,
     List<MilestoneHistory>? history,
+    MilestoneStatus? status,
     this.isCompleted = false,
   })  : startingTime = startingTime ?? DateTime.now(),
         createdBy = createdBy ?? AuthMethods.uid,
         assignTo = assignTo ?? <String>[],
+        status = status ?? MilestoneStatus.inActive,
         history = history ??
             <MilestoneHistory>[
               MilestoneHistory(type: MilestoneHistoryType.start)
@@ -59,6 +62,8 @@ class Milestone extends HiveObject {
   final bool isCompleted;
   @HiveField(13, defaultValue: 0)
   final int index;
+  @HiveField(14, defaultValue: MilestoneStatus.inActive)
+  MilestoneStatus status;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -95,11 +100,11 @@ class Milestone extends HiveObject {
           map['created_by'] != AuthMethods.uid ? 0.0 : map['payment'] ?? 0.0,
       currency: map['currency'] ?? 'USD',
       createdBy: map['created_by'] ?? '',
-      assignTo: List<String>.from((map['assign_to'] as List<String>)),
+      assignTo: List<String>.from((map['assign_to'] as List<dynamic>)),
       history: List<MilestoneHistory>.from(
-        (map['history'] as List<dynamic>).map<MilestoneHistory>(
-          (dynamic x) => MilestoneHistory.fromMap(x as Map<String, dynamic>),
-        ),
+        ((map['history'] ?? <dynamic>[]) as List<dynamic>)
+            .map<MilestoneHistory>((dynamic x) =>
+                MilestoneHistory.fromMap(x as Map<String, dynamic>)),
       ),
       isCompleted: map['is_completed'] ?? false,
     );
