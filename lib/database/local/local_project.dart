@@ -31,6 +31,12 @@ class LocalProject {
     await box.put(value.pid, value);
   }
 
+  Future<void> update(Project value) async {
+    final Box<Project> box = await refresh();
+    await box.put(value.pid, value);
+    await ProjectAPI().update(value);
+  }
+
   Future<void> addAll(List<Project> value) async {
     final Box<Project> box = await refresh();
     await box.clear();

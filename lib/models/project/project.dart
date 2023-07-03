@@ -78,6 +78,22 @@ class Project extends HiveObject {
     };
   }
 
+  Map<String, dynamic> toUpdate() {
+    final String me = AuthMethods.uid;
+    if (!members.contains(me)) members.add(me);
+    return <String, dynamic>{
+      'title': title,
+      'description': description,
+      'members': members,
+      'starting_time': startingTime,
+      'ending_time': endingTime,
+      'logo': logo,
+      'created_by': createdBy,
+      'notes': notes.map((Note x) => x.toMap()).toList(),
+      'milestone': milestone.map((Milestone x) => x.toMap()).toList(),
+    };
+  }
+
   Map<String, dynamic> toUpdateMembers() {
     final String me = AuthMethods.uid;
     if (!members.contains(me)) members.add(me);

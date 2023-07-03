@@ -32,13 +32,14 @@ class MilestoneAdapter extends TypeAdapter<Milestone> {
           ? MilestoneStatus.inActive
           : fields[14] as MilestoneStatus?,
       isCompleted: fields[12] as bool,
+      createdTime: fields[15] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Milestone obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.milestoneID)
       ..writeByte(2)
@@ -64,7 +65,9 @@ class MilestoneAdapter extends TypeAdapter<Milestone> {
       ..writeByte(13)
       ..write(obj.index)
       ..writeByte(14)
-      ..write(obj.status);
+      ..write(obj.status)
+      ..writeByte(15)
+      ..write(obj.createdTime);
   }
 
   @override

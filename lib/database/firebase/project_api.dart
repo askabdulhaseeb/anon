@@ -80,6 +80,17 @@ class ProjectAPI {
     }
   }
 
+  Future<void> update(Project value) async {
+    try {
+      await _instance
+          .collection(_collection)
+          .doc(value.pid)
+          .update(value.toUpdate());
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<String?> projectLogo({
     required File file,
     required String projectID,

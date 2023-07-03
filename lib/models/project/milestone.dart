@@ -19,13 +19,14 @@ class Milestone extends HiveObject {
     this.completedTime,
     this.deadline,
     this.currency = 'USD',
-    DateTime? startingTime,
+    this.startingTime,
     String? createdBy,
     List<String>? assignTo,
     List<MilestoneHistory>? history,
     MilestoneStatus? status,
     this.isCompleted = false,
-  })  : startingTime = startingTime ?? DateTime.now(),
+    DateTime? createdTime,
+  })  : createdTime = createdTime ?? DateTime.now(),
         createdBy = createdBy ?? AuthMethods.uid,
         assignTo = assignTo ?? <String>[],
         status = status ?? MilestoneStatus.inActive,
@@ -45,7 +46,7 @@ class Milestone extends HiveObject {
   @HiveField(4)
   DateTime? deadline;
   @HiveField(5)
-  final DateTime startingTime;
+  DateTime? startingTime;
   @HiveField(6)
   DateTime? completedTime;
   @HiveField(7)
@@ -59,11 +60,13 @@ class Milestone extends HiveObject {
   @HiveField(11)
   final List<MilestoneHistory> history;
   @HiveField(12)
-  final bool isCompleted;
+  bool isCompleted;
   @HiveField(13, defaultValue: 0)
   final int index;
   @HiveField(14, defaultValue: MilestoneStatus.inActive)
   MilestoneStatus status;
+  @HiveField(15)
+  DateTime createdTime;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -72,12 +75,14 @@ class Milestone extends HiveObject {
       // 'project_id': projectID,
       'title': title,
       'deadline': deadline,
+      'created_time': createdTime,
       'starting_time': startingTime,
       'completed_time': completedTime,
       'payment': payment,
       'currency': currency,
       'created_by': createdBy,
       'assign_to': assignTo,
+      'status': status.json,
       'history': history.map((MilestoneHistory x) => x.toMap()).toList(),
       'is_completed': isCompleted,
     };
@@ -92,6 +97,7 @@ class Milestone extends HiveObject {
       title: map['title'] ?? '',
       // description: map['description'] ?? '',
       deadline: TimeFun.parseTime(map['deadline']),
+      createdTime: TimeFun.parseTime(map['created_time']),
       startingTime: TimeFun.parseTime(map['starting_time']),
       completedTime: map['completed_time'] != null
           ? TimeFun.parseTime(map['completed_time'])
@@ -106,7 +112,21 @@ class Milestone extends HiveObject {
             .map<MilestoneHistory>((dynamic x) =>
                 MilestoneHistory.fromMap(x as Map<String, dynamic>)),
       ),
+      status: MilestoneStatusConvertor()
+          .toEnum(map['status'] ?? MilestoneStatus.inActive.json),
       isCompleted: map['is_completed'] ?? false,
     );
+  }
+
+  void statusUpdate(MilestoneStatus value) {
+    status = value;
+    if (value == MilestoneStatus.active) {
+      isCompleted = false;
+      startingTime = DateTime.now();
+    } else if (value == MilestoneStatus.done ||
+        MilestoneStatus.cancel == value) {
+      isCompleted = true;
+      completedTime = DateTime.now();
+    }
   }
 }

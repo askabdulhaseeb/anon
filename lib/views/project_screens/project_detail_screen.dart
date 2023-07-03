@@ -4,6 +4,7 @@ import '../../database/firebase/auth_methods.dart';
 import '../../database/local/local_agency.dart';
 import '../../database/local/local_project.dart';
 import '../../database/local/local_user.dart';
+import '../../enums/project/milestone_status.dart';
 import '../../models/agency/agency.dart';
 import '../../models/project/project.dart';
 import '../../models/user/app_user.dart';
@@ -98,6 +99,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                   return ProjectMilestoneDisplayTile(
                                     milestone: project.milestone[index],
                                     canEdit: canEdit,
+                                    onMilestoneUpdate:
+                                        (MilestoneStatus p0) async {
+                                      project.milestone[index].statusUpdate(p0);
+                                      setState(() {});
+                                      await LocalProject().update(project);
+                                    },
                                   );
                                 },
                               ),
