@@ -21,6 +21,7 @@ import 'views/main_screen/main_screen.dart';
 import 'views/project_screens/create_project_screen.dart';
 import 'views/chat_screens/chat_dashboard_screen.dart';
 import 'views/project_screens/project_detail_screen.dart';
+import 'views/user_screen/user_profile_screen.dart';
 
 final List<ChangeNotifierProvider<ChangeNotifier>> myProviders =
     <ChangeNotifierProvider<ChangeNotifier>>[
@@ -56,4 +57,6 @@ final Map<String, WidgetBuilder> myRoutes = <String, WidgetBuilder>{
   ChatScreen.routeName: (_) => const ChatScreen(),
   ChatDetailScreen.routeName: (_) => const ChatDetailScreen(),
   MessageMediaFullScreen.routeName: (_) => const MessageMediaFullScreen(),
+  // User
+  UserProfileScreeen.routeName: (_) => const UserProfileScreeen(),
 };

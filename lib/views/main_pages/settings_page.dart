@@ -12,6 +12,7 @@ import '../../widgets/custom/custom_profile_photo.dart';
 import '../../widgets/custom/show_loading.dart';
 import '../agency_screens/agency_joining_request_screen.dart';
 import '../auth/agency_auth/switch_agency_screen.dart';
+import '../user_screen/user_profile_screen.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class SettingsPage extends StatelessWidget {
           return SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
                 FutureBuilder<AppUser>(
                   future: LocalUser().user(AuthMethods.uid),
                   builder: (
@@ -50,8 +51,11 @@ class SettingsPage extends StatelessWidget {
                         title: Text(user.name),
                         subtitle:
                             user.nickName.isEmpty ? null : Text(user.nickName),
-                        // trailing: forwardIcon,
-                        onTap: () {},
+                        trailing: forwardIcon,
+                        onTap: () => Navigator.of(context).pushNamed(
+                          UserProfileScreeen.routeName,
+                          arguments: user.uid,
+                        ),
                       );
                     } else {
                       return const ShowLoading();
