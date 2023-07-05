@@ -20,12 +20,17 @@ class CustomToast {
   static void errorSnackBar(BuildContext context, {required String text}) {
     final SnackBar snackBar =
         SnackBar(content: Text(text), backgroundColor: Colors.red);
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    _displaySnakeBar(context, snackBar);
   }
 
   static void successSnackBar(BuildContext context, {required String text}) {
     final SnackBar snackBar =
         SnackBar(content: Text(text), backgroundColor: Colors.green);
+    _displaySnakeBar(context, snackBar);
+  }
+
+  static void _displaySnakeBar(BuildContext context, SnackBar snackBar) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

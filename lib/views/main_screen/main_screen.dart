@@ -6,7 +6,7 @@ import '../../database/firebase/auth_methods.dart';
 import '../../providers/app_nav_provider.dart';
 import '../../widgets/agency/agency_app_bar_title.dart';
 import '../auth/agency_auth/switch_agency_screen.dart';
-import '../main_pages/agency_page.dart';
+import '../main_pages/settings_page.dart';
 import '../main_pages/project_page.dart';
 import 'main_bottom_nav_bar.dart';
 
@@ -17,8 +17,8 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> pages = const <Widget>[
       ProjectPage(),
-      Center(child: Text('TODO')),
-      AgencyPage(),
+      Center(child: Text('Coming soon...')),
+      SettingsPage(),
     ];
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -53,10 +53,8 @@ class MainScreen extends StatelessWidget {
   }
 
   onMoreOption(BuildContext context) {
-    showBottomSheet(
-      context: context,
-      builder: (BuildContext context) =>
-          Builder(builder: (BuildContext context) {
+    Scaffold.of(context).showBottomSheet(
+      (BuildContext context) => Builder(builder: (BuildContext context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[

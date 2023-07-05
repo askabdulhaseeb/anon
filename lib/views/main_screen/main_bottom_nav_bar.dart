@@ -29,9 +29,9 @@ class MainBottomNavigationBar extends StatelessWidget {
           label: 'Todo',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.workspace_premium_outlined),
-          activeIcon: Icon(Icons.workspace_premium),
-          label: 'Agency',
+          icon: Icon(CupertinoIcons.settings),
+          activeIcon: Icon(CupertinoIcons.settings),
+          label: 'Settings',
         ),
       ],
     );

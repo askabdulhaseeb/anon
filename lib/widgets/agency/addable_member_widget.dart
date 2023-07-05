@@ -56,11 +56,15 @@ class _AddableMemberWidgetState extends State<AddableMemberWidget> {
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
-                  Text(
-                    widget.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: Text(
+                      widget.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   TextButton(

@@ -112,9 +112,8 @@ class SwitchAgencyScreen extends StatelessWidget {
   }
 
   onMoreOption(BuildContext context) {
-    showBottomSheet(
-      context: context,
-      builder: (BuildContext context) => Column(
+    Scaffold.of(context).showBottomSheet(
+      (BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Align(

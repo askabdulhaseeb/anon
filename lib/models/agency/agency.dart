@@ -85,7 +85,7 @@ class Agency extends HiveObject {
   }
 
   // ignore: sort_constructors_first
-  factory Agency.fromMap(DocumentSnapshot<Map<String, dynamic>> doc) {
+  factory Agency.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     final List<dynamic> activeData =
         doc.data()?['active_members'] ?? <dynamic>[];
     final List<dynamic> pendingData =

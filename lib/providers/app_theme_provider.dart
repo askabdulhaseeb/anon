@@ -89,6 +89,7 @@ class AppThemes {
     dividerColor: Colors.grey.shade300,
     listTileTheme: const ListTileThemeData(
       contentPadding: EdgeInsets.symmetric(horizontal: 16),
+      visualDensity: VisualDensity(vertical: -4),
       tileColor: _lightScaffoldColor,
       horizontalTitleGap: 10,
     ),

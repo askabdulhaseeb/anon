@@ -31,12 +31,24 @@ class AttachedMessage extends StatelessWidget {
                 children: <Widget>[
                   FutureBuilder<AppUser>(
                     future: LocalUser().user(message.sendBy),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<AppUser> snapshot) {
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<AppUser> snapshot,
+                    ) {
                       if (snapshot.hasData) {
                         return Text(
                           snapshot.data?.name ?? 'null',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(
+                              snapshot.data?.defaultColor ??
+                                  Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .color!
+                                      .value,
+                            ),
+                          ),
                         );
                       } else {
                         return const ShowLoading();

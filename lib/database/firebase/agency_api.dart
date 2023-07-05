@@ -76,6 +76,21 @@ class AgencyAPI {
     }
   }
 
+  Stream<List<Agency>> agenciesStream() {
+    final List<Agency> updatedAgencies = <Agency>[];
+    return _instance
+        .collection(_collection)
+        .where('members', arrayContains: AuthMethods.uid)
+        .snapshots()
+        .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
+      final List<DocumentSnapshot<Map<String, dynamic>>> data = event.docs;
+      for (DocumentSnapshot<Map<String, dynamic>> element in data) {
+        updatedAgencies.add(Agency.fromDoc(element));
+      }
+      return updatedAgencies;
+    });
+  }
+
   Future<Agency?> joinAgency(String value) async {
     try {
       final QuerySnapshot<Map<String, dynamic>> doc = await _instance
@@ -83,7 +98,7 @@ class AgencyAPI {
           .where('agency_code', isEqualTo: value)
           .get();
       if (doc.docs.isEmpty) return null;
-      final Agency result = Agency.fromMap(doc.docs[0]);
+      final Agency result = Agency.fromDoc(doc.docs[0]);
       final String myUID = AuthMethods.uid;
       if (result.activeMembers
           .any((MemberDetail element) => element.uid == myUID)) {
@@ -144,7 +159,7 @@ class AgencyAPI {
           .where('members', arrayContains: AuthMethods.uid)
           .get();
       for (DocumentSnapshot<Map<String, dynamic>> element in docs.docs) {
-        final Agency temp = Agency.fromMap(element);
+        final Agency temp = Agency.fromDoc(element);
         result.add(temp);
       }
       if (result.isNotEmpty) {
