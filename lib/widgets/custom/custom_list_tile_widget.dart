@@ -10,8 +10,10 @@ class CustomListTileWidget extends StatelessWidget {
     this.header,
     this.headerTextStyle,
     this.canEdit = false,
+    this.verticallyCenter = false,
     this.trailing,
     this.title,
+    this.titleWidget,
     this.titleTextStyle,
     this.onEdit,
     this.margin,
@@ -32,8 +34,9 @@ class CustomListTileWidget extends StatelessWidget {
   final bool canEdit;
   final VoidCallback? onEdit;
   final Widget? trailing;
-
+  final bool verticallyCenter;
   final String? title;
+  final Widget? titleWidget;
   final TextStyle? titleTextStyle;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
@@ -62,7 +65,9 @@ class CustomListTileWidget extends StatelessWidget {
           child: Padding(
             padding: padding ?? const EdgeInsets.symmetric(vertical: 10),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: verticallyCenter
+                  ? CrossAxisAlignment.center
+                  : CrossAxisAlignment.start,
               children: <Widget>[
                 leading ??
                     (leadingIcon != null
@@ -80,23 +85,24 @@ class CustomListTileWidget extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        if (header != null)
-                          Text(
-                            header ?? '',
-                            style: headerTextStyle ??
-                                TextStyle(
-                                    color: Theme.of(context).disabledColor),
-                          ),
-                        if (title != null)
-                          Text(
-                            title ?? '',
-                            style: titleTextStyle,
-                          ),
-                      ],
-                    ),
+                    child: titleWidget ??
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            if (header != null)
+                              Text(
+                                header ?? '',
+                                style: headerTextStyle ??
+                                    TextStyle(
+                                        color: Theme.of(context).disabledColor),
+                              ),
+                            if (title != null)
+                              Text(
+                                title ?? '',
+                                style: titleTextStyle,
+                              ),
+                          ],
+                        ),
                   ),
                 ),
                 //

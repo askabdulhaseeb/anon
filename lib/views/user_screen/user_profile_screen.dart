@@ -16,6 +16,7 @@ class UserProfileScreeen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final String userID = ModalRoute.of(context)!.settings.arguments as String;
+    // TODO: On Edit
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -33,19 +34,23 @@ class UserProfileScreeen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: CustomNetworkImage(
-                          imageURL: user.imageURL,
-                          size: size.width,
-                          placeholder:
-                              HelpingFuncation().photoPlaceholder(user.name),
-                          placeholderBgColor: Color(user.defaultColor),
+                      Hero(
+                        tag: user.uid,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: CustomNetworkImage(
+                            imageURL: user.imageURL,
+                            size: size.width,
+                            placeholder:
+                                HelpingFuncation().photoPlaceholder(user.name),
+                            placeholderBgColor: Color(user.defaultColor),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),
                       CustomListTileWidget(
                         header: 'Name',
+                        leadingIcon: CupertinoIcons.person_alt_circle,
                         title: user.name,
                         canEdit: canEdit,
                         onEdit: () {},
@@ -54,6 +59,13 @@ class UserProfileScreeen extends StatelessWidget {
                         header: 'Email',
                         leadingIcon: CupertinoIcons.mail,
                         title: user.email,
+                        canEdit: false,
+                        onEdit: () {},
+                      ),
+                      CustomListTileWidget(
+                        header: 'Phone Number',
+                        leadingIcon: CupertinoIcons.phone,
+                        title: user.phoneNumber.completeNumber,
                         canEdit: canEdit,
                         onEdit: () {},
                       ),

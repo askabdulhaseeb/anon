@@ -38,7 +38,7 @@ class AppThemes {
       centerTitle: false,
       elevation: 0,
       backgroundColor: Colors.transparent,
-      surfaceTintColor: _darkScaffoldColor,
+      surfaceTintColor: Colors.transparent,
       titleTextStyle: TextStyle(
         color: _lightScaffoldColor,
         fontSize: 20,
@@ -74,7 +74,7 @@ class AppThemes {
       centerTitle: false,
       elevation: 0,
       backgroundColor: Colors.transparent,
-      surfaceTintColor: _lightScaffoldColor,
+      surfaceTintColor: Colors.transparent,
       titleTextStyle: TextStyle(
         color: _darkScaffoldColor,
         fontSize: 20,

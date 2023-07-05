@@ -27,14 +27,18 @@ class CustomProfilePhoto extends StatelessWidget {
   }
 
   Widget _placeholder() {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: FittedBox(
-        child: Text(
-          HelpingFuncation().photoPlaceholder(user.name.toUpperCase()),
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
+    return SizedBox(
+      height: double.infinity,
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: FittedBox(
+          child: Text(
+            HelpingFuncation().photoPlaceholder(user.name.toUpperCase()),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ),
