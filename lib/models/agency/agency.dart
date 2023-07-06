@@ -18,7 +18,7 @@ class Agency extends HiveObject {
     List<MemberDetail>? activeMembers,
     List<MemberDetail>? pendingRequest,
     List<MemberDetail>? requestHistory,
-    bool? isCurrenlySelected = true,
+    bool? isCurrenlySelected = false,
   })  : websiteURL = websiteURL ?? '',
         logoURL = logoURL ?? '',
         members = members ?? <String>[AuthMethods.uid],

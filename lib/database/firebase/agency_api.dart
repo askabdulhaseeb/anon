@@ -76,19 +76,35 @@ class AgencyAPI {
     }
   }
 
-  Stream<List<Agency>> agenciesStream() {
-    final List<Agency> updatedAgencies = <Agency>[];
+  Stream<bool> agenciesStream() {
     return _instance
         .collection(_collection)
         .where('members', arrayContains: AuthMethods.uid)
         .snapshots()
         .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
-      final List<DocumentSnapshot<Map<String, dynamic>>> data = event.docs;
-      for (DocumentSnapshot<Map<String, dynamic>> element in data) {
-        updatedAgencies.add(Agency.fromDoc(element));
+      final List<Agency> newChanges = <Agency>[];
+      final List<DocumentChange<Map<String, dynamic>>> changes =
+          event.docChanges;
+      for (DocumentChange<Map<String, dynamic>> newEle in changes) {
+        newChanges.add(Agency.fromDoc(newEle.doc));
       }
-      return updatedAgencies;
+      LocalAgency().refreshAgencies(newChanges);
+      return true;
     });
+  }
+
+  Future<bool> refreshAgencies() async {
+    final List<Agency> newChanges = <Agency>[];
+    final QuerySnapshot<Map<String, dynamic>> doc = await _instance
+        .collection(_collection)
+        .where('members', arrayContains: AuthMethods.uid)
+        .get();
+    final List<DocumentChange<Map<String, dynamic>>> changes = doc.docChanges;
+    for (DocumentChange<Map<String, dynamic>> newEle in changes) {
+      newChanges.add(Agency.fromDoc(newEle.doc));
+    }
+    await LocalAgency().refreshAgencies(newChanges);
+    return true;
   }
 
   Future<Agency?> joinAgency(String value) async {

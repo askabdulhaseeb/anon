@@ -41,6 +41,19 @@ class LocalAgency {
     }
   }
 
+  Future<void> refreshAgencies(List<Agency> value) async {
+    final Agency? current = await currentlySelected();
+    if (current != null) {
+      value
+          .firstWhere((Agency element) => element.agencyID == current.agencyID)
+          .isCurrenlySelected = true;
+    }
+    for (Agency element in value) {
+      await add(element);
+    }
+    debugPrint('Update ${value.length} agencies');
+  }
+
   Future<void> leaveAgency(String value) async {
     final Box<Agency> box = await refresh();
     await box.delete(value);

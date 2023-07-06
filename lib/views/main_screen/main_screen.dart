@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../database/firebase/agency_api.dart';
 import '../../database/firebase/auth_methods.dart';
 import '../../providers/app_nav_provider.dart';
 import '../../widgets/agency/agency_app_bar_title.dart';
@@ -42,11 +43,15 @@ class MainScreen extends StatelessWidget {
             topRight: Radius.circular(24),
           ),
         ),
-        child: Consumer<AppNavProvider>(
-          builder: (BuildContext context, AppNavProvider appPro, _) {
-            return pages[appPro.currentTap];
-          },
-        ),
+        child: StreamBuilder<bool>(
+            stream: AgencyAPI().agenciesStream(),
+            builder: (_, __) {
+              return Consumer<AppNavProvider>(
+                builder: (BuildContext context, AppNavProvider appPro, _) {
+                  return pages[appPro.currentTap];
+                },
+              );
+            }),
       ),
       bottomNavigationBar: const MainBottomNavigationBar(),
     );
