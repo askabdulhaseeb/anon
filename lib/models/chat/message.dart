@@ -25,6 +25,7 @@ class Message extends HiveObject {
     this.replyOf,
     this.isLive = true,
     this.isEncrypted = false,
+    this.isBuged = false,
   })  : messageID = messageID ?? UniqueIdFun.messageID(chatID),
         timestamp = timestamp ?? DateTime.now(),
         sendBy = sendBy ?? AuthMethods.uid;
@@ -58,6 +59,8 @@ class Message extends HiveObject {
   bool isEncrypted;
   @HiveField(14, defaultValue: '')
   final String projectID;
+  @HiveField(15, defaultValue: false)
+  final bool isBuged;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -74,6 +77,7 @@ class Message extends HiveObject {
       'timestamp': timestamp,
       'reply_of': replyOf?.toMap(),
       'is_encrypted': isEncrypted = false,
+      'is_buged': isBuged,
     };
   }
 
@@ -85,8 +89,8 @@ class Message extends HiveObject {
       messageID: map['message_id'] ?? '',
       chatID: map['chat_id'] ?? '',
       projectID: map['project_id'] ?? '',
-      text: map['text'],
-      displayString: map['display_string'],
+      text: map['text'] ?? '',
+      displayString: map['display_string'] ?? '...',
       sendToUIDs: List<String>.from((map['send_to_uids'] ?? <String>[])),
       type: MessageTypeConvertor().toEnum(map['type'] ?? MessageType.text.json),
       attachment: List<Attachment>.from(
@@ -100,6 +104,7 @@ class Message extends HiveObject {
       replyOf:
           map['reply_of'] != null ? Message.fromMap(map['reply_of']) : null,
       isLive: true,
+      isBuged: map['is_buged'] ?? false,
       isEncrypted: isEnc,
     );
   }

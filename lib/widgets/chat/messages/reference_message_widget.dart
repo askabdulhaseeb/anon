@@ -12,13 +12,14 @@ class ReferenceMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle nameText = TextStyle(fontWeight: FontWeight.bold);
+    final TextStyle nameText = TextStyle(
+        fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor);
     return Container(
       padding: const EdgeInsets.all(8),
-      margin: const EdgeInsets.only(bottom: 4),
+      margin: const EdgeInsets.only(bottom: 4, top: 2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: Theme.of(context).dividerColor,
       ),
       child: Row(
         children: <Widget>[
@@ -27,7 +28,7 @@ class ReferenceMessageWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 message.sendBy == AuthMethods.uid
-                    ? const Text('You', style: nameText)
+                    ? Text('You', style: nameText)
                     : FutureBuilder<AppUser>(
                         future: LocalUser().user(message.sendBy),
                         builder: (BuildContext context,
@@ -35,7 +36,11 @@ class ReferenceMessageWidget extends StatelessWidget {
                           if (snapshot.hasData) {
                             return Text(
                               snapshot.data?.name ?? '',
-                              style: nameText,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color(snapshot.data?.defaultColor ??
+                                    Colors.grey.value),
+                              ),
                             );
                           } else {
                             return Container(

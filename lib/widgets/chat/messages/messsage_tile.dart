@@ -76,8 +76,11 @@ class MessageTile extends StatelessWidget {
                               if (snapshot.hasData) {
                                 return Text(
                                   snapshot.data?.name ?? '',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(snapshot.data?.defaultColor ??
+                                        Colors.grey.value),
+                                  ),
                                 );
                               } else {
                                 return Container(

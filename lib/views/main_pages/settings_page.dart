@@ -12,7 +12,7 @@ import '../../widgets/custom/custom_list_tile_widget.dart';
 import '../../widgets/custom/custom_profile_photo.dart';
 import '../../widgets/custom/show_loading.dart';
 import '../agency_screens/agency_details_screen.dart';
-import '../agency_screens/agency_joining_request_screen.dart';
+import '../agency_screens/agency_pending_request_screen.dart';
 import '../agency_screens/agency_members_screen.dart';
 import '../auth/agency_auth/switch_agency_screen.dart';
 import '../system_screens/account_screen.dart';
@@ -121,7 +121,7 @@ class SettingsPage extends StatelessWidget {
                     title: const Text('Pending Requests'),
                     trailing: forwardIcon,
                     onTap: () => Navigator.of(context)
-                        .pushNamed(AgencyJoiningRequestScreen.routeName),
+                        .pushNamed(AgencyPendingRequestScreen.routeName),
                   ),
                 const SizedBox(height: 16),
                 ListTile(
