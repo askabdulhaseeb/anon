@@ -92,21 +92,7 @@ class AgencyAPI {
       return true;
     });
   }
-
-  Future<bool> refreshAgencies() async {
-    final List<Agency> newChanges = <Agency>[];
-    final QuerySnapshot<Map<String, dynamic>> doc = await _instance
-        .collection(_collection)
-        .where('members', arrayContains: AuthMethods.uid)
-        .get();
-    final List<DocumentChange<Map<String, dynamic>>> changes = doc.docChanges;
-    for (DocumentChange<Map<String, dynamic>> newEle in changes) {
-      newChanges.add(Agency.fromDoc(newEle.doc));
-    }
-    await LocalAgency().refreshAgencies(newChanges);
-    return true;
-  }
-
+  
   Future<Agency?> joinAgency(String value) async {
     try {
       final QuerySnapshot<Map<String, dynamic>> doc = await _instance

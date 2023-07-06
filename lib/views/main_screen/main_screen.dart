@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../database/firebase/agency_api.dart';
 import '../../database/firebase/auth_methods.dart';
+import '../../database/firebase/message_api.dart';
 import '../../providers/app_nav_provider.dart';
 import '../../widgets/agency/agency_app_bar_title.dart';
 import '../auth/agency_auth/switch_agency_screen.dart';
@@ -46,11 +47,16 @@ class MainScreen extends StatelessWidget {
         child: StreamBuilder<bool>(
             stream: AgencyAPI().agenciesStream(),
             builder: (_, __) {
-              return Consumer<AppNavProvider>(
-                builder: (BuildContext context, AppNavProvider appPro, _) {
-                  return pages[appPro.currentTap];
-                },
-              );
+              return StreamBuilder<void>(
+                  stream: MessageAPI().myAllMessages(),
+                  builder: (_, __) {
+                    return Consumer<AppNavProvider>(
+                      builder:
+                          (BuildContext context, AppNavProvider appPro, _) {
+                        return pages[appPro.currentTap];
+                      },
+                    );
+                  });
             }),
       ),
       bottomNavigationBar: const MainBottomNavigationBar(),

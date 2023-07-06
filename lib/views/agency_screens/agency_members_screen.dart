@@ -21,30 +21,42 @@ class AgencyMembersScreen extends StatelessWidget {
     // TODO: On Edit
     return Scaffold(
       appBar: AppBar(title: const Text('Members')),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: FutureBuilder<Agency?>(
-            future: LocalAgency().currentlySelected(),
-            builder:
-                (BuildContext context, AsyncSnapshot<Agency?> agencySnapchot) {
-              if (agencySnapchot.hasData) {
-                final Agency agency = agencySnapchot.data!;
-                return GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 24,
-                    childAspectRatio: 4 / 4,
-                  ),
-                  itemCount: members.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return _MemberTile(member: members[index], agency: agency);
-                  },
-                );
-              } else {
-                return const ShowLoading();
-              }
-            }),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: 20),
+              FutureBuilder<Agency?>(
+                  future: LocalAgency().currentlySelected(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<Agency?> agencySnapchot) {
+                    if (agencySnapchot.hasData) {
+                      final Agency agency = agencySnapchot.data!;
+                      return GridView.builder(
+                        primary: false,
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 4 / 4,
+                        ),
+                        itemCount: members.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return _MemberTile(
+                              member: members[index], agency: agency);
+                        },
+                      );
+                    } else {
+                      return const ShowLoading();
+                    }
+                  }),
+              const SizedBox(height: 60),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../models/chat/message.dart';
 import '../../models/user/app_user.dart';
 import '../local/local_message.dart';
+import 'auth_methods.dart';
 
 class MessageAPI {
   static final FirebaseFirestore _instance = FirebaseFirestore.instance;
@@ -51,6 +53,22 @@ class MessageAPI {
         .get();
     if (doc.docs.isEmpty) return null;
     return Message.fromMap(doc.docs[0].data());
+  }
+
+  Stream<void> myAllMessages() {
+    return _instance
+        .collection(_collection)
+        .where('send_to_uids', arrayContains: AuthMethods.uid)
+        .snapshots()
+        .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
+      final List<DocumentChange<Map<String, dynamic>>> changes =
+          event.docChanges;
+      debugPrint('Add ${changes.length} new Messages');
+      for (DocumentChange<Map<String, dynamic>> element in changes) {
+        final Message msg = Message.fromDoc(element.doc);
+        LocalMessage().addMessage(msg);
+      }
+    });
   }
 
   Future<void> sendMessage({

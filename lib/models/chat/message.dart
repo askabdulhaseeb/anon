@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 
 import '../../database/firebase/auth_methods.dart';
@@ -84,7 +85,7 @@ class Message extends HiveObject {
   // ignore: sort_constructors_first
   factory Message.fromMap(Map<String, dynamic> map) {
     final String sendedBy = map['send_by'] ?? AuthMethods.uid;
-    final bool isEnc = map['is_encrypted'];
+    final bool isEnc = map['is_encrypted'] ?? false;
     return Message(
       messageID: map['message_id'] ?? '',
       chatID: map['chat_id'] ?? '',
@@ -95,9 +96,10 @@ class Message extends HiveObject {
       type: MessageTypeConvertor().toEnum(map['type'] ?? MessageType.text.json),
       attachment: List<Attachment>.from(
           // ignore: always_specify_types
-          map['attachment']?.map((x) => Attachment.fromMap(x))),
+          (map['attachment'] ?? <dynamic>[])
+              ?.map((dynamic x) => Attachment.fromMap(x))),
       sendBy: sendedBy,
-      sendTo: List<MessageReadInfo>.from(map['send_to']?.map(
+      sendTo: List<MessageReadInfo>.from((map['send_to'] ?? <dynamic>[])?.map(
         (dynamic x) => MessageReadInfo.fromMap(x),
       )),
       timestamp: TimeFun.parseTime(map['timestamp']),
@@ -105,6 +107,38 @@ class Message extends HiveObject {
           map['reply_of'] != null ? Message.fromMap(map['reply_of']) : null,
       isLive: true,
       isBuged: map['is_buged'] ?? false,
+      isEncrypted: isEnc,
+    );
+  }
+  // ignore: sort_constructors_first
+  factory Message.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    final String sendedBy = doc.data()?['send_by'] ?? AuthMethods.uid;
+    final bool isEnc = doc.data()?['is_encrypted'] ?? false;
+    return Message(
+      messageID: doc.data()?['message_id'] ?? '',
+      chatID: doc.data()?['chat_id'] ?? '',
+      projectID: doc.data()?['project_id'] ?? '',
+      text: doc.data()?['text'] ?? '',
+      displayString: doc.data()?['display_string'] ?? '...',
+      sendToUIDs:
+          List<String>.from((doc.data()?['send_to_uids'] ?? <String>[])),
+      type: MessageTypeConvertor()
+          .toEnum(doc.data()?['type'] ?? MessageType.text.json),
+      attachment: List<Attachment>.from(
+          // ignore: always_specify_types
+          (doc.data()?['attachment'] ?? <dynamic>[])
+              ?.map((dynamic x) => Attachment.fromMap(x))),
+      sendBy: sendedBy,
+      sendTo: List<MessageReadInfo>.from(
+          (doc.data()?['send_to'] ?? <dynamic>[])?.map(
+        (dynamic x) => MessageReadInfo.fromMap(x),
+      )),
+      timestamp: TimeFun.parseTime(doc.data()?['timestamp']),
+      replyOf: doc.data()?['reply_of'] != null
+          ? Message.fromMap(doc.data()?['reply_of'])
+          : null,
+      isLive: true,
+      isBuged: doc.data()?['is_buged'] ?? false,
       isEncrypted: isEnc,
     );
   }
