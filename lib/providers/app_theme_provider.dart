@@ -16,6 +16,11 @@ class AppThemeProvider extends ChangeNotifier {
     }
   }
 
+  void switchMode(ThemeMode value) {
+    _themeMode = value;
+    notifyListeners();
+  }
+
   void toggleTheme(bool isOn) {
     _themeMode = isOn ? ThemeMode.dark : ThemeMode.light;
     notifyListeners();
@@ -53,12 +58,11 @@ class AppThemes {
     dividerColor: Colors.grey.shade300,
     listTileTheme: const ListTileThemeData(
       contentPadding: EdgeInsets.symmetric(horizontal: 16),
-      tileColor: _darkScaffoldColor,
+      visualDensity: VisualDensity(vertical: -4),
       horizontalTitleGap: 10,
     ),
     dialogTheme: const DialogTheme(surfaceTintColor: _darkScaffoldColor),
-    bottomSheetTheme:
-        const BottomSheetThemeData(surfaceTintColor: _darkScaffoldColor),
+    bottomSheetTheme: const BottomSheetThemeData(),
     colorScheme: const ColorScheme.dark(
       primary: _primary,
       secondary: _secondary,
@@ -90,12 +94,10 @@ class AppThemes {
     listTileTheme: const ListTileThemeData(
       contentPadding: EdgeInsets.symmetric(horizontal: 16),
       visualDensity: VisualDensity(vertical: -4),
-      tileColor: _lightScaffoldColor,
       horizontalTitleGap: 10,
     ),
     dialogTheme: const DialogTheme(surfaceTintColor: _lightScaffoldColor),
-    bottomSheetTheme:
-        const BottomSheetThemeData(surfaceTintColor: _lightScaffoldColor),
+    bottomSheetTheme: const BottomSheetThemeData(),
     colorScheme: const ColorScheme.light(
       primary: _primary,
       secondary: _secondary,

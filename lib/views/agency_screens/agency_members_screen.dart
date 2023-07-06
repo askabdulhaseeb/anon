@@ -88,7 +88,8 @@ class _MemberTile extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Divider(thickness: 2),
+                  const Divider(height: 4),
+                  const SizedBox(height: 8),
                   Text(
                     user.name,
                     maxLines: 1,

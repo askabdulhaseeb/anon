@@ -15,6 +15,7 @@ import '../agency_screens/agency_details_screen.dart';
 import '../agency_screens/agency_joining_request_screen.dart';
 import '../agency_screens/agency_members_screen.dart';
 import '../auth/agency_auth/switch_agency_screen.dart';
+import '../system_screens/account_screen.dart';
 import '../user_screen/user_profile_screen.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -140,7 +141,8 @@ class SettingsPage extends StatelessWidget {
                   leading: const Icon(CupertinoIcons.person_alt_circle),
                   title: const Text('Account'),
                   trailing: forwardIcon,
-                  onTap: () {},
+                  onTap: () =>
+                      Navigator.of(context).pushNamed(AccountScreen.routeName),
                 ),
                 ListTile(
                   leading: const Icon(CupertinoIcons.info_circle),

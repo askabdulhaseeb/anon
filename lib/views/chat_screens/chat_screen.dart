@@ -27,9 +27,8 @@ class ChatScreen extends StatelessWidget {
       child: Scaffold(
           appBar: AppBar(title: _AppBar(chatID: chatID)),
           body: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              image: const DecorationImage(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
                 image: AssetImage(AppImages.chatBGimage),
                 fit: BoxFit.cover,
               ),
