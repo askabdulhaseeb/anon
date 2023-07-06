@@ -13,6 +13,7 @@ import '../../widgets/custom/custom_profile_photo.dart';
 import '../../widgets/custom/show_loading.dart';
 import '../agency_screens/agency_details_screen.dart';
 import '../agency_screens/agency_joining_request_screen.dart';
+import '../agency_screens/agency_members_screen.dart';
 import '../auth/agency_auth/switch_agency_screen.dart';
 import '../user_screen/user_profile_screen.dart';
 
@@ -108,7 +109,10 @@ class SettingsPage extends StatelessWidget {
                   leading: const Icon(CupertinoIcons.person_3),
                   title: const Text('Members'),
                   trailing: forwardIcon,
-                  onTap: () {},
+                  onTap: () => Navigator.of(context).pushNamed(
+                    AgencyMembersScreen.routeName,
+                    arguments: agency.activeMembers,
+                  ),
                 ),
                 if (canEdit)
                   ListTile(

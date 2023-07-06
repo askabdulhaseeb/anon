@@ -74,8 +74,9 @@ class LocalAgency {
         (Agency element) =>
             element.isCurrenlySelected == true &&
             element.members.contains(AuthMethods.uid),
-        orElse: () =>
-            Agency(agencyID: nullID, agencyCode: nullID, name: nullID),
+        orElse: () => results.isNotEmpty
+            ? results[0]
+            : Agency(agencyID: nullID, agencyCode: nullID, name: nullID),
       );
       log('Current Agency ID: ${found.agencyID} - ${found.name}');
       return found.agencyID == nullID ? null : found;

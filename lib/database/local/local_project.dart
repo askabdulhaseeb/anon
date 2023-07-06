@@ -26,6 +26,16 @@ class LocalProject {
     return box.get(value) ?? _null;
   }
 
+  Future<List<Project>> projectByAgencyAndUID(
+      String agencyID, String uid) async {
+    final Box<Project> box = await refresh();
+    return box.values
+        .where((Project element) =>
+            element.members.contains(uid) &&
+            element.agencies.contains(agencyID))
+        .toList();
+  }
+
   Future<void> add(Project value) async {
     final Box<Project> box = await refresh();
     await box.put(value.pid, value);
