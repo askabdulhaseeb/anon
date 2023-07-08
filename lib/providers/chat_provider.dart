@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -54,7 +55,9 @@ class ChatProvider extends ChangeNotifier {
       projectID: chat.projectID,
       type: MessageType.text,
       attachment: urls,
-      sendTo: chat.persons.map((String e) => MessageReadInfo(uid: e)).toList(),
+      sendTo: chat.persons
+          .map((String e) => MessageReadInfo(uid: e, seen: e == me))
+          .toList(),
       sendToUIDs: chat.persons,
       text: _text.text.trim(),
       displayString: displayMsg,
@@ -75,6 +78,10 @@ class ChatProvider extends ChangeNotifier {
       sender: sender,
     );
     reset();
+  }
+
+  void updateUnseendMessages(String chatID) {
+    log(chatID);
   }
 
   void reset() {

@@ -3,7 +3,8 @@ enum MyHiveType {
   agency(2, 'dm-agencies'),
   project(3, 'dm-projects'),
   chat(4, 'dm-chats'),
-  message(5, 'dm-messages');
+  message(5, 'dm-messages'),
+  unseenMessage(5, 'dm-unseen-messages');
 
   const MyHiveType(this.hiveTypeNumber, this.database);
   final int hiveTypeNumber;

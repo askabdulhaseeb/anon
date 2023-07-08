@@ -65,7 +65,7 @@ class Message extends HiveObject {
   @HiveField(15, defaultValue: false)
   final bool isBuged;
   @HiveField(16)
-  final DateTime lastUpdate;
+  DateTime lastUpdate;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -148,5 +148,18 @@ class Message extends HiveObject {
       isBuged: doc.data()?['is_buged'] ?? false,
       isEncrypted: isEnc,
     );
+  }
+
+  bool get isSeenedMessage => sendTo
+      .firstWhere((MessageReadInfo element) => element.uid == AuthMethods.uid)
+      .seen;
+  void updateSeenByMe() {
+    sendTo
+        .firstWhere((MessageReadInfo element) => element.uid == AuthMethods.uid)
+        .seen = true;
+    sendTo
+        .firstWhere((MessageReadInfo element) => element.uid == AuthMethods.uid)
+        .seenAt = DateTime.now();
+    lastUpdate = DateTime.now();
   }
 }

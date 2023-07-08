@@ -33,7 +33,7 @@ class ChatDashboardTile extends StatelessWidget {
           if (snapshot.hasData) {
             final Message? msg = snapshot.data;
             return Text(
-              msg?.displayString ?? 'Message issue',
+              '${msg?.sendBy == AuthMethods.uid ? 'You:' : 'Someone:'} ${msg?.displayString ?? 'Message issue'}',
               style: const TextStyle(color: Colors.grey),
             );
           } else {

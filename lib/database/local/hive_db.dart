@@ -30,13 +30,14 @@ import 'local_chat.dart';
 import 'local_data.dart';
 import 'local_message.dart';
 import 'local_project.dart';
+import 'local_unseen_message.dart';
 import 'local_user.dart';
 
 class HiveDB {
   Future<void> init() async {
     Directory directory = await getApplicationDocumentsDirectory();
     Hive.init(directory.path);
-    await LocalData.init(); 
+    await LocalData.init();
     await Hive.initFlutter(directory.path);
     //
     // Type: User 1
@@ -76,6 +77,7 @@ class HiveDB {
     await LocalProject.openBox;
     await LocalChat.openBox;
     await LocalMessage.openBox;
+    await LocalUnseenMessage.openBox;
   }
 
   Future<void> signOut() async {
@@ -84,5 +86,6 @@ class HiveDB {
     await LocalProject().signOut();
     await LocalChat().signOut();
     await LocalMessage().signOut();
+    await LocalUnseenMessage().signOut();
   }
 }

@@ -19,11 +19,11 @@ class MessageReadInfo {
   @HiveField(1)
   final bool delivered;
   @HiveField(2)
-  final bool seen;
+  bool seen;
   @HiveField(3)
   final DateTime? deliveryAt;
   @HiveField(4)
-  final DateTime? seenAt;
+  DateTime? seenAt;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

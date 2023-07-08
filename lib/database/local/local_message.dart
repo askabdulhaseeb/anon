@@ -6,8 +6,8 @@ import '../../enums/my_hive_type.dart';
 import '../../models/chat/message.dart';
 import '../../models/chat/message_read_info.dart';
 import '../../models/project/attachment.dart';
-import '../firebase/auth_methods.dart';
 import '../firebase/message_api.dart';
+import 'local_unseen_message.dart';
 
 class LocalMessage {
   static Future<Box<Message>> get openBox async =>
@@ -29,6 +29,18 @@ class LocalMessage {
     try {
       final Box<Message> box = await refresh();
       box.put(value.messageID, value);
+      if (value.isSeenedMessage) {
+        await LocalUnseenMessage().add(value);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> update(Message value) async {
+    try {
+      final Box<Message> box = await refresh();
+      box.put(value.messageID, value);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -43,6 +55,12 @@ class LocalMessage {
     return _null(chatID);
   }
 
+  Future<void> updateSeenByMe(Message value) async {
+    value.updateSeenByMe();
+    await update(value);
+    await LocalUnseenMessage().clearChat(value.chatID);
+  }
+
   Future<Message> lastMessage(String chatID) async {
     final Box<Message> box = await refresh();
     final List<Message> msgs = box.values
@@ -53,33 +71,11 @@ class LocalMessage {
   }
 
   Future<List<String>> listOfProjectUnseenMessages(String projID) async {
-    final String me = AuthMethods.uid;
-    final Box<Message> box = await refresh();
-    final List<Message> msgs = box.values
-        .where((Message element) =>
-            element.projectID == projID &&
-            element.sendBy != me &&
-            element.sendTo
-                // .any((MessageReadInfo ele) => ele.uid == me && ele.seen == false))
-                .any(
-                    (MessageReadInfo ele) => ele.uid == me && ele.seen == true))
-        .toList();
-    return msgs.map((Message e) => e.sendBy).toSet().toList();
+    return await LocalUnseenMessage().listOfProjectUnseenMessages(projID);
   }
 
   Future<List<String>> listOfChatUnseenMessages(String chatID) async {
-    final String me = AuthMethods.uid;
-    final Box<Message> box = await refresh();
-    final List<Message> msgs = box.values
-        .where((Message element) =>
-            element.chatID == chatID &&
-            element.sendBy != me &&
-            element.sendTo
-                // .any((MessageReadInfo ele) => ele.uid == me && ele.seen == false))
-                .any(
-                    (MessageReadInfo ele) => ele.uid == me && ele.seen == true))
-        .toList();
-    return msgs.map((Message e) => e.sendBy).toSet().toList();
+    return await LocalUnseenMessage().listOfChatUnseenMessages(chatID);
   }
 
   Future<void> signOut() async {

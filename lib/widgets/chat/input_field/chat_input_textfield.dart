@@ -72,6 +72,8 @@ class ChatInputTextField extends StatelessWidget {
                     maxLines: 5,
                     minLines: 1,
                     textCapitalization: TextCapitalization.sentences,
+                    onEditingComplete: () =>
+                        chatPro.updateUnseendMessages(chat.chatID),
                     decoration: const InputDecoration(
                       hintText: 'Write message here...',
                       contentPadding: EdgeInsets.symmetric(

@@ -21,11 +21,11 @@ class UniqueIdFun {
   }
 
   static String projectID(String agencyID) {
-    return '$agencyID-pro-${generateRandomString()}';
+    return '$agencyID-me-${AuthMethods.uid}-pro-${generateRandomString()}';
   }
 
   static String chatID(String proID) {
-    return '$proID-chat-${generateRandomString()}';
+    return '$proID-me-${AuthMethods.uid}-chat-${generateRandomString(length: 16)}';
   }
 
   static String messageID(String chatID) {

@@ -9,16 +9,18 @@ class MultiUserDisplayWidget extends StatelessWidget {
   const MultiUserDisplayWidget(
     this.users, {
     this.maxWidth = double.infinity,
+    this.emptyListWidget,
     super.key,
   });
   final List<String> users;
   final double maxWidth;
+  final Widget? emptyListWidget;
 
   @override
   Widget build(BuildContext context) {
     const double size = 10;
     return users.isEmpty
-        ? const Text('Viewed')
+        ? emptyListWidget ?? const SizedBox()
         : Container(
             height: size * 2.2,
             constraints: maxWidth != double.infinity
