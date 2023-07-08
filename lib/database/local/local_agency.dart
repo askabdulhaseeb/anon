@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../enums/my_hive_type.dart';
 import '../../models/agency/agency.dart';
 import '../firebase/auth_methods.dart';
+import 'local_data.dart';
 
 class LocalAgency {
   static const String nullID = '-%-null-%-';
@@ -111,6 +112,7 @@ class LocalAgency {
   Future<void> switchAgency(String value) async {
     final Box<Agency> box = await refresh();
     try {
+      await LocalData.setCurrentlySelectedAgency(value);
       final List<Agency> results = box.values.toList();
       for (Agency element in results) {
         if (element.agencyID == value) {

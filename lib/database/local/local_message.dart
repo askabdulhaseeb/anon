@@ -6,6 +6,7 @@ import '../../enums/my_hive_type.dart';
 import '../../models/chat/message.dart';
 import '../../models/chat/message_read_info.dart';
 import '../../models/project/attachment.dart';
+import '../firebase/auth_methods.dart';
 import '../firebase/message_api.dart';
 
 class LocalMessage {
@@ -46,7 +47,17 @@ class LocalMessage {
     final Box<Message> box = await refresh();
     return box.values.lastWhere((Message element) => element.chatID == chatID,
         orElse: () => _null(chatID));
+  }
 
+  Future<List<String>> listOfUnseenMessages(String projID) async {
+    final String me = AuthMethods.uid;
+    final Box<Message> box = await refresh();
+    final List<Message> msgs = box.values
+        .where((Message element) => element.sendTo
+            // .any((MessageReadInfo ele) => ele.uid == me && ele.seen == true))
+            .any((MessageReadInfo ele) => ele.seen == true))
+        .toList();
+    return msgs.map((Message e) => e.sendBy).toSet().toList();
   }
 
   Future<void> signOut() async {

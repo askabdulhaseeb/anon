@@ -8,7 +8,7 @@ class MessageReadInfo {
   MessageReadInfo({
     required this.uid,
     this.delivered = true,
-    this.seen = true,
+    this.seen = false,
     DateTime? deliveryAt,
     DateTime? seenAt,
   })  : deliveryAt = deliveryAt ?? DateTime.now(),

@@ -27,6 +27,7 @@ class MessageAdapter extends TypeAdapter<Message> {
       displayString: fields[2] as String,
       messageID: fields[0] as String?,
       timestamp: fields[9] as DateTime?,
+      lastUpdate: fields[16] as DateTime?,
       sendBy: fields[5] as String?,
       replyOf: fields[10] as Message?,
       isLive: fields[11] as bool,
@@ -38,7 +39,7 @@ class MessageAdapter extends TypeAdapter<Message> {
   @override
   void write(BinaryWriter writer, Message obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.messageID)
       ..writeByte(1)
@@ -68,7 +69,9 @@ class MessageAdapter extends TypeAdapter<Message> {
       ..writeByte(14)
       ..write(obj.projectID)
       ..writeByte(15)
-      ..write(obj.isBuged);
+      ..write(obj.isBuged)
+      ..writeByte(16)
+      ..write(obj.lastUpdate);
   }
 
   @override

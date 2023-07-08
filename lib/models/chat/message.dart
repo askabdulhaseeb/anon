@@ -22,6 +22,7 @@ class Message extends HiveObject {
     required this.displayString,
     String? messageID,
     DateTime? timestamp,
+    DateTime? lastUpdate,
     String? sendBy,
     this.replyOf,
     this.isLive = true,
@@ -29,6 +30,7 @@ class Message extends HiveObject {
     this.isBuged = false,
   })  : messageID = messageID ?? UniqueIdFun.messageID(chatID),
         timestamp = timestamp ?? DateTime.now(),
+        lastUpdate = lastUpdate ?? DateTime.now(),
         sendBy = sendBy ?? AuthMethods.uid;
 
   @HiveField(0)
@@ -62,6 +64,8 @@ class Message extends HiveObject {
   final String projectID;
   @HiveField(15, defaultValue: false)
   final bool isBuged;
+  @HiveField(16)
+  final DateTime lastUpdate;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -76,6 +80,7 @@ class Message extends HiveObject {
       'send_to': sendTo.map((MessageReadInfo x) => x.toMap()).toList(),
       'send_to_uids': sendToUIDs,
       'timestamp': timestamp,
+      'last_update': lastUpdate,
       'reply_of': replyOf?.toMap(),
       'is_encrypted': isEncrypted = false,
       'is_buged': isBuged,
@@ -103,6 +108,7 @@ class Message extends HiveObject {
         (dynamic x) => MessageReadInfo.fromMap(x),
       )),
       timestamp: TimeFun.parseTime(map['timestamp']),
+      lastUpdate: TimeFun.parseTime(map['last_update']),
       replyOf:
           map['reply_of'] != null ? Message.fromMap(map['reply_of']) : null,
       isLive: true,
@@ -134,6 +140,7 @@ class Message extends HiveObject {
         (dynamic x) => MessageReadInfo.fromMap(x),
       )),
       timestamp: TimeFun.parseTime(doc.data()?['timestamp']),
+      lastUpdate: TimeFun.parseTime(doc.data()?['last_update']),
       replyOf: doc.data()?['reply_of'] != null
           ? Message.fromMap(doc.data()?['reply_of'])
           : null,

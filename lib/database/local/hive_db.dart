@@ -27,14 +27,16 @@ import '../../models/user/device_token.dart';
 import '../../models/user/number_detail.dart';
 import 'local_agency.dart';
 import 'local_chat.dart';
+import 'local_data.dart';
 import 'local_message.dart';
 import 'local_project.dart';
 import 'local_user.dart';
 
-class LocalDB {
+class HiveDB {
   Future<void> init() async {
     Directory directory = await getApplicationDocumentsDirectory();
     Hive.init(directory.path);
+    await LocalData.init(); 
     await Hive.initFlutter(directory.path);
     //
     // Type: User 1

@@ -8,9 +8,8 @@ import '../../database/local/local_project.dart';
 import '../../models/agency/agency.dart';
 import '../../models/project/project.dart';
 import '../../widgets/custom/custom_icon_elevated_custom.dart';
-import '../../widgets/custom/custom_square_photo.dart';
 import '../../widgets/custom/show_loading.dart';
-import '../chat_screens/chat_dashboard_screen.dart';
+import '../../widgets/project/project_list_tile.dart';
 import '../project_screens/create_project_screen.dart';
 
 class ProjectPage extends StatelessWidget {
@@ -90,39 +89,7 @@ class _ProjectList extends StatelessWidget {
                             itemCount: projects.length,
                             itemBuilder: (BuildContext context, int index) {
                               final Project project = projects[index];
-                              return ListTile(
-                                contentPadding: const EdgeInsets.all(0),
-                                leading: CustomSquarePhoto(
-                                  project.logo,
-                                  defaultColor: project.defaultColor,
-                                  name: project.title,
-                                ),
-                                title: Text(
-                                  project.title,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                subtitle:
-                                    Text('Members: ${project.members.length}'),
-                                trailing: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
-                                    Text(
-                                      'Deadline',
-                                      style: TextStyle(
-                                        color: Theme.of(context).disabledColor,
-                                      ),
-                                    ),
-                                    Text(project.nextDeadline()),
-                                  ],
-                                ),
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                      ProjectDashboardScreen.routeName,
-                                      arguments: project.pid);
-                                },
-                              );
+                              return ProjectListTile(project: project);
                             },
                           );
                         });

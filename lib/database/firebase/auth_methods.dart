@@ -9,7 +9,7 @@ import '../../functions/encryption.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/number_detail.dart';
 import '../../views/auth/user_auth/sign_in_screen.dart';
-import '../local/local_db.dart';
+import '../local/hive_db.dart';
 import '../local/local_user.dart';
 import 'user_api.dart';
 
@@ -96,7 +96,7 @@ class AuthMethods {
 
   Future<void> signout(BuildContext context) async {
     _auth.signOut();
-    await LocalDB().signOut();
+    await HiveDB().signOut();
     // ignore: use_build_context_synchronously
     Navigator.of(context).pushNamedAndRemoveUntil(
         SignInScreen.routeName, (Route<dynamic> route) => false);

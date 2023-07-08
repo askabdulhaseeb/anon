@@ -31,7 +31,7 @@ class CustomProfilePhoto extends StatelessWidget {
       height: double.infinity,
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: EdgeInsets.all(size / 4),
         child: FittedBox(
           child: Text(
             HelpingFuncation().photoPlaceholder(user.name.toUpperCase()),
