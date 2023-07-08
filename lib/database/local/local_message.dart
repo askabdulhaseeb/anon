@@ -45,17 +45,39 @@ class LocalMessage {
 
   Future<Message> lastMessage(String chatID) async {
     final Box<Message> box = await refresh();
-    return box.values.lastWhere((Message element) => element.chatID == chatID,
-        orElse: () => _null(chatID));
+    final List<Message> msgs = box.values
+        .where((Message element) => element.chatID == chatID)
+        .toList();
+    msgs.sort((Message a, Message b) => a.timestamp.compareTo(b.timestamp));
+    return msgs.last;
   }
 
-  Future<List<String>> listOfUnseenMessages(String projID) async {
+  Future<List<String>> listOfProjectUnseenMessages(String projID) async {
     final String me = AuthMethods.uid;
     final Box<Message> box = await refresh();
     final List<Message> msgs = box.values
-        .where((Message element) => element.sendTo
-            // .any((MessageReadInfo ele) => ele.uid == me && ele.seen == true))
-            .any((MessageReadInfo ele) => ele.seen == true))
+        .where((Message element) =>
+            element.projectID == projID &&
+            element.sendBy != me &&
+            element.sendTo
+                // .any((MessageReadInfo ele) => ele.uid == me && ele.seen == false))
+                .any(
+                    (MessageReadInfo ele) => ele.uid == me && ele.seen == true))
+        .toList();
+    return msgs.map((Message e) => e.sendBy).toSet().toList();
+  }
+
+  Future<List<String>> listOfChatUnseenMessages(String chatID) async {
+    final String me = AuthMethods.uid;
+    final Box<Message> box = await refresh();
+    final List<Message> msgs = box.values
+        .where((Message element) =>
+            element.chatID == chatID &&
+            element.sendBy != me &&
+            element.sendTo
+                // .any((MessageReadInfo ele) => ele.uid == me && ele.seen == false))
+                .any(
+                    (MessageReadInfo ele) => ele.uid == me && ele.seen == true))
         .toList();
     return msgs.map((Message e) => e.sendBy).toSet().toList();
   }

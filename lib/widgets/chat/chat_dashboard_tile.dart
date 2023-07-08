@@ -5,9 +5,9 @@ import '../../database/local/local_message.dart';
 import '../../functions/time_functions.dart';
 import '../../models/chat/chat.dart';
 import '../../models/chat/message.dart';
-import '../../models/chat/message_read_info.dart';
 import '../../views/chat_screens/chat_screen.dart';
 import '../custom/chat_tile_image_widget.dart';
+import '../user/multi_user_display_widget.dart';
 
 class ChatDashboardTile extends StatelessWidget {
   const ChatDashboardTile(this.chat, {super.key});
@@ -46,21 +46,20 @@ class ChatDashboardTile extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<Message> snapshot) {
           if (snapshot.hasData) {
             final Message? msg = snapshot.data;
-            final String me = AuthMethods.uid;
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(TimeFun.timeInWords(msg?.timestamp)),
-                if ((msg?.sendBy ?? '') == me &&
-                    msg?.sendTo
-                            .firstWhere(
-                              (MessageReadInfo e) => e.uid == me,
-                              orElse: () => MessageReadInfo(uid: ''),
-                            )
-                            .seen ==
-                        false)
-                  Icon(Icons.circle, color: Theme.of(context).primaryColor)
+                FutureBuilder<List<String>>(
+                  future: LocalMessage().listOfChatUnseenMessages(chat.chatID),
+                  builder: (BuildContext context,
+                          AsyncSnapshot<List<String>> snapshot) =>
+                      MultiUserDisplayWidget(
+                    snapshot.data ?? <String>[],
+                    maxWidth: 80.0,
+                  ),
+                )
               ],
             );
           } else {

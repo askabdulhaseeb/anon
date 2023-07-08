@@ -25,7 +25,7 @@ class ProjectListTile extends StatelessWidget {
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       subtitle: FutureBuilder<List<String>>(
-        future: LocalMessage().listOfUnseenMessages(project.pid),
+        future: LocalMessage().listOfProjectUnseenMessages(project.pid),
         builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) =>
             MultiUserDisplayWidget(snapshot.data ?? <String>[]),
       ),
