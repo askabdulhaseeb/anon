@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../database/firebase/message_api.dart';
 import '../../database/local/local_chat.dart';
 import '../../database/local/local_message.dart';
 import '../../models/chat/chat.dart';

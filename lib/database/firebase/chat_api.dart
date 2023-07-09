@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../enums/chat/message_type.dart';
 import '../../enums/user/user_type.dart';
+import '../../functions/time_functions.dart';
 import '../../models/chat/chat.dart';
 import '../../models/chat/message.dart';
 import '../../models/chat/message_read_info.dart';
@@ -12,6 +14,7 @@ import '../../models/project/attachment.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/number_detail.dart';
 import '../local/local_chat.dart';
+import '../local/local_data.dart';
 import 'auth_methods.dart';
 import 'message_api.dart';
 
@@ -36,6 +39,38 @@ class ChatAPI {
         LocalChat().addAllChat(chats);
       }
       return chats;
+    });
+  }
+
+  Stream<void> refreshChats() {
+    return _instance
+        .collection(_collection)
+        .where('persons', arrayContains: AuthMethods.uid)
+        .where(
+          'timestamp',
+          isGreaterThanOrEqualTo: TimeFun.miliToObject(
+            LocalData.lastChatFetch() ??
+                DateTime.now()
+                    .subtract(const Duration(days: 30))
+                    .millisecondsSinceEpoch,
+          ),
+        )
+        .snapshots()
+        .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
+      if (event.docChanges.isEmpty) return;
+      for (DocumentChange<Map<String, dynamic>> element in event.docChanges) {
+        final DocumentSnapshot<Map<String, dynamic>> doc = element.doc;
+        final Chat temp = Chat.fromDoc(doc);
+        if (element.type == DocumentChangeType.removed) {
+          LocalChat().remove(temp.chatID);
+        } else {
+          LocalChat().addChat(temp);
+        }
+      }
+      log('Chat API: New ${event.docChanges.length} Chats added');
+      LocalData.setLastChatFetch(DateTime.now()
+          .subtract(const Duration(seconds: 1))
+          .millisecondsSinceEpoch);
     });
   }
 

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -70,28 +71,20 @@ class MessageAPI {
 
   Stream<void> myAllMessages() {
     final DateTime fetchingTime = DateTime.now();
-    final int? temp = LocalData.lastChatFetch();
-    final DateTime? updatedTime =
-        temp == null ? null : TimeFun.miliToObject(temp);
+    final int? temp = LocalData.lastMessageFetch();
+    final DateTime updatedTime = temp == null
+        ? DateTime.now().subtract(const Duration(days: 30))
+        : TimeFun.miliToObject(temp);
     debugPrint('New Message fetching time: ${updatedTime.toString()}');
-    return updatedTime == null
-        ? _instance
-            .collection(_collection)
-            .where('send_to_uids', arrayContains: AuthMethods.uid)
-            .snapshots()
-            .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
-            _changeEventToLocal(event, fetchingTime);
-            debugPrint('Request at: ${DateTime.now().toString()}');
-          })
-        : _instance
-            .collection(_collection)
-            .where('send_to_uids', arrayContains: AuthMethods.uid)
-            .where('last_update', isGreaterThanOrEqualTo: updatedTime)
-            .snapshots()
-            .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
-            _changeEventToLocal(event, fetchingTime);
-            debugPrint('Request with time at: ${DateTime.now().toString()}');
-          });
+    return _instance
+        .collection(_collection)
+        .where('send_to_uids', arrayContains: AuthMethods.uid)
+        .where('last_update', isGreaterThanOrEqualTo: updatedTime)
+        .snapshots()
+        .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
+      _changeEventToLocal(event, fetchingTime);
+      debugPrint('Request with time at: ${DateTime.now().toString()}');
+    });
   }
 
   void _changeEventToLocal(
@@ -100,8 +93,8 @@ class MessageAPI {
   ) {
     final List<DocumentChange<Map<String, dynamic>>> changes = event.docChanges;
     if (changes.isEmpty) return;
-    debugPrint('Message API: Add ${changes.length} new Messages');
-    LocalData.setLastChatFetch(fetchingTime.millisecondsSinceEpoch);
+    log('Message API: Add ${changes.length} new Messages');
+    LocalData.setLastMessageFetch(fetchingTime.millisecondsSinceEpoch);
     for (DocumentChange<Map<String, dynamic>> element in changes) {
       final Message msg = Message.fromDoc(element.doc);
       if (element.type == DocumentChangeType.removed) {

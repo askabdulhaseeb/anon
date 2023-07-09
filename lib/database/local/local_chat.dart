@@ -31,6 +31,15 @@ class LocalChat {
     }
   }
 
+  Future<void> remove(String value) async {
+    try {
+      final Box<Chat> box = await refresh();
+      box.delete(value);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   Future<void> addAllChat(List<Chat> value) async {
     try {
       final Box<Chat> box = await refresh();
@@ -60,6 +69,12 @@ class LocalChat {
       return newResult;
     }
     return result;
+  }
+
+  List<Chat> boxToChats({required Box<Chat> box, required String projID}) {
+    return box.values
+        .where((Chat element) => element.projectID == projID)
+        .toList();
   }
 
   Future<void> updateMembers(Chat value) async {

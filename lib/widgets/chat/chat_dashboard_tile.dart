@@ -58,8 +58,7 @@ class ChatDashboardTile extends StatelessWidget {
                   valueListenable: LocalUnseenMessage().listenable(),
                   builder: (BuildContext context, Box<UnseenMessage> box, _) {
                     return MultiUserDisplayWidget(
-                      LocalUnseenMessage().boxToChatUnseenMessages(
-                          box: box, chatID: chat.chatID),
+                      LocalUnseenMessage().boxToChatUnseenMessages(box: box, chatID: chat.chatID),
                       maxWidth: 80.0,
                     );
                   },

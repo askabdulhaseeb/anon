@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devmarkaz/models/chat/target_string.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -93,6 +94,7 @@ class Chat extends HiveObject {
     return <String, dynamic>{
       'persons': persons,
       'members': members.map((ChatMember x) => x.toMap()).toList(),
+      'timestamp': DateTime.now(),
     };
   }
 
@@ -121,6 +123,33 @@ class Chat extends HiveObject {
         (dynamic x) => ChatMember.fromMap(x),
       )),
       timestamp: TimeFun.parseTime(map['timestamp']),
+    );
+  }
+  // ignore: sort_constructors_first
+  factory Chat.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+    return Chat(
+      chatID: doc.data()?['chat_id'] ?? '',
+      imageURL: doc.data()?['image_url'] ?? '',
+      title: doc.data()?['title'] ?? '',
+      description: doc.data()?['description'] ?? '',
+      persons: List<String>.from((doc.data()?['persons'] ?? <String>[])),
+      projectID: doc.data()?['project_id'] ?? '',
+      defaultColor: doc.data()?['default_color'] ?? Colors.grey.value,
+      chatNotes: List<Note>.from(doc.data()?['notes']?.map(
+            (dynamic x) => Note.fromMap(x),
+          )),
+      lastMessage: doc.data()?['last_message'] != null
+          ? Message.fromMap(doc.data()?['last_message'])
+          : null,
+      unseenMessages: List<Message>.from(
+          (doc.data()?['unseen_message'] as List<dynamic>).map<Message>(
+        (dynamic x) => Message.fromMap(x),
+      )),
+      members: List<ChatMember>.from(
+          (doc.data()?['members'] as List<dynamic>).map<ChatMember>(
+        (dynamic x) => ChatMember.fromMap(x),
+      )),
+      timestamp: TimeFun.parseTime(doc.data()?['timestamp']),
     );
   }
 }

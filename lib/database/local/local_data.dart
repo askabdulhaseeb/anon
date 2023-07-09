@@ -9,7 +9,8 @@ class LocalData {
 
   static const String _themeKey = 'ThemeKey';
   static const String _chatTimeKey = 'ChatTimeKey';
-  static const String _agencyTimeKey = 'ChatTimeKey';
+  static const String _messageTimeKey = 'MessageTimeKey';
+  static const String _agencyTimeKey = 'AgencyTimeKey';
   static const String _currentlySelectedAgencyKey =
       'CurrentlySelectedAgencyKey';
 
@@ -18,6 +19,8 @@ class LocalData {
   //
   static Future<void> setLastChatFetch(int value) async =>
       await _preferences.setInt(_chatTimeKey, value);
+  static Future<void> setLastMessageFetch(int value) async =>
+      await _preferences.setInt(_messageTimeKey, value);
   static Future<void> setAgencyFetch(int value) async =>
       await _preferences.setInt(_agencyTimeKey, value);
   //
@@ -26,6 +29,7 @@ class LocalData {
 
   static int? themeMode() => _preferences.getInt(_themeKey);
   static int? lastChatFetch() => _preferences.getInt(_chatTimeKey);
+  static int? lastMessageFetch() => _preferences.getInt(_messageTimeKey);
   static int? lastAgencyFetch() => _preferences.getInt(_agencyTimeKey);
   static String? currentlySelectedAgency() =>
       _preferences.getString(_currentlySelectedAgencyKey);
