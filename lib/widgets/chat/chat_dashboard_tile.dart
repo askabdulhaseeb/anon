@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '../../database/firebase/auth_methods.dart';
 import '../../database/local/local_message.dart';
+import '../../database/local/local_unseen_message.dart';
 import '../../functions/time_functions.dart';
 import '../../models/chat/chat.dart';
 import '../../models/chat/message.dart';
+import '../../models/chat/unseen_message.dart';
 import '../../views/chat_screens/chat_screen.dart';
 import '../custom/chat_tile_image_widget.dart';
 import '../user/multi_user_display_widget.dart';
@@ -51,14 +54,15 @@ class ChatDashboardTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(TimeFun.timeInWords(msg?.timestamp)),
-                FutureBuilder<List<String>>(
-                  future: LocalMessage().listOfChatUnseenMessages(chat.chatID),
-                  builder: (BuildContext context,
-                          AsyncSnapshot<List<String>> snapshot) =>
-                      MultiUserDisplayWidget(
-                    snapshot.data ?? <String>[],
-                    maxWidth: 80.0,
-                  ),
+                ValueListenableBuilder<Box<UnseenMessage>>(
+                  valueListenable: LocalUnseenMessage().listenable(),
+                  builder: (BuildContext context, Box<UnseenMessage> box, _) {
+                    return MultiUserDisplayWidget(
+                      LocalUnseenMessage().boxToChatUnseenMessages(
+                          box: box, chatID: chat.chatID),
+                      maxWidth: 80.0,
+                    );
+                  },
                 )
               ],
             );

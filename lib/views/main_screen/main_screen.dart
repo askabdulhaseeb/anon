@@ -27,10 +27,12 @@ class MainScreen extends StatelessWidget {
       appBar: AppBar(
         title: const AgencyNameAppBarTitle(),
         actions: <Widget>[
-          IconButton(
-            onPressed: () => onMoreOption(context),
-            icon: Icon(Icons.adaptive.more, color: Colors.white),
-          ),
+          Builder(builder: (BuildContext context) {
+            return IconButton(
+              onPressed: () => onMoreOption(context),
+              icon: Icon(Icons.adaptive.more, color: Colors.white),
+            );
+          }),
         ],
       ),
       body: Container(

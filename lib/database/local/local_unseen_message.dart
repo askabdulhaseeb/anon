@@ -44,10 +44,9 @@ class LocalUnseenMessage {
   Future<void> clearChat(String chatID) async {
     try {
       final Box<UnseenMessage> box = await refresh();
-      box.values
-          .firstWhere((UnseenMessage element) => element.chatID == chatID)
-          .unseenMessages
-          .clear();
+      box.get(chatID)?.unseenMessages.clear();
+      debugPrint(
+          'Chat Id: ($chatID) is Clear: ${box.get(chatID)?.unseenMessages.length}');
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -68,8 +67,21 @@ class LocalUnseenMessage {
 
   Future<List<String>> listOfChatUnseenMessages(String chatID) async {
     final Box<UnseenMessage> box = await refresh();
+    final UnseenMessage? chatResult = box.get(chatID);
+    return chatResult == null
+        ? <String>[]
+        : chatResult.unseenMessages
+            .map((Message e) => e.sendBy)
+            .toSet()
+            .toList();
+  }
+
+  List<String> boxToProjectUnseenMessages({
+    required Box<UnseenMessage> box,
+    required String projID,
+  }) {
     final List<UnseenMessage> allChats = box.values
-        .where((UnseenMessage element) => element.chatID == chatID)
+        .where((UnseenMessage element) => element.projectID == projID)
         .toList();
     final Set<String> persons = <String>{};
     for (UnseenMessage element in allChats) {
@@ -77,6 +89,25 @@ class LocalUnseenMessage {
           .addAll(element.unseenMessages.map((Message e) => e.sendBy).toSet());
     }
     return persons.toList();
+  }
+
+  List<String> boxToChatUnseenMessages({
+    required Box<UnseenMessage> box,
+    required String chatID,
+  }) {
+    final UnseenMessage? chatResult = box.get(chatID);
+    return chatResult == null
+        ? <String>[]
+        : chatResult.unseenMessages
+            .map((Message e) => e.sendBy)
+            .toSet()
+            .toList();
+  }
+
+  Future<List<Message>> unseenMessageOfChat(String chatID) async {
+    final Box<UnseenMessage> box = await refresh();
+    final UnseenMessage? chatResult = box.get(chatID);
+    return chatResult == null ? <Message>[] : chatResult.unseenMessages;
   }
 
   Future<void> signOut() async {

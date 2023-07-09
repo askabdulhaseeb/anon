@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
-import '../../database/local/local_message.dart';
+import '../../database/local/local_unseen_message.dart';
+import '../../models/chat/unseen_message.dart';
 import '../../models/project/project.dart';
 import '../../views/chat_screens/chat_dashboard_screen.dart';
 import '../custom/custom_square_photo.dart';
@@ -24,11 +26,14 @@ class ProjectListTile extends StatelessWidget {
         project.title,
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
-      subtitle: FutureBuilder<List<String>>(
-        future: LocalMessage().listOfProjectUnseenMessages(project.pid),
-        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) =>
-            MultiUserDisplayWidget(snapshot.data ?? <String>[]),
-      ),
+      subtitle: ValueListenableBuilder<Box<UnseenMessage>>(
+          valueListenable: LocalUnseenMessage().listenable(),
+          builder: (BuildContext context, Box<UnseenMessage> box, _) {
+            return MultiUserDisplayWidget(
+              LocalUnseenMessage()
+                  .boxToProjectUnseenMessages(box: box, projID: project.pid),
+            );
+          }),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,

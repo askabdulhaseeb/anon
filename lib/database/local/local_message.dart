@@ -29,9 +29,18 @@ class LocalMessage {
     try {
       final Box<Message> box = await refresh();
       box.put(value.messageID, value);
-      if (value.isSeenedMessage) {
+      if (!value.isSeenedMessage) {
         await LocalUnseenMessage().add(value);
       }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> remove(Message value) async {
+    try {
+      final Box<Message> box = await refresh();
+      box.delete(value.messageID);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -41,6 +50,7 @@ class LocalMessage {
     try {
       final Box<Message> box = await refresh();
       box.put(value.messageID, value);
+      await MessageAPI().updateSeenTo(value: value);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -55,10 +65,19 @@ class LocalMessage {
     return _null(chatID);
   }
 
-  Future<void> updateSeenByMe(Message value) async {
-    value.updateSeenByMe();
-    await update(value);
-    await LocalUnseenMessage().clearChat(value.chatID);
+  Future<void> updateSeenByMe(String chatID) async {
+    final List<Message> mags =
+        await LocalUnseenMessage().unseenMessageOfChat(chatID);
+    if (mags.isEmpty) return;
+    final List<Message> temp = <Message>[];
+    for (Message value in mags) {
+      value.updateSeenByMe();
+      temp.add(value);
+    }
+    await LocalUnseenMessage().clearChat(chatID);
+    // for (Message value in temp) {
+    //   await update(value);
+    // }
   }
 
   Future<Message> lastMessage(String chatID) async {
@@ -67,15 +86,18 @@ class LocalMessage {
         .where((Message element) => element.chatID == chatID)
         .toList();
     msgs.sort((Message a, Message b) => a.timestamp.compareTo(b.timestamp));
-    return msgs.last;
+    return msgs.isEmpty ? _null(chatID) : msgs.last;
   }
 
-  Future<List<String>> listOfProjectUnseenMessages(String projID) async {
-    return await LocalUnseenMessage().listOfProjectUnseenMessages(projID);
-  }
-
-  Future<List<String>> listOfChatUnseenMessages(String chatID) async {
-    return await LocalUnseenMessage().listOfChatUnseenMessages(chatID);
+  List<Message> boxToChatMessages({
+    required Box<Message> box,
+    required String chatID,
+  }) {
+    final List<Message> msgs = box.values
+        .where((Message element) => element.chatID == chatID)
+        .toList();
+    msgs.sort((Message a, Message b) => b.timestamp.compareTo(a.timestamp));
+    return msgs;
   }
 
   Future<void> signOut() async {

@@ -18,15 +18,17 @@ class MultiUserDisplayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double size = 10;
+    const double size = 11;
     return users.isEmpty
         ? emptyListWidget ?? const SizedBox()
         : Container(
-            height: size * 2.2,
+            height: size * 2,
             constraints: maxWidth != double.infinity
                 ? BoxConstraints(
-                    maxWidth: users.length <= 3
-                        ? users.length * ((size * 2) + 2)
+                    maxWidth: users.length < 4
+                        ? users.length *
+                            ((size * 2) +
+                                (users.length < 3 ? 0 : -users.length))
                         : maxWidth,
                   )
                 : BoxConstraints(maxWidth: maxWidth),
@@ -34,7 +36,7 @@ class MultiUserDisplayWidget extends StatelessWidget {
               children: <Widget>[
                 for (int i = 0; i < users.length; i++)
                   Positioned(
-                    left: i * (size + 4),
+                    left: i * (size + 6),
                     child: _UserCircle(users[i], size: size),
                   ),
               ],
@@ -54,9 +56,9 @@ class _UserCircle extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<AppUser> snapshot) {
         if (snapshot.hasData) {
           return CircleAvatar(
-            radius: size + 2,
+            radius: size,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            child: CustomProfilePhoto(snapshot.data!, size: size),
+            child: CustomProfilePhoto(snapshot.data!, size: size - 2),
           );
         } else {
           return CircleAvatar(radius: size, child: const ShowLoading());

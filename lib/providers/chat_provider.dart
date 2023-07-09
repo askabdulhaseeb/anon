@@ -1,6 +1,4 @@
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 
 import '../database/firebase/auth_methods.dart';
@@ -80,8 +78,8 @@ class ChatProvider extends ChangeNotifier {
     reset();
   }
 
-  void updateUnseendMessages(String chatID) {
-    log(chatID);
+  Future<void> updateUnseendMessages(String chatID) async {
+    await LocalMessage().updateSeenByMe(chatID);
   }
 
   void reset() {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../database/firebase/message_api.dart';
 import '../../database/local/local_chat.dart';
+import '../../database/local/local_message.dart';
 import '../../models/chat/chat.dart';
 import '../../models/chat/message.dart';
 import '../../providers/chat_provider.dart';
@@ -22,6 +24,8 @@ class ChatScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         Provider.of<ChatProvider>(context, listen: false).reset();
+        Provider.of<ChatProvider>(context, listen: false)
+            .updateUnseendMessages(chatID);
         return true;
       },
       child: Scaffold(
@@ -36,34 +40,31 @@ class ChatScreen extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: StreamBuilder<List<Message>>(
-                    stream: MessageAPI().messages(chatID),
-                    builder: (
-                      BuildContext context,
-                      AsyncSnapshot<List<Message>> snapshot,
-                    ) {
-                      if (snapshot.hasData) {
-                        final List<Message> messages =
-                            snapshot.data ?? <Message>[];
-                        return Container(
-                          constraints: const BoxConstraints(minWidth: 100),
-                          child: ListView.builder(
-                            primary: false,
-                            shrinkWrap: true,
-                            reverse: true,
-                            keyboardDismissBehavior:
-                                ScrollViewKeyboardDismissBehavior.onDrag,
-                            itemCount: messages.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return MessageTile(messages[index]);
-                            },
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return const Center(child: Text('ERROR'));
-                      } else {
-                        return const ShowLoading();
-                      }
+                  child: ValueListenableBuilder<Box<Message>>(
+                    valueListenable: LocalMessage().listenable(),
+                    builder: (BuildContext context, Box<Message> box, _) {
+                      // if (snapshot.hasData) {
+                      final List<Message> messages = LocalMessage()
+                          .boxToChatMessages(box: box, chatID: chatID);
+                      return Container(
+                        constraints: const BoxConstraints(minWidth: 100),
+                        child: ListView.builder(
+                          primary: false,
+                          shrinkWrap: true,
+                          reverse: true,
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          itemCount: messages.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return MessageTile(messages[index]);
+                          },
+                        ),
+                      );
+                      // } else if (snapshot.hasError) {
+                      //   return const Center(child: Text('ERROR'));
+                      // } else {
+                      //   return const ShowLoading();
+                      // }
                     },
                   ),
                 ),

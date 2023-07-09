@@ -22,25 +22,27 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: myProviders,
-      child: Consumer<AppThemeProvider>(
-        builder: (BuildContext context, AppThemeProvider appPro, _) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Dev Markaz',
-            theme: AppThemes.light,
-            darkTheme: AppThemes.dark,
-            themeMode: appPro.themeMode,
-            // TODO: signin time refresh the agencies
-            home: AuthMethods.getCurrentUser == null
-                ? const SignInScreen()
-                : LocalData.currentlySelectedAgency() == null
-                    ? const SwitchAgencyScreen()
-                    : const MainScreen(),
-            routes: myRoutes,
-          );
-        },
+    return SafeArea(
+      child: MultiProvider(
+        providers: myProviders,
+        child: Consumer<AppThemeProvider>(
+          builder: (BuildContext context, AppThemeProvider appPro, _) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Dev Markaz',
+              theme: AppThemes.light,
+              darkTheme: AppThemes.dark,
+              themeMode: appPro.themeMode,
+              // TODO: signin time refresh the agencies
+              home: AuthMethods.getCurrentUser == null
+                  ? const SignInScreen()
+                  : LocalData.currentlySelectedAgency() == null
+                      ? const SwitchAgencyScreen()
+                      : const MainScreen(),
+              routes: myRoutes,
+            );
+          },
+        ),
       ),
     );
   }

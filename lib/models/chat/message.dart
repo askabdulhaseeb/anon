@@ -87,6 +87,13 @@ class Message extends HiveObject {
     };
   }
 
+  Map<String, dynamic> seenToMap() {
+    return <String, dynamic>{
+      'send_to': sendTo.map((MessageReadInfo x) => x.toMap()).toList(),
+      'last_update': DateTime.now(),
+    };
+  }
+
   // ignore: sort_constructors_first
   factory Message.fromMap(Map<String, dynamic> map) {
     final String sendedBy = map['send_by'] ?? AuthMethods.uid;
@@ -153,13 +160,13 @@ class Message extends HiveObject {
   bool get isSeenedMessage => sendTo
       .firstWhere((MessageReadInfo element) => element.uid == AuthMethods.uid)
       .seen;
+
   void updateSeenByMe() {
-    sendTo
-        .firstWhere((MessageReadInfo element) => element.uid == AuthMethods.uid)
-        .seen = true;
-    sendTo
-        .firstWhere((MessageReadInfo element) => element.uid == AuthMethods.uid)
-        .seenAt = DateTime.now();
+    final String me = AuthMethods.uid;
+    sendTo.firstWhere((MessageReadInfo element) => element.uid == me).seen =
+        true;
+    sendTo.firstWhere((MessageReadInfo element) => element.uid == me).seenAt =
+        DateTime.now();
     lastUpdate = DateTime.now();
   }
 }

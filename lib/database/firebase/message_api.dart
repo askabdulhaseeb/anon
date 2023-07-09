@@ -57,11 +57,23 @@ class MessageAPI {
     return Message.fromMap(doc.docs[0].data());
   }
 
+  Future<void> updateSeenTo({required Message value}) async {
+    if (true) {
+      debugPrint('Message API: Updating Unseen Messages not in work');
+      return;
+    }
+    // await _instance
+    //     .collection(_collection)
+    //     .doc(value.messageID)
+    //     .update(value.seenToMap());
+  }
+
   Stream<void> myAllMessages() {
     final DateTime fetchingTime = DateTime.now();
     final int? temp = LocalData.lastChatFetch();
     final DateTime? updatedTime =
         temp == null ? null : TimeFun.miliToObject(temp);
+    debugPrint('New Message fetching time: ${updatedTime.toString()}');
     return updatedTime == null
         ? _instance
             .collection(_collection)
@@ -69,6 +81,7 @@ class MessageAPI {
             .snapshots()
             .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
             _changeEventToLocal(event, fetchingTime);
+            debugPrint('Request at: ${DateTime.now().toString()}');
           })
         : _instance
             .collection(_collection)
@@ -77,6 +90,7 @@ class MessageAPI {
             .snapshots()
             .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
             _changeEventToLocal(event, fetchingTime);
+            debugPrint('Request with time at: ${DateTime.now().toString()}');
           });
   }
 
@@ -86,11 +100,15 @@ class MessageAPI {
   ) {
     final List<DocumentChange<Map<String, dynamic>>> changes = event.docChanges;
     if (changes.isEmpty) return;
-    debugPrint('Add ${changes.length} new Messages');
+    debugPrint('Message API: Add ${changes.length} new Messages');
     LocalData.setLastChatFetch(fetchingTime.millisecondsSinceEpoch);
     for (DocumentChange<Map<String, dynamic>> element in changes) {
       final Message msg = Message.fromDoc(element.doc);
-      LocalMessage().addMessage(msg);
+      if (element.type == DocumentChangeType.removed) {
+        LocalMessage().remove(msg);
+      } else {
+        LocalMessage().addMessage(msg);
+      }
     }
   }
 
@@ -99,7 +117,10 @@ class MessageAPI {
     required List<AppUser> receiver,
     required AppUser sender,
   }) async {
-    await _instance.collection(_collection).doc().set(newMessage.toMap());
+    await _instance
+        .collection(_collection)
+        .doc(newMessage.messageID)
+        .set(newMessage.toMap());
     await LocalMessage().addMessage(newMessage);
     // if (receiver.deviceToken.isNotEmpty) {
     //     await NotificationsServices().sendSubsceibtionNotification(

@@ -17,6 +17,7 @@ import '../../models/chat/chat.dart';
 import '../../models/chat/chat_group_member.dart';
 import '../../models/chat/message.dart';
 import '../../models/chat/message_read_info.dart';
+import '../../models/chat/unseen_message.dart';
 import '../../models/project/attachment.dart';
 import '../../models/project/milestone.dart';
 import '../../models/project/milestone_history.dart';
@@ -69,6 +70,7 @@ class HiveDB {
     Hive.registerAdapter(ChatMemberRoleAdapter()); // 43
     Hive.registerAdapter(MessageTypeAdapter()); // 44
     Hive.registerAdapter(MessageReadInfoAdapter()); // 45
+    Hive.registerAdapter(UnseenMessageAdapter()); // 46
 
     //
     // Open Boxes
@@ -81,6 +83,7 @@ class HiveDB {
   }
 
   Future<void> signOut() async {
+    await LocalData.signout();
     await LocalUser().signOut();
     await LocalAgency().signOut();
     await LocalProject().signOut();

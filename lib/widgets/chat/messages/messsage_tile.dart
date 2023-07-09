@@ -61,7 +61,7 @@ class MessageTile extends StatelessWidget {
                         ),
                       ],
                       color: isMe
-                          ? Colors.grey[100]
+                          ? Theme.of(context).primaryColor.withOpacity(0.4)
                           : Theme.of(context).scaffoldBackgroundColor,
                     ),
                     child: Column(

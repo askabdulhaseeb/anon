@@ -5,7 +5,7 @@ class LocalData {
   static Future<SharedPreferences> init() async =>
       _preferences = await SharedPreferences.getInstance();
 
-  static signout() => _preferences.clear();
+  static Future<void> signout() => _preferences.clear();
 
   static const String _themeKey = 'ThemeKey';
   static const String _chatTimeKey = 'ChatTimeKey';

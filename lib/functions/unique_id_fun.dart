@@ -29,6 +29,6 @@ class UniqueIdFun {
   }
 
   static String messageID(String chatID) {
-    return '$chatID-${generateRandomString()}-${DateTime.now().microsecondsSinceEpoch}';
+    return '$chatID-${generateRandomString()}-${DateTime.now().microsecondsSinceEpoch}-me-${AuthMethods.uid}';
   }
 }
