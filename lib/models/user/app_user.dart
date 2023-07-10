@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 
+import '../../database/firebase/auth_methods.dart';
 import '../../enums/user/auth_type.dart';
 import '../../enums/user/user_type.dart';
 import '../../functions/helping_funcation.dart';
@@ -24,12 +25,14 @@ class AppUser extends HiveObject {
     String? imageURL,
     List<MyDeviceToken>? deviceToken,
     List<String>? notAllowedWords,
+    DateTime? lastUpdate,
     this.status = true,
   })  : nickName = nickName ?? 'no-name',
         authType = authType ?? AuthType.email,
         imageURL = imageURL ?? '',
         deviceToken = deviceToken ?? <MyDeviceToken>[],
         defaultColor = defaultColor ?? HelpingFuncation().randomColor(),
+        lastUpdate = lastUpdate ?? DateTime.now(),
         notAllowedWords = notAllowedWords ??
             <String>[
               'on Whatsapp',
@@ -73,6 +76,8 @@ class AppUser extends HiveObject {
   // 15 not in use
   @HiveField(16, defaultValue: 808080)
   final int defaultColor;
+  @HiveField(17)
+  final DateTime lastUpdate;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -90,6 +95,14 @@ class AppUser extends HiveObject {
       'not_allowed_words': notAllowedWords,
       'default_color': defaultColor,
       'status': status,
+      'last_update': lastUpdate,
+    };
+  }
+
+  Map<String, dynamic> deviceTokenMap() {
+    return <String, dynamic>{
+      'devices_token': deviceToken.map((MyDeviceToken x) => x.toMap()).toList(),
+      'last_update': lastUpdate,
     };
   }
 
@@ -101,6 +114,7 @@ class AppUser extends HiveObject {
         dtData.add(MyDeviceToken.fromMap(e));
       });
     }
+    final bool isMe = AuthMethods.uid == (doc.data()?['uid'] ?? '');
     return AppUser(
       uid: doc.data()?['uid'] ?? '',
       agencyIDs: List<String>.from((doc.data()?['agency_ids'] ?? <String>[])),
@@ -113,7 +127,7 @@ class AppUser extends HiveObject {
       phoneNumber: NumberDetails.fromMap(
           doc.data()?['phone_number'] ?? <String, dynamic>{}),
       email: doc.data()?['email'] ?? '',
-      password: doc.data()?['password'] ?? '',
+      password: !isMe ? '' : doc.data()?['password'] ?? '',
       imageURL: doc.data()?['image_url'] ?? '',
       defaultColor:
           doc.data()?['default_color'] ?? HelpingFuncation().randomColor(),
@@ -121,10 +135,14 @@ class AppUser extends HiveObject {
       notAllowedWords:
           List<String>.from((doc.data()?['not_allowed_words'] ?? <String>[])),
       status: doc.data()?['status'] ?? false,
+      lastUpdate: doc.data()?['last_update'] ?? DateTime.now(),
     );
   }
 
-  Map<String, dynamic> updateAgency() {
-    return <String, dynamic>{'agency_ids': agencyIDs};
+  Map<String, dynamic> updateAgencyMap() {
+    return <String, dynamic>{
+      'agency_ids': agencyIDs,
+      'last_update': lastUpdate,
+    };
   }
 }

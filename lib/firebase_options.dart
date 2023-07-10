@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAi51RurcceCVS6Z6zWkNZwXmmjPBDr8FM',
-    appId: '1:932325401767:android:2dea2b3cdea0772685a782',
+    appId: '1:932325401767:android:8322bd29fea883ec85a782',
     messagingSenderId: '932325401767',
     projectId: 'dm-managment',
     storageBucket: 'dm-managment.appspot.com',
@@ -63,11 +63,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD6rqJfnhejTI80zYUROAW1_Wve8wvKlmw',
-    appId: '1:932325401767:ios:dab4580e2e371e5985a782',
+    appId: '1:932325401767:ios:76eed2fb3757810385a782',
     messagingSenderId: '932325401767',
     projectId: 'dm-managment',
     storageBucket: 'dm-managment.appspot.com',
-    iosBundleId: 'com.devmarkaz.staging.anon',
+    iosBundleId: 'com.devmarkaz.early.staging.anon',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(

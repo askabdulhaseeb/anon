@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'basics.dart';
 import 'database/firebase/auth_methods.dart';
+import 'database/firebase/notification_api.dart';
 import 'database/local/hive_db.dart';
 import 'database/local/local_data.dart';
 import 'firebase_options.dart';
@@ -13,8 +15,10 @@ import 'views/main_screen/main_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await HiveDB().init();
+  await dotenv.load(fileName: '.env');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationAPI().init();
+  await HiveDB().init();
   runApp(const MyApp());
 }
 
@@ -29,7 +33,7 @@ class MyApp extends StatelessWidget {
           builder: (BuildContext context, AppThemeProvider appPro, _) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Dev Markaz',
+              title: 'Anon',
               theme: AppThemes.light,
               darkTheme: AppThemes.dark,
               themeMode: appPro.themeMode,

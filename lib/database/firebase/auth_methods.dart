@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import '../../enums/user/user_type.dart';
 import '../../functions/encryption.dart';
 import '../../models/user/app_user.dart';
+import '../../models/user/device_token.dart';
 import '../../models/user/number_detail.dart';
 import '../../views/auth/user_auth/sign_in_screen.dart';
 import '../local/hive_db.dart';
 import '../local/local_user.dart';
+import 'notification_api.dart';
 import 'user_api.dart';
 
 class AuthMethods {
@@ -41,6 +43,7 @@ class AuthMethods {
       if (number?.number.isNotEmpty ?? false) {
         // TODO: save phone number
       }
+      final String? token = await NotificationAPI().deviceToken();
       final AppUser appUser = AppUser(
         uid: uid,
         agencyIDs: <String>[],
@@ -50,6 +53,9 @@ class AuthMethods {
         password: MyEncryption().encrypt(password, uid),
         type: userType ?? UserType.user,
         imageURL: _auth.currentUser!.photoURL ?? '',
+        deviceToken: token == null
+            ? <MyDeviceToken>[]
+            : <MyDeviceToken>[MyDeviceToken(token: token)],
       );
       await UserAPI().register(appUser);
       await LocalUser().signIn(appUser);
@@ -68,8 +74,16 @@ class AuthMethods {
       final User? user = result.user;
       assert(user != null);
       final AppUser? appUser = await UserAPI().user(user!.uid);
-      assert(appUser != null);
-      await LocalUser().signIn(appUser!);
+      if (appUser == null) throw ('User Not found - register yourself');
+      final String? token = await NotificationAPI().deviceToken();
+      if (token != null) {
+        if (!appUser.deviceToken
+            .any((MyDeviceToken element) => element.token == token)) {
+          appUser.deviceToken.add(MyDeviceToken(token: token));
+          await UserAPI().updateToken(appUser);
+        }
+      }
+      await LocalUser().signIn(appUser);
       return user;
     } on FirebaseAuthException catch (_) {
       rethrow;
