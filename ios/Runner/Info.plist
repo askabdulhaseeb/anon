@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Devmarkaz</string>
+	<string>Anon</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -26,6 +26,24 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>We need your meida to fetch and upload it.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Anon use your device's camera to do things such as clicking live photo</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Anon needs your contact access to display your friends on Anon and to provide a better experience</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Anon need your location always on to display you the nearest products and to provide a better experience.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Anon need location on to display your current location and to provide a better experience.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Anon need your location while using the app and to provide a better experience.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This lets you share the videos, photos, and voice while sending voice messages and choosing media from library.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Anon needs your photo library access to upload the photos and videos</string>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Anon needs notification permission to notify you when you receive new order, new offer, message and keep you up to date about your account</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -41,23 +59,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>We need your meida to fetch and upload it.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Dev Markaz use your device's camera to do things such as clicking live photo</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Dev Markaz needs your contact access to display your friends on Dev Markaz and to provide a better experience</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Dev Markaz need location on to display your current location and to provide a better experience.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Dev Markaz need your location while using the app and to provide a better experience.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Dev Markaz need your location always on to display you the nearest products and to provide a better experience.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This lets you share the videos, photos, and voice while sending voice messages and choosing media from library.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Dev Markaz needs your photo library access to upload the photos and videos</string>
-	<key>NSUserNotificationsUsageDescription</key>
-	<string>Dev Markaz needs notification permission to notify you when you receive new order, new offer, message and keep you up to date about your account</string>
 </dict>
 </plist>
