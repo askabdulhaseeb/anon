@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../database/local/local_user.dart';
+import '../../../enums/attachment_type.dart';
 import '../../../models/chat/message.dart';
 import '../../../models/user/app_user.dart';
 import '../../../providers/chat_provider.dart';
 import '../../custom/custom_network_image.dart';
+import '../../custom/custom_video_player.dart';
 import '../../custom/show_loading.dart';
 
 class AttachedMessage extends StatelessWidget {
@@ -66,7 +68,11 @@ class AttachedMessage extends StatelessWidget {
             ),
           ),
           if (message.attachment.isNotEmpty)
-            CustomNetworkImage(imageURL: message.attachment[0].url, size: 40),
+            message.attachment[0].type == AttachmentType.video
+                ? CustomVideoPlayer(
+                    path: message.attachment[0].url, isFileVideo: true)
+                : CustomNetworkImage(
+                    imageURL: message.attachment[0].url, size: 40),
           IconButton(
             onPressed: () => Provider.of<ChatProvider>(context, listen: false)
                 .onAttachedMessageUpdate(null),

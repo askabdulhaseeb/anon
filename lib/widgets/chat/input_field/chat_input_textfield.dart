@@ -7,6 +7,7 @@ import '../../../models/chat/chat.dart';
 import '../../../models/chat/message.dart';
 import '../../../providers/chat_provider.dart';
 
+import '../../custom/show_loading.dart';
 import '../messages/attached_message.dart';
 import 'attached_file_widget.dart';
 import 'attachment_selection_widget.dart';
@@ -71,6 +72,7 @@ class ChatInputTextField extends StatelessWidget {
                     textInputAction: TextInputAction.newline,
                     maxLines: 5,
                     minLines: 1,
+                    readOnly: chatPro.isSendingMessage,
                     textCapitalization: TextCapitalization.sentences,
                     onChanged: (_) async =>
                         await chatPro.updateUnseendMessages(chat.chatID),
@@ -85,12 +87,15 @@ class ChatInputTextField extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () async =>
-                      await chatPro.onSendMessage(chat: chat),
+                  onPressed: () async => chatPro.isSendingMessage
+                      ? null
+                      : await chatPro.onSendMessage(chat: chat),
                   splashRadius: 16,
-                  icon: const CircleAvatar(
-                    child: Icon(Icons.send, color: Colors.white),
-                  ),
+                  icon: chatPro.isSendingMessage
+                      ? const ShowLoading()
+                      : const CircleAvatar(
+                          child: Icon(Icons.send, color: Colors.white),
+                        ),
                 ),
               ],
             ),

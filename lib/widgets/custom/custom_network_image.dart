@@ -27,7 +27,7 @@ class CustomNetworkImage extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: FittedBox(
         child: Text(
-          placeholder!.substring(0, 2).toUpperCase(),
+          placeholder?.substring(0, 2).toUpperCase() ?? 'NULL',
           style: const TextStyle(color: Colors.white),
         ),
       ),

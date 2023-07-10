@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../enums/attachment_type.dart';
 import '../../../models/chat/message.dart';
 import '../../../views/chat_screens/message_media__full_screen.dart';
 import '../../custom/custom_network_image.dart';
+import '../../custom/custom_video_player.dart';
 
 class MessageMediaAttachmentWidget extends StatelessWidget {
   const MessageMediaAttachmentWidget({required this.message, super.key});
@@ -24,7 +26,9 @@ class MessageMediaAttachmentWidget extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: <Widget>[
-              CustomNetworkImage(imageURL: message.attachment[0].url),
+              message.attachment[0].type == AttachmentType.video
+                  ? CustomVideoPlayer(path: message.attachment[0].url)
+                  : CustomNetworkImage(imageURL: message.attachment[0].url),
               if (message.attachment.length > 1)
                 Container(
                   color: Colors.black45,

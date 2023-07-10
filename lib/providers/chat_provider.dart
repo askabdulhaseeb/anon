@@ -18,6 +18,7 @@ import '../models/user/app_user.dart';
 class ChatProvider extends ChangeNotifier {
   onSendMessage({required Chat chat}) async {
     if (_text.text.trim().isEmpty && files.isEmpty) return;
+    _onLoading(true);
     final String me = AuthMethods.uid;
     final List<Attachment> urls = <Attachment>[];
     if (files.isNotEmpty) {
@@ -86,7 +87,7 @@ class ChatProvider extends ChangeNotifier {
     _attachedMessage = null;
     _text.clear();
     _files.clear();
-    notifyListeners();
+    _onLoading(false);
   }
 
   void onAttachedMessageUpdate(Message? value) async {
@@ -96,7 +97,7 @@ class ChatProvider extends ChangeNotifier {
 
   void onFileUpdate(List<File> value) {
     if (value.isEmpty) return;
-    for (int i = _files.length, j = 0; i < 25; i++, j++) {
+    for (int i = _files.length, j = 0; i < 10 && j < value.length; i++, j++) {
       _files.add(value[j]);
       notifyListeners();
     }
@@ -107,10 +108,17 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _onLoading(bool value) {
+    _isSendingMessage = value;
+    notifyListeners();
+  }
+
+  bool get isSendingMessage => _isSendingMessage;
   Message? get attachedMessage => _attachedMessage;
   List<File> get files => _files;
   TextEditingController get text => _text;
 
+  bool _isSendingMessage = false;
   Message? _attachedMessage;
   final List<File> _files = <File>[];
   final TextEditingController _text = TextEditingController();

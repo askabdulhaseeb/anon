@@ -27,7 +27,13 @@ class AttachmentSelectionWidget extends StatelessWidget {
             children: <Widget>[
               _AttachmentWidget(
                 ChatAttachmentOption.camera,
-                onTap: () {},
+                onTap: () async {
+                  final File? results = await PickerFunctions().camera();
+                  if (results == null) return;
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop(results);
+                  onTap(<File>[results]);
+                },
               ),
               _AttachmentWidget(
                 ChatAttachmentOption.gallery,
@@ -40,7 +46,7 @@ class AttachmentSelectionWidget extends StatelessWidget {
               ),
               _AttachmentWidget(
                 ChatAttachmentOption.document,
-                onTap: () {},
+                onTap: () async {},
               ),
             ],
           ),

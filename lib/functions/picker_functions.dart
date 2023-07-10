@@ -22,7 +22,9 @@ class PickerFunctions {
     if (file == null) return <File>[];
     List<File> temp = <File>[];
     for (PlatformFile element in file.files) {
-      temp.add(File(element.path!));
+      if (element.path != null) {
+        temp.add(File(element.path!));
+      }
     }
     return temp;
   }
@@ -71,14 +73,21 @@ class PickerFunctions {
   }
 
   Future<bool> _request() async {
-    if (!await Permission.photos.isGranted) {
+    if (await Permission.photos.status != PermissionStatus.granted) {
       await Permission.photos.request();
     }
-    if (!await Permission.mediaLibrary.isGranted) {
+    if (await Permission.mediaLibrary.status != PermissionStatus.granted) {
       await Permission.mediaLibrary.request();
     }
-    final PermissionStatus status1 = await Permission.photos.status;
-    final PermissionStatus status2 = await Permission.mediaLibrary.status;
-    return status1.isGranted && status2.isGranted;
+    if (await Permission.storage.status != PermissionStatus.granted) {
+      await Permission.storage.request();
+    }
+    if (await Permission.videos.status != PermissionStatus.granted) {
+      await Permission.videos.request();
+    }
+    // final PermissionStatus status1 = await Permission.photos.status;
+    // final PermissionStatus status2 = await Permission.mediaLibrary.status;
+    final PermissionStatus status3 = await Permission.storage.status;
+    return status3.isGranted;
   }
 }

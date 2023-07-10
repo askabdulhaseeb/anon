@@ -1,25 +1,29 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 import 'show_loading.dart';
 
-class NetworkVideoPlayer extends StatefulWidget {
-  const NetworkVideoPlayer({
-    required this.url,
+class CustomVideoPlayer extends StatefulWidget {
+  const CustomVideoPlayer({
+    required this.path,
+    this.isFileVideo = false,
     this.isPlay = false,
     this.isMute = true,
     this.isOnLoop = false,
     Key? key,
   }) : super(key: key);
-  final String url;
+  final String path;
+  final bool isFileVideo;
   final bool isPlay;
   final bool isMute;
   final bool isOnLoop;
   @override
-  State<NetworkVideoPlayer> createState() => _NetworkVideoPlayerState();
+  State<CustomVideoPlayer> createState() => _CustomVideoPlayerState();
 }
 
-class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
+class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   late VideoPlayerController controller;
   @override
   void initState() {
@@ -28,7 +32,9 @@ class _NetworkVideoPlayerState extends State<NetworkVideoPlayer> {
   }
 
   _init() async {
-    controller = VideoPlayerController.network(widget.url);
+    controller = widget.isFileVideo
+        ? VideoPlayerController.file(File(widget.path))
+        : VideoPlayerController.network(widget.path);
     await controller.initialize().then((_) {
       widget.isPlay ? controller.play() : controller.pause();
       controller.setVolume(widget.isMute ? 0 : 1);
