@@ -44,7 +44,7 @@ class LocalUnseenMessage {
   Future<void> clearChat(String chatID) async {
     try {
       final Box<UnseenMessage> box = await refresh();
-      box.get(chatID)?.unseenMessages.clear();
+      box.delete(chatID);
       debugPrint(
           'Chat Id: ($chatID) is Clear: ${box.get(chatID)?.unseenMessages.length}');
     } catch (e) {

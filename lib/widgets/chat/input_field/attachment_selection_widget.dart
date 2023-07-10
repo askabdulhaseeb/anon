@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 
+import '../../../enums/chat/chat_attachment_option.dart';
 import '../../../functions/picker_functions.dart';
 
 class AttachmentSelectionWidget extends StatelessWidget {
@@ -19,37 +20,63 @@ class AttachmentSelectionWidget extends StatelessWidget {
             child: const Text('Close'),
           ),
         ),
-        ListTile(
-          leading: const Icon(Icons.photo_library_outlined),
-          title: const Text('Photos'),
-          subtitle: const Text('Max. selection limit 25'),
-          onTap: () async {
-            final List<File> results = await PickerFunctions().images();
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).pop(results);
-            onTap(results);
-          },
-        ),
-        ListTile(
-          enabled: false,
-          leading: const Icon(Icons.video_collection_outlined),
-          title: const Text('Videos'),
-          subtitle: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text('Max. selection limit 25'),
-              Text('Coming soon...', style: TextStyle(color: Colors.red)),
+              _AttachmentWidget(
+                ChatAttachmentOption.camera,
+                onTap: () {},
+              ),
+              _AttachmentWidget(
+                ChatAttachmentOption.gallery,
+                onTap: () async {
+                  final List<File> results = await PickerFunctions().images();
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop(results);
+                  onTap(results);
+                },
+              ),
+              _AttachmentWidget(
+                ChatAttachmentOption.document,
+                onTap: () {},
+              ),
             ],
           ),
-          onTap: () async {
-            // TODO: video attachment left
-            // final List<File> results = await PickerFunctions().videos();
-            // // ignore: use_build_context_synchronously
-            // Navigator.of(context).pop(results);
-            // onTap(results);
-          },
         ),
       ],
+    );
+  }
+}
+
+class _AttachmentWidget extends StatelessWidget {
+  const _AttachmentWidget(this.attachment, {required this.onTap});
+  final ChatAttachmentOption attachment;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: attachment.bgColor,
+            ),
+            child: SizedBox(
+              height: 30,
+              width: 30,
+              child: Image.asset(attachment.path),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(attachment.title)
+        ],
+      ),
     );
   }
 }

@@ -2,12 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../database/firebase/chat_api.dart';
-import '../../database/firebase/message_api.dart';
 import '../../database/local/local_chat.dart';
 import '../../database/local/local_project.dart';
 import '../../models/chat/chat.dart';
-import '../../models/chat/message.dart';
 import '../../models/project/project.dart';
 import '../../widgets/chat/chat_dashboard_tile.dart';
 import '../../widgets/custom/show_loading.dart';
@@ -62,9 +59,8 @@ class ProjectDashboardScreen extends StatelessWidget {
                     StatefulBuilder(
                       builder: (BuildContext context, Function setState) {
                         return CupertinoSearchTextField(
-                          onChanged: (String value) {
-                            setState(() => search = value);
-                          },
+                          onChanged: (String value) =>
+                              setState(() => search = value),
                         );
                       },
                     ),
@@ -77,30 +73,16 @@ class ProjectDashboardScreen extends StatelessWidget {
                         child: Text('Imp. Notes (${project.notes.length})'),
                       ),
                     ),
-                    //
-                    // StreamBuilder<List<Chat>>(
-                    //   stream: ChatAPI().chats(projectID),
-                    //   builder: (BuildContext context,
-                    //       AsyncSnapshot<List<Chat>> snapshot) {
-                    //     if (snapshot.hasData) {
-                    //       final List<Chat> chats = snapshot.data ?? <Chat>[];
-                    //       final List<Chat> filterChat = chats
-                    //           .where((Chat element) =>
-                    //               element.title.contains(search))
-                    //           .toList();
-                    //       return StreamBuilder<List<Message>>(
-                    //           stream:
-                    //               MessageAPI().messagesByProjectID(projectID),
-                    //           builder: (
-                    //             BuildContext context,
-                    //             AsyncSnapshot<List<Message>> snapshot,
-                    //           ) {
                     ValueListenableBuilder<Box<Chat>>(
                         valueListenable: LocalChat().listenable(),
                         builder: (BuildContext context, Box<Chat> box, _) {
-                          // if (snapshot.hasData) {
-                          final List<Chat> filterChat = LocalChat()
+                          final List<Chat> chats = LocalChat()
                               .boxToChats(box: box, projID: projectID);
+                          final List<Chat> filterChat = chats
+                              .where((Chat element) =>
+                                  element.title.contains(search.toLowerCase()))
+                              .toList()
+                              .toList();
                           return ListView.builder(
                             primary: false,
                             shrinkWrap: true,
@@ -109,15 +91,6 @@ class ProjectDashboardScreen extends StatelessWidget {
                                 ChatDashboardTile(filterChat[index]),
                           );
                         }),
-                    //           });
-                    //     } else if (snapshot.hasError) {
-                    //       debugPrint('CHAT ERROR: ${snapshot.error}');
-                    //       return const Text('ERROR');
-                    //     } else {
-                    //       return const ShowLoading();
-                    //     }
-                    //   },
-                    // )
                   ],
                 );
               } else if (snapshot.hasError) {
