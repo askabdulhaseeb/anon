@@ -1,14 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../database/firebase/agency_api.dart';
-import '../../database/firebase/auth_methods.dart';
 import '../../database/firebase/chat_api.dart';
 import '../../database/firebase/message_api.dart';
 import '../../providers/app_nav_provider.dart';
 import '../../widgets/agency/agency_app_bar_title.dart';
-import '../auth/agency_auth/switch_agency_screen.dart';
 import '../main_pages/settings_page.dart';
 import '../main_pages/project_page.dart';
 import 'main_bottom_nav_bar.dart';
@@ -27,14 +24,14 @@ class MainScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         title: const AgencyNameAppBarTitle(),
-        actions: <Widget>[
-          Builder(builder: (BuildContext context) {
-            return IconButton(
-              onPressed: () => onMoreOption(context),
-              icon: Icon(Icons.adaptive.more, color: Colors.white),
-            );
-          }),
-        ],
+        // actions: <Widget>[
+        //   Builder(builder: (BuildContext context) {
+        //     return IconButton(
+        //       onPressed: () => onMoreOption(context),
+        //       icon: Icon(Icons.adaptive.more, color: Colors.white),
+        //     );
+        //   }),
+        // ],
       ),
       body: Container(
         height: double.infinity,
@@ -70,41 +67,41 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  onMoreOption(BuildContext context) {
-    Scaffold.of(context).showBottomSheet(
-      (BuildContext context) => Builder(builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text(
-                  'Close',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-            ListTile(
-              onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                  SwitchAgencyScreen.routeName,
-                  (Route<dynamic> route) => false),
-              leading: const Icon(CupertinoIcons.arrow_right_arrow_left),
-              title: const Text('Switch Agency'),
-            ),
-            ListTile(
-              onTap: () => AuthMethods().signout(context),
-              leading: const Icon(
-                CupertinoIcons.square_arrow_left,
-                color: Colors.red,
-              ),
-              title:
-                  const Text('Sign out', style: TextStyle(color: Colors.red)),
-            )
-          ],
-        );
-      }),
-    );
-  }
+  // onMoreOption(BuildContext context) {
+  //   Scaffold.of(context).showBottomSheet(
+  //     (BuildContext context) => Builder(builder: (BuildContext context) {
+  //       return Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: <Widget>[
+  //           Align(
+  //             alignment: Alignment.centerRight,
+  //             child: TextButton(
+  //               onPressed: () => Navigator.of(context).pop(),
+  //               child: const Text(
+  //                 'Close',
+  //                 style: TextStyle(fontWeight: FontWeight.bold),
+  //               ),
+  //             ),
+  //           ),
+  //           ListTile(
+  //             onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+  //                 SwitchAgencyScreen.routeName,
+  //                 (Route<dynamic> route) => false),
+  //             leading: const Icon(CupertinoIcons.arrow_right_arrow_left),
+  //             title: const Text('Switch Agency'),
+  //           ),
+  //           ListTile(
+  //             onTap: () => AuthMethods().signout(context),
+  //             leading: const Icon(
+  //               CupertinoIcons.square_arrow_left,
+  //               color: Colors.red,
+  //             ),
+  //             title:
+  //                 const Text('Sign out', style: TextStyle(color: Colors.red)),
+  //           )
+  //         ],
+  //       );
+  //     }),
+  //   );
+  // }
 }

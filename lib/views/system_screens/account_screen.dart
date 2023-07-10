@@ -29,13 +29,24 @@ class AccountScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       TextButton(
+                        onPressed: () => themePro.switchMode(ThemeMode.system),
+                        child: Text(
+                          'System',
+                          style: TextStyle(
+                            color: themePro.themeMode == ThemeMode.system
+                                ? Theme.of(context).primaryColor
+                                : Colors.grey,
+                          ),
+                        ),
+                      ),
+                      TextButton(
                         onPressed: () => themePro.switchMode(ThemeMode.light),
                         child: Text(
                           'Light',
                           style: TextStyle(
-                            color: themePro.isDarkMode
-                                ? Colors.grey
-                                : Theme.of(context).primaryColor,
+                            color: themePro.themeMode == ThemeMode.light
+                                ? Theme.of(context).primaryColor
+                                : Colors.grey,
                           ),
                         ),
                       ),
@@ -44,7 +55,7 @@ class AccountScreen extends StatelessWidget {
                         child: Text(
                           'Dark',
                           style: TextStyle(
-                            color: themePro.isDarkMode
+                            color: themePro.themeMode == ThemeMode.dark
                                 ? Theme.of(context).primaryColor
                                 : Colors.grey,
                           ),

@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-class AppThemeProvider extends ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.light;
+import '../database/local/local_data.dart';
 
-  ThemeMode get themeMode => _themeMode;
+class AppThemeProvider extends ChangeNotifier {
+  ThemeMode _themeMode =
+      LocalData.themeMode() == null || LocalData.themeMode() == 0
+          ? ThemeMode.system
+          : LocalData.themeMode() == 1
+              ? ThemeMode.light
+              : ThemeMode.dark;
+
+  // ThemeMode get themeMode => _themeMode;
+  ThemeMode get themeMode => ThemeMode.light;
 
   bool get isDarkMode {
     if (_themeMode == ThemeMode.system) {
@@ -16,8 +24,9 @@ class AppThemeProvider extends ChangeNotifier {
     }
   }
 
-  void switchMode(ThemeMode value) {
+  Future<void> switchMode(ThemeMode value) async {
     _themeMode = value;
+    await LocalData.setThemeMode(value.index);
     notifyListeners();
   }
 
