@@ -30,6 +30,11 @@ class LocalAgency {
     await box.put(value.agencyID, value);
   }
 
+  Future<void> remove(String value) async {
+    final Box<Agency> box = await refresh();
+    await box.delete(value);
+  }
+
   Future<void> addAll(List<Agency> value) async {
     final Box<Agency> box = await refresh();
     await box.clear();

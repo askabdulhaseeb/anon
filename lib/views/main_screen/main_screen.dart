@@ -48,10 +48,10 @@ class MainScreen extends StatelessWidget {
           ),
         ),
         child: StreamBuilder<bool>(
-            stream: AgencyAPI().agenciesStream(),
+            stream: AgencyAPI().refreshAgency(),
             builder: (_, __) {
               return StreamBuilder<void>(
-                  stream: MessageAPI().myAllMessages(),
+                  stream: MessageAPI().refreshMessages(),
                   builder: (_, __) {
                     return StreamBuilder<void>(
                         stream: ChatAPI().refreshChats(),

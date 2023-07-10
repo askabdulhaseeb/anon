@@ -76,7 +76,11 @@ class AgencyAPI {
     }
   }
 
-  Stream<bool> agenciesStream() {
+  Stream<bool> refreshAgency() {
+    // final int? temp = LocalData.lastAgencyFetch();
+    // final DateTime updatedTime = temp == null
+    //     ? DateTime.now().subtract(const Duration(days: 3000))
+    //     : TimeFun.miliToObject(temp);
     return _instance
         .collection(_collection)
         .where('members', arrayContains: AuthMethods.uid)
@@ -86,13 +90,19 @@ class AgencyAPI {
       final List<DocumentChange<Map<String, dynamic>>> changes =
           event.docChanges;
       for (DocumentChange<Map<String, dynamic>> newEle in changes) {
-        newChanges.add(Agency.fromDoc(newEle.doc));
+        final Agency mod = Agency.fromDoc(newEle.doc);
+        if (newEle.type == DocumentChangeType.removed &&
+            (!mod.members.contains(AuthMethods.uid))) {
+          LocalAgency().remove(mod.agencyID);
+        } else {
+          newChanges.add(mod);
+        }
       }
       LocalAgency().refreshAgencies(newChanges);
       return true;
     });
   }
-  
+
   Future<Agency?> joinAgency(String value) async {
     try {
       final QuerySnapshot<Map<String, dynamic>> doc = await _instance

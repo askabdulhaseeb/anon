@@ -58,6 +58,9 @@ class ChatAPI {
         .snapshots()
         .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
       if (event.docChanges.isEmpty) return;
+      LocalData.setLastChatFetch(DateTime.now()
+          .subtract(const Duration(seconds: 1))
+          .millisecondsSinceEpoch);
       for (DocumentChange<Map<String, dynamic>> element in event.docChanges) {
         final DocumentSnapshot<Map<String, dynamic>> doc = element.doc;
         final Chat temp = Chat.fromDoc(doc);
@@ -68,41 +71,7 @@ class ChatAPI {
         }
       }
       log('Chat API: New ${event.docChanges.length} Chats added');
-      LocalData.setLastChatFetch(DateTime.now()
-          .subtract(const Duration(seconds: 1))
-          .millisecondsSinceEpoch);
     });
-  }
-
-  Future<void> chatsReferesh(String projectID) async {
-    final List<Chat> results = <Chat>[];
-    try {
-      final QuerySnapshot<Map<String, dynamic>> doc = await _instance
-          .collection(_collection)
-          .where('persons', arrayContains: AuthMethods.uid)
-          .where('project_id', isEqualTo: projectID)
-          .orderBy('timestamp', descending: true)
-          .get();
-      if (doc.docs.isEmpty) return;
-      for (DocumentSnapshot<Map<String, dynamic>> element in doc.docs) {
-        final Chat temp = Chat.fromMap(element.data()!);
-        results.add(temp);
-      }
-      if (results.isNotEmpty) {
-        await LocalChat().addAllChat(results);
-      }
-    } catch (e) {}
-    //     .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
-    //   List<Chat> chats = <Chat>[];
-    //   for (DocumentSnapshot<Map<String, dynamic>> element in event.docs) {
-    //     final Chat temp = Chat.fromMap(element.data()!);
-    //     chats.add(temp);
-    //   }
-    //   if (chats.isNotEmpty) {
-    //     LocalChat().addAllChat(chats);
-    //   }
-    //   return chats;
-    // });
   }
 
   Future<void> startChat({

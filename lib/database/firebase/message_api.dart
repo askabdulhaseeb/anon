@@ -69,7 +69,7 @@ class MessageAPI {
     //     .update(value.seenToMap());
   }
 
-  Stream<void> myAllMessages() {
+  Stream<void> refreshMessages() {
     final DateTime fetchingTime = DateTime.now();
     final int? temp = LocalData.lastMessageFetch();
     final DateTime updatedTime = temp == null
