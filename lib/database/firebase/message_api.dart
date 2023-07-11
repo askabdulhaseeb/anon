@@ -75,8 +75,6 @@ class MessageAPI {
         ? DateTime.now().subtract(const Duration(days: 30))
         : TimeFun.miliToObject(temp) ??
             DateTime.now().subtract(const Duration(days: 30));
-
-    debugPrint('New Message fetching time: ${updatedTime.toString()}');
     return _instance
         .collection(_collection)
         .where('send_to_uids', arrayContains: AuthMethods.uid)
@@ -84,7 +82,6 @@ class MessageAPI {
         .snapshots()
         .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
       _changeEventToLocal(event, fetchingTime);
-      debugPrint('Request with time at: ${DateTime.now().toString()}');
     });
   }
 

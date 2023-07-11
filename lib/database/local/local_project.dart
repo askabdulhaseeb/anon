@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../enums/my_hive_type.dart';
+import '../../enums/project/milestone_status.dart';
+import '../../models/project/milestone.dart';
 import '../../models/project/project.dart';
 import '../firebase/project_api.dart';
 
@@ -67,9 +69,37 @@ class LocalProject {
     await ProjectAPI().updateMembers(value);
   }
 
-  Future<void> signOut() async {
-    final Box<Project> box = await refresh();
-    await box.clear();
+  List<Project> boxToProjects(
+    Box<Project> box,
+    String agencyID,
+    String search,
+  ) {
+    final List<Project> results = box.values
+        .toList()
+        .cast<Project>()
+        .where((Project element) =>
+            element.agencies.contains(agencyID) &&
+            element.title.toLowerCase().contains(search.toLowerCase()))
+        .toList();
+    results.sort((Project a, Project b) => (a.milestone
+                .firstWhere(
+                  (Milestone aEle) =>
+                      aEle.status == MilestoneStatus.inActive ||
+                      aEle.status == MilestoneStatus.active,
+                  orElse: () => a.milestone.last,
+                )
+                .deadline ??
+            DateTime.now())
+        .compareTo(b.milestone
+                .firstWhere(
+                  (Milestone bEle) =>
+                      bEle.status == MilestoneStatus.inActive ||
+                      bEle.status == MilestoneStatus.active,
+                  orElse: () => b.milestone.last,
+                )
+                .deadline ??
+            DateTime.now()));
+    return results;
   }
 
   ValueListenable<Box<Project>> listenable() {
@@ -80,6 +110,11 @@ class LocalProject {
       openBox;
       return Hive.box<Project>(MyHiveType.project.database).listenable();
     }
+  }
+
+  Future<void> signOut() async {
+    final Box<Project> box = await refresh();
+    await box.clear();
   }
 
   Project get _null => Project(

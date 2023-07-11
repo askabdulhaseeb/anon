@@ -23,6 +23,8 @@ class AgencyAPI {
     required File? logoFile,
   }) async {
     try {
+      // TODO: Allow all to create a agency
+      if (!kDebugMode) return '';
       String code = UniqueIdFun.generateRandomString();
       final QuerySnapshot<Map<String, dynamic>> docs =
           await _instance.collection(_collection).get();

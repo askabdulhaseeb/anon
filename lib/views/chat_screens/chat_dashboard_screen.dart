@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../../database/firebase/auth_methods.dart';
 import '../../database/local/local_chat.dart';
 import '../../database/local/local_project.dart';
 import '../../models/chat/chat.dart';
@@ -81,8 +82,10 @@ class ProjectDashboardScreen extends StatelessWidget {
                           final List<Chat> filterChat = chats
                               .where((Chat element) =>
                                   element.title.contains(search.toLowerCase()))
-                              .toList()
                               .toList();
+                          filterChat.sort((Chat a, Chat b) => a.title
+                              .toLowerCase()
+                              .compareTo(b.title.toLowerCase()));
                           return ListView.builder(
                             primary: false,
                             shrinkWrap: true,
@@ -110,6 +113,7 @@ class ProjectDashboardScreen extends StatelessWidget {
           future: LocalProject().project(projectID),
           builder: (BuildContext context, AsyncSnapshot<Project> snapshot) {
             if (snapshot.hasData) {
+              final Project project = snapshot.data!;
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -120,15 +124,16 @@ class ProjectDashboardScreen extends StatelessWidget {
                       child: const Text('Close'),
                     ),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.add),
-                    dense: false,
-                    title: const Text('Create New Chat Section'),
-                    onTap: () => Navigator.of(context).popAndPushNamed(
-                      CreateChatScreen.routeName,
-                      arguments: projectID,
+                  if (project.createdBy == AuthMethods.uid)
+                    ListTile(
+                      leading: const Icon(Icons.add),
+                      dense: false,
+                      title: const Text('Create New Chat Section'),
+                      onTap: () => Navigator.of(context).popAndPushNamed(
+                        CreateChatScreen.routeName,
+                        arguments: projectID,
+                      ),
                     ),
-                  ),
                   ListTile(
                     leading: const Icon(Icons.group),
                     dense: false,
@@ -138,15 +143,18 @@ class ProjectDashboardScreen extends StatelessWidget {
                       arguments: projectID,
                     ),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.delete, color: Colors.red),
-                    dense: false,
-                    title: const Text(
-                      'Remove Project',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    onTap: () {},
-                  ),
+                  project.createdBy == AuthMethods.uid
+                      ? ListTile(
+                          leading: const Icon(Icons.delete, color: Colors.red),
+                          dense: false,
+                          title: const Text(
+                            'Remove Project',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          onTap: () {},
+                        )
+                      : const ShowLoading(),
+                  const SizedBox(height: 16),
                 ],
               );
             } else if (snapshot.hasError) {
