@@ -78,7 +78,7 @@ class AppUser extends HiveObject {
   @HiveField(16, defaultValue: 808080)
   final int defaultColor;
   @HiveField(17)
-  final DateTime lastUpdate;
+  DateTime lastUpdate;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -96,14 +96,21 @@ class AppUser extends HiveObject {
       'not_allowed_words': notAllowedWords,
       'default_color': defaultColor,
       'status': status,
-      'last_update': lastUpdate,
+      'last_update': lastUpdate = DateTime.now(),
     };
   }
 
   Map<String, dynamic> deviceTokenMap() {
     return <String, dynamic>{
       'devices_token': deviceToken.map((MyDeviceToken x) => x.toMap()).toList(),
-      'last_update': lastUpdate,
+      'last_update': lastUpdate = DateTime.now(),
+    };
+  }
+
+  Map<String, dynamic> updateAgencyMap() {
+    return <String, dynamic>{
+      'agency_ids': agencyIDs,
+      'last_update': lastUpdate = DateTime.now(),
     };
   }
 
@@ -138,12 +145,5 @@ class AppUser extends HiveObject {
       status: doc.data()?['status'] ?? false,
       lastUpdate: TimeFun.parseTime(doc.data()?['last_update']),
     );
-  }
-
-  Map<String, dynamic> updateAgencyMap() {
-    return <String, dynamic>{
-      'agency_ids': agencyIDs,
-      'last_update': lastUpdate,
-    };
   }
 }

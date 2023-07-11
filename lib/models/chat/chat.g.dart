@@ -29,6 +29,7 @@ class ChatAdapter extends TypeAdapter<Chat> {
       chatNotes: (fields[3] as List?)?.cast<Note>(),
       unseenMessages: (fields[6] as List?)?.cast<Message>(),
       timestamp: fields[7] as DateTime?,
+      lastUpdate: fields[13] as DateTime?,
       targetString: (fields[11] as List?)?.cast<TargetString>(),
     );
   }
@@ -36,7 +37,7 @@ class ChatAdapter extends TypeAdapter<Chat> {
   @override
   void write(BinaryWriter writer, Chat obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.chatID)
       ..writeByte(1)
@@ -62,7 +63,9 @@ class ChatAdapter extends TypeAdapter<Chat> {
       ..writeByte(11)
       ..write(obj.targetString)
       ..writeByte(12)
-      ..write(obj.defaultColor);
+      ..write(obj.defaultColor)
+      ..writeByte(13)
+      ..write(obj.lastUpdate);
   }
 
   @override

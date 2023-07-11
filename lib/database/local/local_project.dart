@@ -41,6 +41,11 @@ class LocalProject {
     await box.put(value.pid, value);
   }
 
+  Future<void> remove(Project value) async {
+    final Box<Project> box = await refresh();
+    await box.delete(value.pid);
+  }
+
   Future<void> update(Project value) async {
     final Box<Project> box = await refresh();
     await box.put(value.pid, value);

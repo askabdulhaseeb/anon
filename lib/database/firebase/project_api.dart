@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,10 +6,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import '../../enums/chat/chat_member_role.dart';
+import '../../functions/time_functions.dart';
 import '../../models/chat/chat.dart';
 import '../../models/chat/chat_group_member.dart';
 import '../../models/project/project.dart';
 import '../../models/user/app_user.dart';
+import '../local/local_data.dart';
 import '../local/local_project.dart';
 import 'auth_methods.dart';
 import 'chat_api.dart';
@@ -44,27 +47,42 @@ class ProjectAPI {
     }
   }
 
-  Future<bool> refresh(String agencyID) async {
-    final String myUID = AuthMethods.uid;
-    try {
-      final QuerySnapshot<Map<String, dynamic>> docs = await _instance
-          .collection(_collection)
-          .where('agencies', arrayContains: agencyID)
-          .get();
-      final List<Project> tempResult = <Project>[];
-      for (DocumentSnapshot<Map<String, dynamic>> element in docs.docs) {
-        final Project temp = Project.fromMap(element);
-        if (temp.members.contains(myUID)) {
-          tempResult.add(temp);
-        }
+  Stream<void> refresh(String agencyID) {
+    final DateTime fetchingTime = DateTime.now();
+    final DateTime? time = TimeFun.miliToObject(LocalData.lastProjectFetch());
+    return time == null
+        ? _instance
+            .collection(_collection)
+            .where('agencies', arrayContains: agencyID)
+            .snapshots()
+            .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
+            _changeEventToLocal(event, fetchingTime);
+          })
+        : _instance
+            .collection(_collection)
+            .where('agencies', arrayContains: agencyID)
+            .where('last_update', isGreaterThan: time)
+            .snapshots()
+            .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
+            _changeEventToLocal(event, fetchingTime);
+          });
+  }
+
+  void _changeEventToLocal(
+    QuerySnapshot<Map<String, dynamic>> event,
+    DateTime fetchingTime,
+  ) {
+    final List<DocumentChange<Map<String, dynamic>>> changes = event.docChanges;
+    if (changes.isEmpty) return;
+    log('Project API: ${changes.length} changes in Projects');
+    LocalData.setProjectFetch(fetchingTime.millisecondsSinceEpoch);
+    for (DocumentChange<Map<String, dynamic>> element in changes) {
+      final Project msg = Project.fromDoc(element.doc);
+      if (element.type == DocumentChangeType.removed) {
+        LocalProject().remove(msg);
+      } else {
+        LocalProject().add(msg);
       }
-      if (tempResult.isNotEmpty) {
-        await LocalProject().addAll(tempResult);
-      }
-      return true;
-    } catch (e) {
-      debugPrint(e.toString());
-      return false;
     }
   }
 

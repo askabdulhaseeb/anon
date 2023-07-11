@@ -65,8 +65,8 @@ class _ProjectList extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<Agency?> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               final Agency? agency = snapshot.data;
-              return FutureBuilder<bool>(
-                  future: ProjectAPI().refresh(agency?.agencyID ?? ''),
+              return StreamBuilder<void>(
+                  stream: ProjectAPI().refresh(agency?.agencyID ?? ''),
                   builder: (BuildContext context, _) {
                     return ValueListenableBuilder<Box<Project>>(
                         valueListenable: LocalProject().listenable(),

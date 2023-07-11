@@ -28,11 +28,13 @@ class Chat extends HiveObject {
     List<Note>? chatNotes,
     List<Message>? unseenMessages,
     DateTime? timestamp,
+    DateTime? lastUpdate,
     List<TargetString>? targetString,
   })  : chatID = chatID ?? UniqueIdFun.unique(),
         chatNotes = chatNotes ?? <Note>[],
         unseenMessages = unseenMessages ?? <Message>[],
         timestamp = timestamp ?? DateTime.now(),
+        lastUpdate = lastUpdate ?? DateTime.now(),
         defaultColor = defaultColor ?? HelpingFuncation().randomColor(),
         targetString = targetString ?? <TargetString>[];
 
@@ -62,6 +64,8 @@ class Chat extends HiveObject {
   final List<TargetString> targetString;
   @HiveField(12, defaultValue: 808080)
   final int defaultColor;
+  @HiveField(13)
+  DateTime lastUpdate;
 
   Map<String, dynamic> toMap() {
     final String me = AuthMethods.uid;
@@ -82,6 +86,7 @@ class Chat extends HiveObject {
       'unseen_message': unseenMessages.map((Message x) => x.toMap()).toList(),
       'default_color': defaultColor,
       'timestamp': timestamp,
+      'last_update': lastUpdate = DateTime.now(),
     };
   }
 
@@ -95,6 +100,7 @@ class Chat extends HiveObject {
       'persons': persons,
       'members': members.map((ChatMember x) => x.toMap()).toList(),
       'timestamp': DateTime.now(),
+      'last_update': lastUpdate = DateTime.now(),
     };
   }
 
@@ -123,8 +129,10 @@ class Chat extends HiveObject {
         (dynamic x) => ChatMember.fromMap(x),
       )),
       timestamp: TimeFun.parseTime(map['timestamp']),
+      lastUpdate: TimeFun.parseTime(map['last_update']),
     );
   }
+
   // ignore: sort_constructors_first
   factory Chat.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     return Chat(
@@ -150,6 +158,7 @@ class Chat extends HiveObject {
         (dynamic x) => ChatMember.fromMap(x),
       )),
       timestamp: TimeFun.parseTime(doc.data()?['timestamp']),
+      lastUpdate: TimeFun.parseTime(doc.data()?['last_update']),
     );
   }
 }

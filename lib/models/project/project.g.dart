@@ -30,13 +30,14 @@ class ProjectAdapter extends TypeAdapter<Project> {
       notes: fields[7] == null ? [] : (fields[7] as List?)?.cast<Note>(),
       createdBy: fields[9] == null ? '' : fields[9] as String?,
       defaultColor: fields[11] == null ? 808080 : fields[11] as int?,
+      lastUpdate: fields[12] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Project obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.pid)
       ..writeByte(1)
@@ -60,7 +61,9 @@ class ProjectAdapter extends TypeAdapter<Project> {
       ..writeByte(10)
       ..write(obj.milestone)
       ..writeByte(11)
-      ..write(obj.defaultColor);
+      ..write(obj.defaultColor)
+      ..writeByte(12)
+      ..write(obj.lastUpdate);
   }
 
   @override

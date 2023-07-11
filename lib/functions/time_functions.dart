@@ -12,8 +12,8 @@ class TimeFun {
             : (date as Timestamp).toDate();
   }
 
-  static DateTime miliToObject(int value) {
-    return DateTime.fromMillisecondsSinceEpoch(value);
+  static DateTime? miliToObject(int? value) {
+    return value == null ? null : DateTime.fromMillisecondsSinceEpoch(value);
   }
 
   static Duration timeDuration(DateTime value) {

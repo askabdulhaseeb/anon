@@ -25,9 +25,11 @@ class Project extends HiveObject {
     List<Note>? notes,
     String? createdBy,
     int? defaultColor,
+    DateTime? lastUpdate,
   })  : members = members ?? <String>[AuthMethods.uid],
         startingTime = startingTime ?? DateTime.now(),
         endingTime = endingTime ?? DateTime.now(),
+        lastUpdate = lastUpdate ?? DateTime.now(),
         notes = notes ?? <Note>[],
         createdBy = createdBy ?? AuthMethods.uid,
         defaultColor = defaultColor ?? HelpingFuncation().randomColor(),
@@ -58,6 +60,8 @@ class Project extends HiveObject {
   // payment, payment detail
   @HiveField(11, defaultValue: 808080)
   final int defaultColor;
+  @HiveField(12)
+  DateTime lastUpdate;
 
   Map<String, dynamic> toMap() {
     final String me = AuthMethods.uid;
@@ -70,6 +74,7 @@ class Project extends HiveObject {
       'members': members,
       'starting_time': startingTime,
       'ending_time': endingTime,
+      'last_update': lastUpdate = DateTime.now(),
       'logo': logo,
       'created_by': createdBy,
       'default_color': defaultColor,
@@ -87,6 +92,7 @@ class Project extends HiveObject {
       'members': members,
       'starting_time': startingTime,
       'ending_time': endingTime,
+      'last_update': lastUpdate = DateTime.now(),
       'logo': logo,
       'created_by': createdBy,
       'notes': notes.map((Note x) => x.toMap()).toList(),
@@ -97,11 +103,14 @@ class Project extends HiveObject {
   Map<String, dynamic> toUpdateMembers() {
     final String me = AuthMethods.uid;
     if (!members.contains(me)) members.add(me);
-    return <String, dynamic>{'members': members};
+    return <String, dynamic>{
+      'members': members,
+      'last_update': lastUpdate = DateTime.now()
+    };
   }
 
   // ignore: sort_constructors_first
-  factory Project.fromMap(DocumentSnapshot<Map<String, dynamic>> doc) {
+  factory Project.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     return Project(
       pid: doc.data()?['pid'] ?? '',
       title: doc.data()?['title'] ?? '',
@@ -110,6 +119,7 @@ class Project extends HiveObject {
       members: List<String>.from((doc.data()?['members'] ?? <String>[])),
       startingTime: TimeFun.parseTime(doc.data()?['starting_time']),
       endingTime: TimeFun.parseTime(doc.data()?['ending_time']),
+      lastUpdate: TimeFun.parseTime(doc.data()?['last_update']),
       logo: doc.data()?['logo'] ?? '',
       defaultColor: doc.data()?['default_color'] ?? Colors.grey.value,
       createdBy: doc.data()?['created_by'] ?? '',

@@ -66,10 +66,6 @@ class MessageAPI {
       debugPrint('Message API: Updating Unseen Messages not in work');
       return;
     }
-    // await _instance
-    //     .collection(_collection)
-    //     .doc(value.messageID)
-    //     .update(value.seenToMap());
   }
 
   Stream<void> refreshMessages() {
@@ -77,7 +73,9 @@ class MessageAPI {
     final int? temp = LocalData.lastMessageFetch();
     final DateTime updatedTime = temp == null
         ? DateTime.now().subtract(const Duration(days: 30))
-        : TimeFun.miliToObject(temp);
+        : TimeFun.miliToObject(temp) ??
+            DateTime.now().subtract(const Duration(days: 30));
+
     debugPrint('New Message fetching time: ${updatedTime.toString()}');
     return _instance
         .collection(_collection)

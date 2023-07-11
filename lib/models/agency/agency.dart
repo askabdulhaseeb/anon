@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 
 import '../../database/firebase/auth_methods.dart';
 import '../../enums/user/user_designation.dart';
+import '../../functions/time_functions.dart';
 import 'member_detail.dart';
 part 'agency.g.dart';
 
@@ -19,8 +20,10 @@ class Agency extends HiveObject {
     List<MemberDetail>? pendingRequest,
     List<MemberDetail>? requestHistory,
     bool? isCurrenlySelected = false,
+    DateTime? lastUpdate,
   })  : websiteURL = websiteURL ?? '',
         logoURL = logoURL ?? '',
+        lastUpdate = lastUpdate ?? DateTime.now(),
         members = members ?? <String>[AuthMethods.uid],
         activeMembers = activeMembers ??
             <MemberDetail>[
@@ -66,6 +69,8 @@ class Agency extends HiveObject {
   String logoURL;
   @HiveField(10, defaultValue: false)
   bool isCurrenlySelected;
+  @HiveField(11)
+  DateTime lastUpdate;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -81,6 +86,20 @@ class Agency extends HiveObject {
           pendingRequest.map((MemberDetail x) => x.toMap()).toList(),
       'request_history':
           requestHistory.map((MemberDetail x) => x.toMap()).toList(),
+      'last_update': lastUpdate = DateTime.now(),
+    };
+  }
+
+  Map<String, dynamic> updateRequest() {
+    return <String, dynamic>{
+      'members': members,
+      'active_members':
+          activeMembers.map((MemberDetail x) => x.toMap()).toList(),
+      'pending_request':
+          pendingRequest.map((MemberDetail x) => x.toMap()).toList(),
+      'request_history':
+          requestHistory.map((MemberDetail x) => x.toMap()).toList(),
+      'last_update': lastUpdate = DateTime.now(),
     };
   }
 
@@ -117,6 +136,7 @@ class Agency extends HiveObject {
       pendingRequest: pending,
       requestHistory: history,
       isCurrenlySelected: false,
+      lastUpdate: TimeFun.parseTime(doc.data()?['last_update']),
     );
   }
 
@@ -163,18 +183,6 @@ class Agency extends HiveObject {
     members.remove(myUID);
     pendingRequest.removeWhere((MemberDetail element) => element.uid == myUID);
     activeMembers.removeWhere((MemberDetail element) => element.uid == myUID);
-  }
-
-  Map<String, dynamic> updateRequest() {
-    return <String, dynamic>{
-      'members': members,
-      'active_members':
-          activeMembers.map((MemberDetail x) => x.toMap()).toList(),
-      'pending_request':
-          pendingRequest.map((MemberDetail x) => x.toMap()).toList(),
-      'request_history':
-          requestHistory.map((MemberDetail x) => x.toMap()).toList(),
-    };
   }
 
   bool _canleave(String myUID) {

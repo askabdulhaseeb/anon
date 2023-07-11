@@ -27,13 +27,14 @@ class AgencyAdapter extends TypeAdapter<Agency> {
       pendingRequest: (fields[7] as List?)?.cast<MemberDetail>(),
       requestHistory: (fields[8] as List?)?.cast<MemberDetail>(),
       isCurrenlySelected: fields[10] == null ? false : fields[10] as bool?,
+      lastUpdate: fields[11] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Agency obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.agencyID)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class AgencyAdapter extends TypeAdapter<Agency> {
       ..writeByte(9)
       ..write(obj.logoURL)
       ..writeByte(10)
-      ..write(obj.isCurrenlySelected);
+      ..write(obj.isCurrenlySelected)
+      ..writeByte(11)
+      ..write(obj.lastUpdate);
   }
 
   @override
