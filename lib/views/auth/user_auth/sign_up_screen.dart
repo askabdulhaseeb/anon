@@ -13,6 +13,7 @@ import '../../../widgets/auth/user_type_selection_widget.dart';
 import '../../../widgets/custom/custom_elevated_button.dart';
 import '../../../widgets/custom/custom_network_change_img_box.dart';
 import '../../../widgets/custom/custom_textformfield.dart';
+import '../../../widgets/custom/custom_toast.dart';
 import '../../../widgets/custom/password_textformfield.dart';
 import '../../../widgets/custom/phone_number_field.dart';
 import '../agency_auth/join_agency_screen.dart';
@@ -59,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   isDisable: _isLoading,
                   onTap: () async {
                     final File? temp = await PickerFunctions().image();
-                    assert(temp != null);
+                    if (temp == null) return;
                     setState(() {
                       file = temp;
                     });
@@ -69,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 CustomTextFormField(
                   controller: _name,
-                  hint: 'Your full name',
+                  hint: 'Your Full Name',
                   autoFocus: true,
                   focusNode: nameNode,
                   keyboardType: TextInputType.name,
@@ -122,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 CustomElevatedButton(
                   title: 'Register'.toUpperCase(),
                   isLoading: _isLoading,
-                  onTap: onRegister,
+                  onTap: () => onRegister(context),
                 ),
                 const SizedBox(height: 120),
               ],
@@ -133,8 +134,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Future<void> onRegister() async {
+  Future<void> onRegister(BuildContext context) async {
     if (!_key.currentState!.validate()) return;
+    if (file == null) {
+      CustomToast.errorSnackBar(context, text: 'Image is required');
+      return;
+    }
     try {
       setState(() {
         _isLoading = true;

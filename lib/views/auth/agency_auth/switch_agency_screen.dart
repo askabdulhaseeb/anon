@@ -60,10 +60,12 @@ class SwitchAgencyScreen extends StatelessWidget {
           ],
         ),
         actions: <Widget>[
-          IconButton(
-            onPressed: () => onMoreOption(context),
-            icon: Icon(Icons.adaptive.more, color: Colors.white),
-          ),
+          Builder(builder: (BuildContext context) {
+            return IconButton(
+              onPressed: () => onMoreOption(context),
+              icon: Icon(Icons.adaptive.more, color: Colors.white),
+            );
+          }),
         ],
       ),
       body: Container(
@@ -130,7 +132,8 @@ class SwitchAgencyScreen extends StatelessWidget {
             onTap: () => AuthMethods().signout(context),
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text('Sign out', style: TextStyle(color: Colors.red)),
-          )
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );

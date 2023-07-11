@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../database/firebase/agency_api.dart';
@@ -9,7 +8,6 @@ import '../../../utilities/custom_validators.dart';
 import '../../../widgets/custom/custom_elevated_button.dart';
 import '../../../widgets/custom/custom_toast.dart';
 import '../../main_screen/main_screen.dart';
-import 'start_agency_screen.dart';
 import 'switch_agency_screen.dart';
 
 class JoinAgencyScreen extends StatefulWidget {
@@ -87,25 +85,25 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
                     onTap: onJoinAgency,
                   ),
                   const SizedBox(height: 12),
-                  Center(
-                    child: RichText(
-                      text: TextSpan(
-                          style: Theme.of(context).textTheme.bodySmall,
-                          children: <TextSpan>[
-                            const TextSpan(text: '''Start your own agency? '''),
-                            TextSpan(
-                              text: 'Start Agency',
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () => Navigator.of(context)
-                                    .pushNamed(StartAgencyScreen.routeName),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                          ]),
-                    ),
-                  ),
+                  // Center(
+                  //   child: RichText(
+                  //     text: TextSpan(
+                  //         style: Theme.of(context).textTheme.bodySmall,
+                  //         children: <TextSpan>[
+                  //           const TextSpan(text: '''Start your own agency? '''),
+                  //           TextSpan(
+                  //             text: 'Start Agency',
+                  //             recognizer: TapGestureRecognizer()
+                  //               ..onTap = () => Navigator.of(context)
+                  //                   .pushNamed(StartAgencyScreen.routeName),
+                  //             style: TextStyle(
+                  //               fontWeight: FontWeight.bold,
+                  //               color: Theme.of(context).primaryColor,
+                  //             ),
+                  //           ),
+                  //         ]),
+                  //   ),
+                  // ),
                   const SizedBox(height: 20),
                 ],
               ),
@@ -133,13 +131,14 @@ class _JoinAgencyScreenState extends State<JoinAgencyScreen> {
             MainScreen.routeName, (Route<dynamic> route) => false);
       } else {
         if (!mounted) return;
-        CustomToast.errorSnackBar(context, text: 'Request Sended');
+        CustomToast.successSnackBar(context, text: 'Request Sended');
         if (!mounted) return;
         Navigator.of(context).pushNamedAndRemoveUntil(
             SwitchAgencyScreen.routeName, (Route<dynamic> route) => false);
       }
     } catch (e) {
       debugPrint(e.toString());
+      CustomToast.successSnackBar(context, text: e.toString());
     }
     setState(() {
       _isLoading = false;
