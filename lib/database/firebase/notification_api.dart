@@ -2,17 +2,18 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../../models/user/device_token.dart';
+import '../../utilities/app_key.dart';
 
 class NotificationAPI {
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   Future<String?> deviceToken() async => await _messaging.getToken();
+
   Future<bool> sendSubsceibtionNotification({
     required List<MyDeviceToken> deviceToken,
     required String messageTitle,
@@ -20,9 +21,11 @@ class NotificationAPI {
     required List<String> data,
   }) async {
     try {
-      final String? fcmToken = dotenv.env['FCM_TOKEN'];
-      if (fcmToken == null) throw ('FCM token issue');
+      if (deviceToken.isEmpty) return false;
+      const String fcmToken = AppKey.fcm;
+      log('FCM token: $fcmToken');
       for (int i = 0; i < deviceToken.length; i++) {
+        if (deviceToken[i].token.isEmpty) continue;
         log('Receiver Devive Token: ${deviceToken[i].token}');
         final Map<String, String> headers = <String, String>{
           'Content-Type': 'application/json',
@@ -36,8 +39,8 @@ class NotificationAPI {
           'to': deviceToken[i].token,
           'priority': 'high',
           'notification': <String, String>{
-            'body': messageBody,
             'title': messageTitle,
+            'body': messageBody,
           }
         });
         request.headers.addAll(headers);

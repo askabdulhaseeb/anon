@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../models/project/attachment.dart';
 import '../../../providers/chat_provider.dart';
 
 class AttachedFileWidget extends StatelessWidget {
-  const AttachedFileWidget(this.file, {super.key});
-  final File file;
+  const AttachedFileWidget(this.attachment, {super.key});
+  final Attachment attachment;
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +22,10 @@ class AttachedFileWidget extends StatelessWidget {
       child: Stack(
         alignment: Alignment.topRight,
         children: <Widget>[
-          Center(child: Image.file(file)),
+          Center(child: Image.file(File(attachment.filePath!))),
           GestureDetector(
             onTap: () => Provider.of<ChatProvider>(context, listen: false)
-                .onFileRemove(file),
+                .onFileRemove(attachment),
             child: Container(
               padding: const EdgeInsets.all(2),
               margin: const EdgeInsets.all(2),

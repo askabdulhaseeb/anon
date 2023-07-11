@@ -25,9 +25,10 @@ class Message extends HiveObject {
     DateTime? lastUpdate,
     String? sendBy,
     this.replyOf,
-    this.isLive = true,
+    this.isLive = false,
     this.isEncrypted = false,
     this.isBuged = false,
+    this.hasError = false,
   })  : messageID = messageID ?? UniqueIdFun.messageID(chatID),
         timestamp = timestamp ?? DateTime.now(),
         lastUpdate = lastUpdate ?? DateTime.now(),
@@ -66,6 +67,8 @@ class Message extends HiveObject {
   final bool isBuged;
   @HiveField(16)
   DateTime lastUpdate;
+  @HiveField(17, defaultValue: false)
+  bool hasError;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -84,6 +87,8 @@ class Message extends HiveObject {
       'reply_of': replyOf?.toMap(),
       'is_encrypted': isEncrypted = false,
       'is_buged': isBuged,
+      'is_live': true,
+      'has_error': false,
     };
   }
 
@@ -121,6 +126,7 @@ class Message extends HiveObject {
       isLive: true,
       isBuged: map['is_buged'] ?? false,
       isEncrypted: isEnc,
+      hasError: false,
     );
   }
   // ignore: sort_constructors_first
@@ -154,6 +160,7 @@ class Message extends HiveObject {
       isLive: true,
       isBuged: doc.data()?['is_buged'] ?? false,
       isEncrypted: isEnc,
+      hasError: false,
     );
   }
 

@@ -30,6 +30,7 @@ class AppUserAdapter extends TypeAdapter<AppUser> {
       imageURL: fields[10] as String?,
       deviceToken: (fields[11] as List?)?.cast<MyDeviceToken>(),
       notAllowedWords: (fields[12] as List?)?.cast<String>(),
+      lastUpdate: fields[17] as DateTime?,
       status: fields[13] as bool,
     );
   }
@@ -37,7 +38,7 @@ class AppUserAdapter extends TypeAdapter<AppUser> {
   @override
   void write(BinaryWriter writer, AppUser obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.uid)
       ..writeByte(2)
@@ -65,7 +66,9 @@ class AppUserAdapter extends TypeAdapter<AppUser> {
       ..writeByte(14)
       ..write(obj.agencyIDs)
       ..writeByte(16)
-      ..write(obj.defaultColor);
+      ..write(obj.defaultColor)
+      ..writeByte(17)
+      ..write(obj.lastUpdate);
   }
 
   @override

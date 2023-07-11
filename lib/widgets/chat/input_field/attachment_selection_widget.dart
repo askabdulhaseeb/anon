@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 
+import '../../../enums/attachment_type.dart';
 import '../../../enums/chat/chat_attachment_option.dart';
 import '../../../functions/picker_functions.dart';
 
 class AttachmentSelectionWidget extends StatelessWidget {
   const AttachmentSelectionWidget({required this.onTap, super.key});
-  final void Function(List<File> files) onTap;
+  final void Function(List<File> files, AttachmentType type) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class AttachmentSelectionWidget extends StatelessWidget {
                   if (results == null) return;
                   // ignore: use_build_context_synchronously
                   Navigator.of(context).pop(results);
-                  onTap(<File>[results]);
+                  onTap(<File>[results], AttachmentType.photo);
                 },
               ),
               _AttachmentWidget(
@@ -41,12 +42,17 @@ class AttachmentSelectionWidget extends StatelessWidget {
                   final List<File> results = await PickerFunctions().images();
                   // ignore: use_build_context_synchronously
                   Navigator.of(context).pop(results);
-                  onTap(results);
+                  onTap(results, AttachmentType.photo);
                 },
               ),
               _AttachmentWidget(
                 ChatAttachmentOption.document,
-                onTap: () async {},
+                onTap: () async {
+                  final List<File> results = await PickerFunctions().videos();
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop(results);
+                  onTap(results, AttachmentType.video);
+                },
               ),
             ],
           ),

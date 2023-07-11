@@ -28,6 +28,7 @@ class LocalMessage {
   Future<void> addMessage(Message value) async {
     try {
       final Box<Message> box = await refresh();
+      
       box.put(value.messageID, value);
       if (!value.isSeenedMessage) {
         await LocalUnseenMessage().add(value);

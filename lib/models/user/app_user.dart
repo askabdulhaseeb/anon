@@ -5,6 +5,7 @@ import '../../database/firebase/auth_methods.dart';
 import '../../enums/user/auth_type.dart';
 import '../../enums/user/user_type.dart';
 import '../../functions/helping_funcation.dart';
+import '../../functions/time_functions.dart';
 import 'device_token.dart';
 import 'number_detail.dart';
 part 'app_user.g.dart';
@@ -135,7 +136,7 @@ class AppUser extends HiveObject {
       notAllowedWords:
           List<String>.from((doc.data()?['not_allowed_words'] ?? <String>[])),
       status: doc.data()?['status'] ?? false,
-      lastUpdate: doc.data()?['last_update'] ?? DateTime.now(),
+      lastUpdate: TimeFun.parseTime(doc.data()?['last_update']),
     );
   }
 

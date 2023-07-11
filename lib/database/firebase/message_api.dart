@@ -6,11 +6,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../functions/time_functions.dart';
+import '../../functions/unique_id_fun.dart';
 import '../../models/chat/message.dart';
+import '../../models/project/attachment.dart';
 import '../../models/user/app_user.dart';
 import '../local/local_data.dart';
 import '../local/local_message.dart';
 import 'auth_methods.dart';
+import 'notification_api.dart';
 
 class MessageAPI {
   static final FirebaseFirestore _instance = FirebaseFirestore.instance;
@@ -115,16 +118,53 @@ class MessageAPI {
         .doc(newMessage.messageID)
         .set(newMessage.toMap());
     await LocalMessage().addMessage(newMessage);
-    // if (receiver.deviceToken.isNotEmpty) {
-    //     await NotificationsServices().sendSubsceibtionNotification(
-    //       deviceToken: receiver.deviceToken,
-    //       messageTitle: sender.displayName ?? 'App User',
-    //       messageBody: newMessage!.text ?? 'Send you a message',
-    //       data: <String>['chat', 'message', 'personal'],
-    //     );
+    for (AppUser userElemen in receiver) {
+      await NotificationAPI().sendSubsceibtionNotification(
+        deviceToken: userElemen.deviceToken,
+        messageTitle: sender.name,
+        messageBody: newMessage.text,
+        data: <String>['chat', 'message', 'personal'],
+      );
+    }
   }
 
-  Future<(String path, String? url)> uploadAttachment({
+  Future<List<Attachment>> uploadAttachments({
+    required List<Attachment> attachments,
+    required String chatID,
+  }) async {
+    try {
+      final List<Attachment> cloudAttachments = <Attachment>[];
+      if (attachments.isNotEmpty) {
+        for (int i = 0; i < attachments.length; i++) {
+          final String id = UniqueIdFun.unique();
+          final Attachment attach = attachments[i];
+          if (attach.filePath == null) continue;
+          final (String path, String? url) = await MessageAPI()
+              ._uploadAttachment(
+                  file: File(attach.filePath!),
+                  chatID: chatID,
+                  attachmentID: id);
+          cloudAttachments.add(
+            Attachment(
+              url: url ?? '',
+              type: attach.type,
+              attachmentID: id,
+              storagePath: path,
+              localStoragePath: attach.localStoragePath,
+              filePath: attach.filePath,
+              isLive: url == null ? false : true,
+              hasError: url == null ? true : false,
+            ),
+          );
+        }
+      }
+      return cloudAttachments;
+    } catch (e) {
+      return (<Attachment>[]);
+    }
+  }
+
+  Future<(String path, String? url)> _uploadAttachment({
     required File file,
     required String chatID,
     required String attachmentID,

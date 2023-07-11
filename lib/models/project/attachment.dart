@@ -12,10 +12,19 @@ class Attachment {
     required this.type,
     required this.attachmentID,
     required this.storagePath,
-    this.canDeleteOn,
+    String? localStoragePath,
+    this.filePath,
+    DateTime? canDeleteOn,
     String? postedBy,
     DateTime? timestamp,
+    this.isLive = false,
+    this.hasError = false,
+    bool? isDownloaded,
   })  : postedBy = postedBy ?? AuthMethods.uid,
+        localStoragePath = localStoragePath ?? '',
+        isDownloaded = isDownloaded ?? postedBy == AuthMethods.uid,
+        canDeleteOn =
+            canDeleteOn ?? DateTime.now().add(const Duration(days: 30)),
         timestamp = timestamp ?? DateTime.now();
 
   @HiveField(0)
@@ -32,6 +41,16 @@ class Attachment {
   final String storagePath;
   @HiveField(6, defaultValue: null)
   final DateTime? canDeleteOn;
+  @HiveField(7, defaultValue: '')
+  String localStoragePath;
+  @HiveField(8, defaultValue: false)
+  bool isLive;
+  @HiveField(9, defaultValue: false)
+  bool hasError;
+  @HiveField(10, defaultValue: '')
+  String? filePath;
+  @HiveField(11, defaultValue: false)
+  bool isDownloaded;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -42,6 +61,8 @@ class Attachment {
       'attachment_id': attachmentID,
       'storage_path': storagePath,
       'can_delete_on': canDeleteOn,
+      'is_live': true,
+      'has_error': false,
     };
   }
 
@@ -56,6 +77,8 @@ class Attachment {
       postedBy: map['posted_by'] ?? '',
       timestamp: TimeFun.parseTime(map['timestamp']),
       canDeleteOn: TimeFun.parseTime(map['can_delete_on']),
+      isLive: map['is_live'] ?? true,
+      hasError: map['has_error'] ?? false,
     );
   }
 }

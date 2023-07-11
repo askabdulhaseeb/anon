@@ -8,7 +8,6 @@ import '../database/local/local_message.dart';
 import '../database/local/local_user.dart';
 import '../enums/attachment_type.dart';
 import '../enums/chat/message_type.dart';
-import '../functions/unique_id_fun.dart';
 import '../models/chat/chat.dart';
 import '../models/chat/message.dart';
 import '../models/chat/message_read_info.dart';
@@ -17,43 +16,25 @@ import '../models/user/app_user.dart';
 
 class ChatProvider extends ChangeNotifier {
   onSendMessage({required Chat chat}) async {
-    if (_text.text.trim().isEmpty && files.isEmpty) return;
+    if (_text.text.trim().isEmpty && _attachments.isEmpty) return;
     _onLoading(true);
     final String me = AuthMethods.uid;
-    final List<Attachment> urls = <Attachment>[];
-    if (files.isNotEmpty) {
-      for (File file in files) {
-        final String id = UniqueIdFun.unique();
-        final (String path, String? url) = await MessageAPI().uploadAttachment(
-            file: file, chatID: chat.chatID, attachmentID: id);
-        if (url != null) {
-          urls.add(
-            Attachment(
-              url: url,
-              type: AttachmentType.photo,
-              attachmentID: id,
-              storagePath: path,
-            ),
-          );
-        }
-      }
-    }
     final String displayMsg = _text.text.trim().isNotEmpty
         ? _text.text.trim()
-        : urls[0].type == AttachmentType.photo
+        : _attachments[0].type == AttachmentType.photo
             ? '📸 Photo'
-            : urls[0].type == AttachmentType.video
+            : _attachments[0].type == AttachmentType.video
                 ? '📹 Video'
-                : urls[0].type == AttachmentType.audio
+                : _attachments[0].type == AttachmentType.audio
                     ? '🎤 Audio'
-                    : urls[0].type == AttachmentType.document
+                    : _attachments[0].type == AttachmentType.document
                         ? '📄 Document'
                         : 'Send an Attachment 📌';
     final Message msg = Message(
       chatID: chat.chatID,
       projectID: chat.projectID,
       type: MessageType.text,
-      attachment: urls,
+      attachment: _attachments.toList(),
       sendTo: chat.persons
           .map((String e) => MessageReadInfo(uid: e, seen: e == me))
           .toList(),
@@ -62,21 +43,29 @@ class ChatProvider extends ChangeNotifier {
       displayString: displayMsg,
       replyOf: _attachedMessage,
     );
+    await LocalMessage().addMessage(msg);
+    reset();
+    //
+    // Uploading on firebase
+    if (msg.attachment.isNotEmpty) {
+      final List<Attachment> cloudAttachments = await MessageAPI()
+          .uploadAttachments(attachments: msg.attachment, chatID: chat.chatID);
+      msg.attachment.clear();
+      msg.attachment.addAll(cloudAttachments);
+    }
     chat.lastMessage = msg;
     await LocalMessage().addMessage(msg);
     await LocalChat().addChat(chat);
-    _text.clear();
     final AppUser sender = await LocalUser().user(me);
     final List<String> stringUID =
         chat.persons.where((String element) => element != me).toList();
     final List<AppUser> receiver =
         await LocalUser().stringListToObjectList(stringUID);
-    MessageAPI().sendMessage(
+    await MessageAPI().sendMessage(
       newMessage: msg,
       receiver: receiver,
       sender: sender,
     );
-    reset();
   }
 
   Future<void> updateUnseendMessages(String chatID) async {
@@ -85,8 +74,8 @@ class ChatProvider extends ChangeNotifier {
 
   void reset() {
     _attachedMessage = null;
+    _attachments.clear();
     _text.clear();
-    _files.clear();
     _onLoading(false);
   }
 
@@ -95,16 +84,27 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onFileUpdate(List<File> value) {
-    if (value.isEmpty) return;
-    for (int i = _files.length, j = 0; i < 10 && j < value.length; i++, j++) {
-      _files.add(value[j]);
+  void onFileUpdate(List<File> values, {required AttachmentType type}) {
+    if (values.isEmpty) return;
+    for (int i = _attachments.length, j = 0;
+        i < 10 && j < values.length;
+        i++, j++) {
+      _attachments.add(
+        Attachment(
+          url: '',
+          type: type,
+          attachmentID: '$i',
+          storagePath: values[i].path,
+          localStoragePath: values[0].path,
+          filePath: values[i].path,
+        ),
+      );
       notifyListeners();
     }
   }
 
-  void onFileRemove(File value) {
-    _files.remove(value);
+  void onFileRemove(Attachment value) {
+    _attachments.remove(value);
     notifyListeners();
   }
 
@@ -115,11 +115,11 @@ class ChatProvider extends ChangeNotifier {
 
   bool get isSendingMessage => _isSendingMessage;
   Message? get attachedMessage => _attachedMessage;
-  List<File> get files => _files;
+  List<Attachment> get attachments => _attachments;
   TextEditingController get text => _text;
 
   bool _isSendingMessage = false;
   Message? _attachedMessage;
-  final List<File> _files = <File>[];
+  final List<Attachment> _attachments = <Attachment>[];
   final TextEditingController _text = TextEditingController();
 }

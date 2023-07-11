@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../../../enums/attachment_type.dart';
@@ -5,6 +7,7 @@ import '../../../models/chat/message.dart';
 import '../../../views/chat_screens/message_media__full_screen.dart';
 import '../../custom/custom_network_image.dart';
 import '../../custom/custom_video_player.dart';
+import '../../custom/show_loading.dart';
 
 class MessageMediaAttachmentWidget extends StatelessWidget {
   const MessageMediaAttachmentWidget({required this.message, super.key});
@@ -26,9 +29,19 @@ class MessageMediaAttachmentWidget extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: <Widget>[
-              message.attachment[0].type == AttachmentType.video
-                  ? CustomVideoPlayer(path: message.attachment[0].url)
-                  : CustomNetworkImage(imageURL: message.attachment[0].url),
+              message.attachment[0].isLive
+                  ? message.attachment[0].type == AttachmentType.video
+                      ? CustomVideoPlayer(path: message.attachment[0].url)
+                      : CustomNetworkImage(imageURL: message.attachment[0].url)
+                  : message.attachment[0].type == AttachmentType.video
+                      ? CustomVideoPlayer(
+                          path: message.attachment[0].localStoragePath,
+                          isFileVideo: true)
+                      : Image.file(
+                          File(message.attachment[0].localStoragePath),
+                        ),
+              if (!message.attachment[0].isLive)
+                const Center(child: ShowLoading()),
               if (message.attachment.length > 1)
                 Container(
                   color: Colors.black45,

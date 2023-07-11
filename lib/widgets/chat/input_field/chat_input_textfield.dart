@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../enums/attachment_type.dart';
 import '../../../models/chat/chat.dart';
 import '../../../models/chat/message.dart';
+import '../../../models/project/attachment.dart';
 import '../../../providers/chat_provider.dart';
 
 import '../../custom/show_loading.dart';
@@ -24,14 +26,14 @@ class ChatInputTextField extends StatelessWidget {
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Consumer<ChatProvider>(
           builder: (BuildContext context, ChatProvider chatPro, _) {
-        final List<File> files = chatPro.files;
+        final List<Attachment> attachments = chatPro.attachments;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             if (chatPro.attachedMessage != null)
               AttachedMessage(chatPro.attachedMessage!),
-            if (files.isNotEmpty)
+            if (attachments.isNotEmpty)
               SizedBox(
                 child: SizedBox(
                   height: 60,
@@ -39,9 +41,9 @@ class ChatInputTextField extends StatelessWidget {
                     primary: false,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: files.length,
+                    itemCount: attachments.length,
                     itemBuilder: (BuildContext context, int index) =>
-                        AttachedFileWidget(files[index]),
+                        AttachedFileWidget(attachments[index]),
                   ),
                 ),
               ),
@@ -54,8 +56,8 @@ class ChatInputTextField extends StatelessWidget {
                       elevation: 10,
                       builder: (BuildContext context) =>
                           AttachmentSelectionWidget(
-                        onTap: (List<File> value) =>
-                            chatPro.onFileUpdate(value),
+                        onTap: (List<File> value, AttachmentType type) =>
+                            chatPro.onFileUpdate(value, type: type),
                       ),
                     );
                   },
