@@ -9,6 +9,7 @@ import '../../../models/user/app_user.dart';
 import '../../../providers/chat_provider.dart';
 import 'announcement_message_widget.dart';
 import 'message_media_attachment_widget.dart';
+import '../../custom/parsed_text_widget.dart';
 import 'reference_message_widget.dart';
 
 class MessageTile extends StatelessWidget {
@@ -61,7 +62,7 @@ class MessageTile extends StatelessWidget {
                         ),
                       ],
                       color: isMe
-                          ? Theme.of(context).primaryColor.withOpacity(0.4)
+                          ? Theme.of(context).primaryColor
                           : Theme.of(context).scaffoldBackgroundColor,
                     ),
                     child: Column(
@@ -96,7 +97,7 @@ class MessageTile extends StatelessWidget {
                         if (message.attachment.isNotEmpty)
                           MessageMediaAttachmentWidget(message: message),
                         if (message.text.isNotEmpty)
-                          SelectableText(message.text),
+                          ParsedTextWidget(message.text),
                       ],
                     ),
                   ),

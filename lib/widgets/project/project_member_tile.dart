@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../database/firebase/auth_methods.dart';
+import '../../database/local/local_agency.dart';
 import '../../database/local/local_user.dart';
+import '../../models/agency/member_detail.dart';
 import '../../models/user/app_user.dart';
 import '../custom/custom_profile_photo.dart';
 import '../custom/show_loading.dart';
@@ -30,6 +32,14 @@ class ProjectMemberTile extends StatelessWidget {
                     icon: Icon(Icons.adaptive.more),
                   )
                 : null,
+            subtitle: FutureBuilder<MemberDetail>(
+              future: LocalAgency().memberDesignation(uid),
+              builder: (BuildContext context,
+                      AsyncSnapshot<MemberDetail> snapshot) =>
+                  snapshot.hasData
+                      ? Text(snapshot.data!.designation.title)
+                      : const ShowLoading(),
+            ),
           );
         } else {
           return const ShowLoading();

@@ -22,18 +22,26 @@ class CustomSquarePhoto extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(6),
-      child: url == null || (url?.isEmpty ?? true)
-          ? _placeholder()
-          : CachedNetworkImage(
-              height: size,
-              width: size,
-              imageUrl: url!,
-              fit: fit,
-              placeholder: (BuildContext context, String url) =>
-                  const ShowLoading(),
-              errorWidget: (BuildContext context, String url, _) =>
-                  _placeholder(),
-            ),
+      child: Container(
+        height: size + 2,
+        width: size + 2,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          color: Color(defaultColor),
+        ),
+        child: url == null || (url?.isEmpty ?? true)
+            ? _placeholder()
+            : CachedNetworkImage(
+                height: size,
+                width: size,
+                imageUrl: url!,
+                fit: fit,
+                placeholder: (BuildContext context, String url) =>
+                    const ShowLoading(),
+                errorWidget: (BuildContext context, String url, _) =>
+                    _placeholder(),
+              ),
+      ),
     );
   }
 

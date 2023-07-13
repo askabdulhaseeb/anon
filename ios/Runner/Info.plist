@@ -30,6 +30,11 @@
 		<array>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		</array>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>sms</string>
+			<string>tel</string>
+		</array>
 		<key>NSAppleMusicUsageDescription</key>
 		<string>We need your meida to fetch and upload it.</string>
 		<key>NSCameraUsageDescription</key>

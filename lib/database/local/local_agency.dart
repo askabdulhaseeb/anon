@@ -4,7 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../enums/my_hive_type.dart';
+import '../../enums/user/user_designation.dart';
 import '../../models/agency/agency.dart';
+import '../../models/agency/member_detail.dart';
 import '../firebase/auth_methods.dart';
 import 'local_data.dart';
 
@@ -63,6 +65,18 @@ class LocalAgency {
   Future<void> leaveAgency(String value) async {
     final Box<Agency> box = await refresh();
     await box.delete(value);
+  }
+
+  Future<MemberDetail> memberDesignation(String value) async {
+    final Box<Agency> box = await refresh();
+    final Agency? result = box.get(LocalData.currentlySelectedAgency());
+    if (result == null) {
+      return MemberDetail(uid: value, designation: UserDesignation.employee);
+    }
+    return result.activeMembers.firstWhere(
+        (MemberDetail element) => element.uid == value,
+        orElse: () =>
+            MemberDetail(uid: value, designation: UserDesignation.employee));
   }
 
   Future<bool> displayMainScreen() async {

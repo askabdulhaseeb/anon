@@ -12,14 +12,6 @@ class UserAPI {
   static const String _collection = 'users';
   static final FirebaseFirestore _instance = FirebaseFirestore.instance;
 
-  Future<void> refresh() async {
-    try {
-      await _instance.collection(_collection).where('uid', whereIn: []).get();
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
   Future<void> register(AppUser value) async {
     try {
       await _instance.collection(_collection).doc(value.uid).set(value.toMap());

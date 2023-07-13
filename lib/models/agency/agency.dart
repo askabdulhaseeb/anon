@@ -157,12 +157,14 @@ class Agency extends HiveObject {
     activeMembers.add(temp);
     pendingRequest
         .removeWhere((MemberDetail element) => element.uid == temp.uid);
+    lastUpdate = DateTime.now();
   }
 
   void onRejectRequest({required String value}) {
     if (!_canleave(value)) return;
     members.remove(value);
     pendingRequest.removeWhere((MemberDetail element) => element.uid == value);
+    lastUpdate = DateTime.now();
   }
 
   void onJoinRequest({
@@ -176,6 +178,7 @@ class Agency extends HiveObject {
     members.add(myUID);
     pendingRequest.add(requestValue);
     requestHistory.add(requestValue);
+    lastUpdate = DateTime.now();
   }
 
   void onLeaveAgency({required String myUID}) {
@@ -183,6 +186,7 @@ class Agency extends HiveObject {
     members.remove(myUID);
     pendingRequest.removeWhere((MemberDetail element) => element.uid == myUID);
     activeMembers.removeWhere((MemberDetail element) => element.uid == myUID);
+    lastUpdate = DateTime.now();
   }
 
   bool _canleave(String myUID) {
