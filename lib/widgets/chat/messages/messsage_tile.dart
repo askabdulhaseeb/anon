@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../database/firebase/auth_methods.dart';
 import '../../../database/local/local_user.dart';
 import '../../../enums/chat/message_type.dart';
+import '../../../functions/time_functions.dart';
 import '../../../models/chat/message.dart';
 import '../../../models/user/app_user.dart';
 import '../../../providers/chat_provider.dart';
@@ -98,6 +99,17 @@ class MessageTile extends StatelessWidget {
                           MessageMediaAttachmentWidget(message: message),
                         if (message.text.isNotEmpty)
                           ParsedTextWidget(message.text, isMe: isMe),
+                        const SizedBox(height: 4),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            TimeFun.timeInDigits(message.timestamp),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
