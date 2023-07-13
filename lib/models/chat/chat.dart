@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:devmarkaz/models/chat/target_string.dart';
+import 'target_string.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -67,6 +67,24 @@ class Chat extends HiveObject {
   @HiveField(13)
   DateTime lastUpdate;
 
+  void removeMember(String value) {
+    persons.remove(value);
+    members.removeWhere((ChatMember element) => element.uid == value);
+    lastUpdate = DateTime.now();
+  }
+
+  void makeAdmin(String value) {
+    members.firstWhere((ChatMember element) => element.uid == value).role =
+        ChatMemberRole.admin;
+    lastUpdate = DateTime.now();
+  }
+
+  void makeMember(String value) {
+    members.firstWhere((ChatMember element) => element.uid == value).role =
+        ChatMemberRole.member;
+    lastUpdate = DateTime.now();
+  }
+
   Map<String, dynamic> toMap() {
     final String me = AuthMethods.uid;
     if (!persons.contains(me)) persons.add(me);
@@ -90,12 +108,33 @@ class Chat extends HiveObject {
     };
   }
 
-  Map<String, dynamic> toAddMember() {
+  Map<String, dynamic> toAddMemberMap() {
     final String me = AuthMethods.uid;
     if (!persons.contains(me)) persons.add(me);
     if (!members.any((ChatMember element) => element.uid == me)) {
       members.add(ChatMember(uid: me, role: ChatMemberRole.admin));
     }
+    members.sort(
+        (ChatMember a, ChatMember b) => a.role.title.compareTo(b.role.title));
+    return <String, dynamic>{
+      'persons': persons,
+      'members': members.map((ChatMember x) => x.toMap()).toList(),
+      'timestamp': DateTime.now(),
+      'last_update': lastUpdate = DateTime.now(),
+    };
+  }
+
+  Map<String, dynamic> updateMemberMap() {
+    final String me = AuthMethods.uid;
+    if (!members
+        .any((ChatMember element) => element.role == ChatMemberRole.admin)) {
+      if (!persons.contains(me)) persons.toSet().add(me);
+      if (!members.any((ChatMember element) => element.uid == me)) {
+        members.toSet().add(ChatMember(uid: me, role: ChatMemberRole.admin));
+      }
+    }
+    members.sort(
+        (ChatMember a, ChatMember b) => a.role.title.compareTo(b.role.title));
     return <String, dynamic>{
       'persons': persons,
       'members': members.map((ChatMember x) => x.toMap()).toList(),

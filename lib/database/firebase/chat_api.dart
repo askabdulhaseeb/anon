@@ -112,18 +112,23 @@ class ChatAPI {
     }
   }
 
+  Future<void> toAddMember(Chat value) async {
+    try {
+      await _instance
+          .collection(_collection)
+          .doc(value.chatID)
+          .update(value.toAddMemberMap());
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> updateMembers(Chat value) async {
     try {
       await _instance
           .collection(_collection)
           .doc(value.chatID)
-          .update(value.toAddMember());
-      // await _instance
-      //     .collection(_collection)
-      //     .doc(chat.chatID)
-      //     .collection(_messageCollection)
-      //     .doc(newMessage.messageID)
-      //     .set(newMessage.toMap());
+          .update(value.updateMemberMap());
     } catch (e) {
       rethrow;
     }

@@ -45,6 +45,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             members.addAll(chat.members
                 .map((ChatMember e) => LocalUser().userWithoutFuture(e.uid))
                 .toList());
+            chat.members.sort((ChatMember a, ChatMember b) =>
+                a.role.title.compareTo(b.role.title));
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
@@ -87,6 +89,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       return ChatMemberTile(
                         chat.members[index],
                         canEdit: canEdit,
+                        chat: canEdit ? chat : null,
                       );
                     },
                   ),
@@ -129,7 +132,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         chat.members.toSet().add(ChatMember(uid: element.uid));
       }
     }
-    await LocalChat().updateMembers(chat);
+    await LocalChat().updateMember(chat);
     setState(() {});
   }
 }

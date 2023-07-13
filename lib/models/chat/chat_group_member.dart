@@ -21,11 +21,11 @@ class ChatMember {
   @HiveField(0)
   final String uid;
   @HiveField(1) // Class Code: 43
-  final ChatMemberRole role;
+  ChatMemberRole role;
   @HiveField(2)
   final String addedBy;
   @HiveField(3)
-  final bool invitationAccepted;
+  bool invitationAccepted;
   @HiveField(4)
   final DateTime memberSince;
 

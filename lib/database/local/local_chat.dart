@@ -77,7 +77,13 @@ class LocalChat {
         .toList();
   }
 
-  Future<void> updateMembers(Chat value) async {
+  Future<void> addMember(Chat value) async {
+    final Box<Chat> box = await refresh();
+    await box.put(value.chatID, value);
+    await ChatAPI().toAddMember(value);
+  }
+
+  Future<void> updateMember(Chat value) async {
     final Box<Chat> box = await refresh();
     await box.put(value.chatID, value);
     await ChatAPI().updateMembers(value);
