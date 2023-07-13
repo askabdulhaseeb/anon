@@ -8,6 +8,7 @@ import '../../enums/user/user_designation.dart';
 import '../../models/agency/agency.dart';
 import '../../models/agency/member_detail.dart';
 import '../../models/user/app_user.dart';
+import '../../widgets/custom/custom_display_number_widget.dart';
 import '../../widgets/custom/custom_list_tile_widget.dart';
 import '../../widgets/custom/custom_profile_photo.dart';
 import '../../widgets/custom/show_loading.dart';
@@ -108,7 +109,14 @@ class SettingsPage extends StatelessWidget {
                 const SizedBox(height: 16),
                 ListTile(
                   leading: const Icon(CupertinoIcons.person_3),
-                  title: const Text('Members'),
+                  title: Row(
+                    children: <Widget>[
+                      const Text('Members'),
+                      CustomNumberDisplayWidget(
+                        number: agency.activeMembers.length,
+                      ),
+                    ],
+                  ),
                   trailing: forwardIcon,
                   onTap: () => Navigator.of(context).pushNamed(
                     AgencyMembersScreen.routeName,
@@ -118,7 +126,14 @@ class SettingsPage extends StatelessWidget {
                 if (canEdit)
                   ListTile(
                     leading: const Icon(CupertinoIcons.person_add),
-                    title: const Text('Pending Requests'),
+                    title: Row(
+                      children: <Widget>[
+                        const Text('Pending Requests'),
+                        CustomNumberDisplayWidget(
+                          number: agency.pendingRequest.length,
+                        ),
+                      ],
+                    ),
                     trailing: forwardIcon,
                     onTap: () => Navigator.of(context)
                         .pushNamed(AgencyPendingRequestScreen.routeName),

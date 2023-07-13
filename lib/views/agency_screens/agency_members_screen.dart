@@ -10,6 +10,7 @@ import '../../models/user/app_user.dart';
 import '../../widgets/custom/custom_profile_photo.dart';
 import '../../widgets/custom/custom_square_photo.dart';
 import '../../widgets/custom/show_loading.dart';
+import '../chat_screens/chat_dashboard_screen.dart';
 
 class AgencyMembersScreen extends StatelessWidget {
   const AgencyMembersScreen({Key? key}) : super(key: key);
@@ -41,7 +42,7 @@ class AgencyMembersScreen extends StatelessWidget {
                           crossAxisCount: 2,
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
-                          childAspectRatio: 4 / 4,
+                          childAspectRatio: 4 / 5,
                         ),
                         itemCount: members.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -108,6 +109,15 @@ class _MemberTile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
+                  Text(
+                    member.designation.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w300,
+                      fontSize: 11,
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
@@ -134,11 +144,18 @@ class _MemberTile extends StatelessWidget {
                                       const SizedBox(width: 8),
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return CustomSquarePhoto(
-                                      projects[index].logo,
-                                      name: projects[index].title,
-                                      defaultColor:
-                                          projects[index].defaultColor,
+                                    return GestureDetector(
+                                      onTap: () =>
+                                          Navigator.of(context).pushNamed(
+                                        ProjectDashboardScreen.routeName,
+                                        arguments: projects[index].pid,
+                                      ),
+                                      child: CustomSquarePhoto(
+                                        projects[index].logo,
+                                        name: projects[index].title,
+                                        defaultColor:
+                                            projects[index].defaultColor,
+                                      ),
                                     );
                                   },
                                 ),
