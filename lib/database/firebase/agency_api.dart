@@ -147,6 +147,18 @@ class AgencyAPI {
       throw 'e.code';
     }
   }
+  Future<void> updateProfileInfo(Agency value) async {
+    try {
+      await _instance
+          .collection(_collection)
+          .doc(value.agencyID)
+          .update(value.updateProfileMap());
+      await LocalAgency().add(value);
+    } on FirebaseException catch (e) {
+      debugPrint("Failed with error '${e.code}': ${e.message}");
+      throw 'e.code';
+    }
+  }
 
   Future<void> leaveAgency({
     required Agency value,

@@ -51,12 +51,12 @@ class Agency extends HiveObject {
   @HiveField(0)
   final String agencyID;
   @HiveField(1)
-  final String name;
+  String name;
   // field 2 not available
   @HiveField(3)
-  final String agencyCode;
+  String agencyCode;
   @HiveField(4)
-  final String websiteURL;
+  String websiteURL;
   @HiveField(5)
   final List<String> members;
   @HiveField(6) // Class Code: 20
@@ -86,6 +86,16 @@ class Agency extends HiveObject {
           pendingRequest.map((MemberDetail x) => x.toMap()).toList(),
       'request_history':
           requestHistory.map((MemberDetail x) => x.toMap()).toList(),
+      'last_update': lastUpdate = DateTime.now(),
+    };
+  }
+
+  Map<String, dynamic> updateProfileMap() {
+    return <String, dynamic>{
+      'name': name,
+      'logo_url': logoURL,
+      'agency_code': agencyCode,
+      'website_url': websiteURL,
       'last_update': lastUpdate = DateTime.now(),
     };
   }

@@ -23,13 +23,11 @@ class HelpingFuncation {
       Colors.green,
       Colors.grey,
       Colors.indigo,
-      Colors.lime,
       Colors.orange,
       Colors.pink,
       Colors.red,
       Colors.purple,
       Colors.teal,
-      Colors.yellow,
     ];
     final int indexRandom = Random.secure().nextInt(colors.length);
     return colors[indexRandom].value;
