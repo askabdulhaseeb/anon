@@ -83,7 +83,7 @@ class Message extends HiveObject {
       'send_to': sendTo.map((MessageReadInfo x) => x.toMap()).toList(),
       'send_to_uids': sendToUIDs,
       'timestamp': timestamp,
-      'last_update': lastUpdate,
+      'last_update': DateTime.now(),
       'reply_of': replyOf?.toMap(),
       'is_encrypted': isEncrypted = false,
       'is_buged': isBuged,

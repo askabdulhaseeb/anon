@@ -37,6 +37,8 @@ class ChatDashboardTile extends StatelessWidget {
             final Message? msg = snapshot.data;
             return Text(
               '${msg?.sendBy == AuthMethods.uid ? 'You:' : 'Someone:'} ${msg?.displayString ?? 'Message issue'}',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(color: Colors.grey),
             );
           } else {
@@ -58,7 +60,8 @@ class ChatDashboardTile extends StatelessWidget {
                   valueListenable: LocalUnseenMessage().listenable(),
                   builder: (BuildContext context, Box<UnseenMessage> box, _) {
                     return MultiUserDisplayWidget(
-                      LocalUnseenMessage().boxToChatUnseenMessages(box: box, chatID: chat.chatID),
+                      LocalUnseenMessage().boxToChatUnseenMessages(
+                          box: box, chatID: chat.chatID),
                       maxWidth: 80.0,
                     );
                   },

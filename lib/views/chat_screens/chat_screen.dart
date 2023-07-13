@@ -20,22 +20,22 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String chatID = ModalRoute.of(context)!.settings.arguments as String;
-    return WillPopScope(
-      onWillPop: () async {
-        Provider.of<ChatProvider>(context, listen: false).reset();
-        Provider.of<ChatProvider>(context, listen: false)
-            .updateUnseendMessages(chatID);
-        return true;
-      },
-      child: Scaffold(
-          appBar: AppBar(title: _AppBar(chatID: chatID)),
-          body: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AppImages.chatBGimage),
-                fit: BoxFit.cover,
-              ),
+    return Scaffold(
+        appBar: AppBar(title: _AppBar(chatID: chatID)),
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppImages.chatBGimage),
+              fit: BoxFit.cover,
             ),
+          ),
+          child: WillPopScope(
+            onWillPop: () async {
+              Provider.of<ChatProvider>(context, listen: false).reset();
+              Provider.of<ChatProvider>(context, listen: false)
+                  .updateUnseendMessages(chatID);
+              return true;
+            },
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -85,8 +85,8 @@ class ChatScreen extends StatelessWidget {
                 ),
               ],
             ),
-          )),
-    );
+          ),
+        ));
   }
 }
 
@@ -112,24 +112,26 @@ class _AppBar extends StatelessWidget {
                   defaultColor: chat.defaultColor,
                 ),
                 const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      chat.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const Text(
-                      'Tap here to check details',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 11,
-                        fontWeight: FontWeight.normal,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        chat.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    ),
-                  ],
+                      const Text(
+                        'Tap here to check details',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 11,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

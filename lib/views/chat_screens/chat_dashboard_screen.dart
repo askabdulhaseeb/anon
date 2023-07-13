@@ -26,10 +26,16 @@ class ProjectDashboardScreen extends StatelessWidget {
             future: LocalProject().project(projectID),
             builder: (BuildContext context, AsyncSnapshot<Project> snapshot) {
               if (snapshot.hasData) {
-                return Text(
-                  snapshot.data?.title ?? 'Null',
-                  style: TextStyle(
-                      color: Theme.of(context).textTheme.bodySmall!.color),
+                return GestureDetector(
+                  onTap: () => Navigator.of(context).pushNamed(
+                    ProjectDetailScreen.routeName,
+                    arguments: projectID,
+                  ),
+                  child: Text(
+                    snapshot.data?.title ?? 'Null',
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.bodySmall!.color),
+                  ),
                 );
               } else if (snapshot.hasError) {
                 return const Text('–ERROR-');
@@ -45,7 +51,7 @@ class ProjectDashboardScreen extends StatelessWidget {
               },
               icon: Icon(Icons.adaptive.more),
             );
-          }),
+          })
         ],
       ),
       body: Padding(

@@ -92,7 +92,9 @@ class MessageAPI {
     final List<DocumentChange<Map<String, dynamic>>> changes = event.docChanges;
     if (changes.isEmpty) return;
     log('Message API: Add ${changes.length} new Messages');
-    LocalData.setLastMessageFetch(fetchingTime.millisecondsSinceEpoch);
+    LocalData.setLastMessageFetch(fetchingTime
+        .subtract(const Duration(minutes: 1))
+        .millisecondsSinceEpoch);
     for (DocumentChange<Map<String, dynamic>> element in changes) {
       final Message msg = Message.fromDoc(element.doc);
       if (element.type == DocumentChangeType.removed) {

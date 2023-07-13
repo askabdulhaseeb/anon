@@ -6,6 +6,7 @@ import '../../enums/my_hive_type.dart';
 import '../../models/chat/message.dart';
 import '../../models/chat/message_read_info.dart';
 import '../../models/project/attachment.dart';
+import '../firebase/auth_methods.dart';
 import '../firebase/message_api.dart';
 import 'local_unseen_message.dart';
 
@@ -28,9 +29,9 @@ class LocalMessage {
   Future<void> addMessage(Message value) async {
     try {
       final Box<Message> box = await refresh();
-      
+
       box.put(value.messageID, value);
-      if (!value.isSeenedMessage) {
+      if (!value.isSeenedMessage && value.sendBy != AuthMethods.uid) {
         await LocalUnseenMessage().add(value);
       }
     } catch (e) {

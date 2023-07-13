@@ -95,7 +95,8 @@ class MessageTile extends StatelessWidget {
                           ReferenceMessageWidget(message: message.replyOf!),
                         if (message.attachment.isNotEmpty)
                           MessageMediaAttachmentWidget(message: message),
-                        if (message.text.isNotEmpty) Text(message.text),
+                        if (message.text.isNotEmpty)
+                          SelectableText(message.text),
                       ],
                     ),
                   ),

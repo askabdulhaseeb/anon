@@ -20,7 +20,7 @@ class ChatProvider extends ChangeNotifier {
     _onLoading(true);
     final String me = AuthMethods.uid;
     final String displayMsg = _text.text.trim().isNotEmpty
-        ? _text.text.trim()
+        ? _text.text.replaceAll('\n', ' ').trim()
         : _attachments[0].type == AttachmentType.photo
             ? '📸 Photo'
             : _attachments[0].type == AttachmentType.video

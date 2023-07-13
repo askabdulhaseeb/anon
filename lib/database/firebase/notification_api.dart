@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +13,8 @@ import '../../utilities/app_key.dart';
 class NotificationAPI {
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
-  Future<String?> deviceToken() async => await _messaging.getToken();
+  Future<String?> deviceToken() async =>
+      Platform.isMacOS ? '' : await _messaging.getToken();
 
   Future<bool> sendSubsceibtionNotification({
     required List<MyDeviceToken> deviceToken,
@@ -68,6 +70,7 @@ class NotificationAPI {
       FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
+    if (Platform.isMacOS) return;
     await _messaging.requestPermission();
     //  final BehaviorSubject<String?> onNotification =
     //     BehaviorSubject<String?>();

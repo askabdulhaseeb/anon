@@ -125,8 +125,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       final bool oldMember = chat.persons.contains(element.uid);
       if (!oldMember) {
         debugPrint(element.uid);
-        chat.persons.add(element.uid);
-        chat.members.add(ChatMember(uid: element.uid));
+        chat.persons.toSet().add(element.uid);
+        chat.members.toSet().add(ChatMember(uid: element.uid));
       }
     }
     await LocalChat().updateMembers(chat);

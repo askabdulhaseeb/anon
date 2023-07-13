@@ -75,7 +75,8 @@ class ProjectAPI {
     final List<DocumentChange<Map<String, dynamic>>> changes = event.docChanges;
     if (changes.isEmpty) return;
     log('Project API: ${changes.length} changes in Projects');
-    LocalData.setProjectFetch(fetchingTime.millisecondsSinceEpoch);
+    LocalData.setProjectFetch(
+        fetchingTime.subtract(const Duration(hours: 1)).millisecondsSinceEpoch);
     for (DocumentChange<Map<String, dynamic>> element in changes) {
       final Project msg = Project.fromDoc(element.doc);
       if (element.type == DocumentChangeType.removed) {
