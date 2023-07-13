@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../database/firebase/agency_api.dart';
 import '../../database/firebase/chat_api.dart';
 import '../../database/firebase/message_api.dart';
+import '../../database/local/local_user.dart';
 import '../../providers/app_nav_provider.dart';
 import '../../widgets/agency/agency_app_bar_title.dart';
 import '../main_pages/settings_page.dart';
@@ -44,21 +45,25 @@ class MainScreen extends StatelessWidget {
             topRight: Radius.circular(24),
           ),
         ),
-        child: StreamBuilder<bool>(
-            stream: AgencyAPI().refreshAgency(),
-            builder: (_, __) {
-              return StreamBuilder<void>(
-                  stream: ChatAPI().refreshChats(),
+        child: FutureBuilder<void>(
+            future: LocalUser().refreshUsers(),
+            builder: (BuildContext context, _) {
+              return StreamBuilder<bool>(
+                  stream: AgencyAPI().refreshAgency(),
                   builder: (_, __) {
                     return StreamBuilder<void>(
-                        stream: MessageAPI().refreshMessages(),
+                        stream: ChatAPI().refreshChats(),
                         builder: (_, __) {
-                          return Consumer<AppNavProvider>(
-                            builder: (BuildContext context,
-                                AppNavProvider appPro, _) {
-                              return pages[appPro.currentTap];
-                            },
-                          );
+                          return StreamBuilder<void>(
+                              stream: MessageAPI().refreshMessages(),
+                              builder: (_, __) {
+                                return Consumer<AppNavProvider>(
+                                  builder: (BuildContext context,
+                                      AppNavProvider appPro, _) {
+                                    return pages[appPro.currentTap];
+                                  },
+                                );
+                              });
                         });
                   });
             }),

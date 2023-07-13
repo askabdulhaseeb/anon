@@ -109,6 +109,12 @@ class LocalUser {
     }
   }
 
+  Future<void> refreshUsers() async {
+    final Box<AppUser> box = await refresh();
+    final List<String> uids = box.keys.toSet().toList() as List<String>;
+    await UserAPI().refresh(uids);
+  }
+
   Future<void> signOut() async {
     final Box<AppUser> box = await refresh();
     await box.clear();

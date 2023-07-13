@@ -31,6 +31,7 @@ class _AgencyDetailsScreenState extends State<AgencyDetailsScreen> {
   }
 
   _dispose() async {
+    if (!needUpdate) return;
     Agency? agency = await LocalAgency()
         .agency(ModalRoute.of(context)!.settings.arguments as String);
     if (agency == null) return;

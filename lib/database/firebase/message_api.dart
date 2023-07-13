@@ -71,10 +71,8 @@ class MessageAPI {
   Stream<void> refreshMessages() {
     final DateTime fetchingTime = DateTime.now();
     final int? temp = LocalData.lastMessageFetch();
-    final DateTime updatedTime = temp == null
-        ? DateTime.now().subtract(const Duration(days: 30))
-        : TimeFun.miliToObject(temp) ??
-            DateTime.now().subtract(const Duration(days: 30));
+    final DateTime updatedTime = TimeFun.miliToObject(temp) ??
+        DateTime.now().subtract(const Duration(days: 7));
     return _instance
         .collection(_collection)
         .where('send_to_uids', arrayContains: AuthMethods.uid)

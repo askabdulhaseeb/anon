@@ -61,7 +61,7 @@ class ProjectAPI {
         : _instance
             .collection(_collection)
             .where('agencies', arrayContains: agencyID)
-            .where('last_update', isGreaterThan: time)
+            .where('last_update', isGreaterThanOrEqualTo: time)
             .snapshots()
             .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
             _changeEventToLocal(event, fetchingTime);
@@ -75,8 +75,9 @@ class ProjectAPI {
     final List<DocumentChange<Map<String, dynamic>>> changes = event.docChanges;
     if (changes.isEmpty) return;
     log('Project API: ${changes.length} changes in Projects');
-    LocalData.setProjectFetch(
-        fetchingTime.subtract(const Duration(hours: 1)).millisecondsSinceEpoch);
+    LocalData.setProjectFetch(fetchingTime
+        .subtract(const Duration(minutes: 10))
+        .millisecondsSinceEpoch);
     for (DocumentChange<Map<String, dynamic>> element in changes) {
       final Project msg = Project.fromDoc(element.doc);
       if (element.type == DocumentChangeType.removed) {

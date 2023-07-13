@@ -5,11 +5,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../enums/user/user_designation.dart';
+import '../../functions/time_functions.dart';
 import '../../functions/unique_id_fun.dart';
 import '../../models/agency/agency.dart';
 import '../../models/agency/member_detail.dart';
 import '../../models/user/app_user.dart';
 import '../local/local_agency.dart';
+import '../local/local_data.dart';
 import 'auth_methods.dart';
 import 'user_api.dart';
 
@@ -79,18 +81,20 @@ class AgencyAPI {
   }
 
   Stream<bool> refreshAgency() {
-    // final int? temp = LocalData.lastAgencyFetch();
-    // final DateTime updatedTime = temp == null
-    //     ? DateTime.now().subtract(const Duration(days: 3000))
-    //     : TimeFun.miliToObject(temp);
+    final DateTime fetchingTime = DateTime.now();
+    final DateTime time = TimeFun.miliToObject(LocalData.lastAgencyFetch()) ??
+        DateTime.now().subtract(const Duration(days: 3000));
     return _instance
         .collection(_collection)
         .where('members', arrayContains: AuthMethods.uid)
+        .where('last_update', isGreaterThanOrEqualTo: time)
         .snapshots()
         .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
       final List<Agency> newChanges = <Agency>[];
       final List<DocumentChange<Map<String, dynamic>>> changes =
           event.docChanges;
+      if (changes.isEmpty) return false;
+      LocalData.setAgencyFetch(fetchingTime.millisecondsSinceEpoch);
       for (DocumentChange<Map<String, dynamic>> newEle in changes) {
         final Agency mod = Agency.fromDoc(newEle.doc);
         if (newEle.type == DocumentChangeType.removed &&
@@ -147,6 +151,7 @@ class AgencyAPI {
       throw 'e.code';
     }
   }
+
   Future<void> updateProfileInfo(Agency value) async {
     try {
       await _instance

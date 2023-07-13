@@ -59,7 +59,7 @@ class ChatAPI {
         .asyncMap((QuerySnapshot<Map<String, dynamic>> event) {
       if (event.docChanges.isEmpty) return;
       LocalData.setLastChatFetch(DateTime.now()
-          .subtract(const Duration(days: 1))
+          .subtract(const Duration(minutes: 10))
           .millisecondsSinceEpoch);
       for (DocumentChange<Map<String, dynamic>> element in event.docChanges) {
         final DocumentSnapshot<Map<String, dynamic>> doc = element.doc;
