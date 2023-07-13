@@ -3,17 +3,22 @@ import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ParsedTextWidget extends StatelessWidget {
-  const ParsedTextWidget(this.text, {super.key});
+  const ParsedTextWidget(this.text, {this.isMe = false, super.key});
   final String text;
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
     return ParsedText(
       text: text,
+      selectable: true,
+      textWidthBasis: TextWidthBasis.parent,
+      style: isMe ? const TextStyle(color: Colors.white) : null,
+      textScaleFactor: 0.5,
       parse: <MatchText>[
         MatchText(
           type: ParsedType.EMAIL,
-          style: const TextStyle(color: Colors.red),
+          style: const TextStyle(color: Colors.blue),
           onTap: (String url) => _launchUrl(url, type: ParsedType.EMAIL),
         ),
         MatchText(

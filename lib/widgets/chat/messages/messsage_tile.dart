@@ -97,7 +97,7 @@ class MessageTile extends StatelessWidget {
                         if (message.attachment.isNotEmpty)
                           MessageMediaAttachmentWidget(message: message),
                         if (message.text.isNotEmpty)
-                          ParsedTextWidget(message.text),
+                          ParsedTextWidget(message.text, isMe: isMe),
                       ],
                     ),
                   ),
