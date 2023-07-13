@@ -56,11 +56,12 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     defaultColor: chat.defaultColor,
                     size: 80,
                   ),
-                  if (canEdit)
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('Change Image'),
-                    ),
+                  canEdit
+                      ? TextButton(
+                          onPressed: () {},
+                          child: const Text('Change Image'),
+                        )
+                      : const SizedBox(height: 16),
                   if (chat.description.isNotEmpty)
                     TextFieldLikeWidget(child: Text(chat.description)),
                   if (canEdit && chat.targetString.isNotEmpty)
