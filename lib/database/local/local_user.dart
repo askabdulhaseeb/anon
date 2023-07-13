@@ -67,6 +67,13 @@ class LocalUser {
     return result ?? _null;
   }
 
+  Future<AppUser?> updateProfileURL(String value) async {
+    final Box<AppUser> box = await refresh();
+    final String me = AuthMethods.uid;
+    box.get(me)!.imageURL = value;
+    return box.get(me);
+  }
+
   Future<List<AppUser>> stringListToObjectList(List<String> value) async {
     final Box<AppUser> box = await refresh();
     List<AppUser> objectList = <AppUser>[];

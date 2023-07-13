@@ -65,7 +65,7 @@ class AppUser extends HiveObject {
   @HiveField(9)
   final String password;
   @HiveField(10)
-  final String imageURL;
+  String imageURL;
   @HiveField(11) // Class Code: 15
   final List<MyDeviceToken> deviceToken;
   @HiveField(12)
@@ -103,6 +103,13 @@ class AppUser extends HiveObject {
   Map<String, dynamic> deviceTokenMap() {
     return <String, dynamic>{
       'devices_token': deviceToken.map((MyDeviceToken x) => x.toMap()).toList(),
+      'last_update': lastUpdate = DateTime.now(),
+    };
+  }
+
+  Map<String, dynamic> profileURLMap() {
+    return <String, dynamic>{
+      'image_url': imageURL,
       'last_update': lastUpdate = DateTime.now(),
     };
   }
