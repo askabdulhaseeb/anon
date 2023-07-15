@@ -70,7 +70,6 @@ class NotificationAPI {
       FlutterLocalNotificationsPlugin();
 
   Future<void> init() async {
-    if (Platform.isMacOS) return;
     await _messaging.requestPermission();
     //  final BehaviorSubject<String?> onNotification =
     //     BehaviorSubject<String?>();

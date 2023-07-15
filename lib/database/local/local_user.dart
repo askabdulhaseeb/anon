@@ -111,7 +111,8 @@ class LocalUser {
 
   Future<void> refreshUsers() async {
     final Box<AppUser> box = await refresh();
-    final List<String> uids = box.keys.toSet().toList() as List<String>;
+    final List<String> uids =
+        box.keys.map((dynamic e) => e.toString()).toSet().toList();
     await UserAPI().refresh(uids);
   }
 

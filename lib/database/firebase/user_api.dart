@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -41,8 +42,11 @@ class UserAPI {
       final DateTime time = TimeFun.miliToObject(temp) ??
           DateTime.now().subtract(const Duration(days: 7));
       int i = 0;
+      int j = 0;
       do {
-        final List<String> data = uids.sublist(i, (i + 9));
+        final List<String> data = uids.length >= i + 9
+            ? uids.sublist(i, (i + 9))
+            : uids.sublist(i, uids.length);
         final QuerySnapshot<Map<String, dynamic>> doc = await _instance
             .collection(_collection)
             .where('uid', whereIn: data)
@@ -53,16 +57,17 @@ class UserAPI {
         if (changes.isNotEmpty) {
           for (DocumentChange<Map<String, dynamic>> element in changes) {
             final AppUser appUser = AppUser.fromMap(element.doc);
+            j++;
             await LocalUser().add(appUser);
           }
         }
         i += 9;
       } while ((i * 10) < uids.length);
       LocalData.setLastUserFetch(fetchingTime.millisecondsSinceEpoch);
+      log('User API: $j User refreshed');
     } catch (e) {
       debugPrint(e.toString());
     }
-    return null;
   }
 
   Future<AppUser?> updateToken(AppUser value) async {

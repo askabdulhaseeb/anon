@@ -26,11 +26,10 @@ class _AgencyDetailsScreenState extends State<AgencyDetailsScreen> {
 
   @override
   void dispose() {
-    _dispose();
     super.dispose();
   }
 
-  _dispose() async {
+  _update() async {
     if (!needUpdate) return;
     Agency? agency = await LocalAgency()
         .agency(ModalRoute.of(context)!.settings.arguments as String);
@@ -49,7 +48,7 @@ class _AgencyDetailsScreenState extends State<AgencyDetailsScreen> {
         centerTitle: true,
         actions: <Widget>[
           TextButton(
-            onPressed: needUpdate ? () => Navigator.of(context).pop() : null,
+            onPressed: needUpdate ? () =>  _update() : null,
             child: const Text('Save'),
           ),
         ],
