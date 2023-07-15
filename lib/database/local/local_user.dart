@@ -109,6 +109,22 @@ class LocalUser {
     }
   }
 
+  Future<List<Map<String, dynamic>>> mentionableUsers(
+    List<String> value,
+  ) async {
+    try {
+      final Box<AppUser> box = await refresh();
+      final List<Map<String, dynamic>> results = <Map<String, dynamic>>[];
+      for (String element in value) {
+        results.add((box.get(element) ?? _null).mentionableMap());
+      }
+      return results;
+    } catch (e) {
+      debugPrint('Error: Local User - ${e.toString()}');
+      return <Map<String, dynamic>>[];
+    }
+  }
+
   Future<void> refreshUsers() async {
     final Box<AppUser> box = await refresh();
     final List<String> uids =

@@ -5,6 +5,7 @@ import '../database/firebase/auth_methods.dart';
 import '../database/firebase/message_api.dart';
 import '../database/local/local_chat.dart';
 import '../database/local/local_message.dart';
+import '../database/local/local_project.dart';
 import '../database/local/local_user.dart';
 import '../enums/attachment_type.dart';
 import '../enums/chat/message_type.dart';
@@ -12,6 +13,7 @@ import '../models/chat/chat.dart';
 import '../models/chat/message.dart';
 import '../models/chat/message_read_info.dart';
 import '../models/project/attachment.dart';
+import '../models/project/project.dart';
 import '../models/user/app_user.dart';
 
 class ChatProvider extends ChangeNotifier {
@@ -61,11 +63,12 @@ class ChatProvider extends ChangeNotifier {
         chat.persons.where((String element) => element != me).toList();
     final List<AppUser> receiver =
         await LocalUser().stringListToObjectList(stringUID);
+    final Project project = await LocalProject().project(chat.projectID);
     await MessageAPI().sendMessage(
-      newMessage: msg,
-      receiver: receiver,
-      sender: sender,
-    );
+        newMessage: msg,
+        receiver: receiver,
+        sender: sender,
+        notificationTitle: '${project.title}/${chat.title}');
   }
 
   Future<void> updateUnseendMessages(String chatID) async {

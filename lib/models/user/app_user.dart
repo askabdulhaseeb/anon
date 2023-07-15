@@ -100,6 +100,15 @@ class AppUser extends HiveObject {
     };
   }
 
+  Map<String, dynamic> mentionableMap() {
+    return <String, dynamic>{
+      'uid': uid,
+      'name': name,
+      'image_url': imageURL,
+      'default_color': defaultColor,
+    };
+  }
+
   Map<String, dynamic> deviceTokenMap() {
     return <String, dynamic>{
       'devices_token': deviceToken.map((MyDeviceToken x) => x.toMap()).toList(),

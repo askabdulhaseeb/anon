@@ -107,6 +107,7 @@ class MessageAPI {
     required Message newMessage,
     required List<AppUser> receiver,
     required AppUser sender,
+    String? notificationTitle,
   }) async {
     await _instance
         .collection(_collection)
@@ -116,8 +117,8 @@ class MessageAPI {
     for (AppUser userElemen in receiver) {
       await NotificationAPI().sendSubsceibtionNotification(
         deviceToken: userElemen.deviceToken,
-        messageTitle: sender.name,
-        messageBody: newMessage.text,
+        messageTitle: notificationTitle ?? sender.name,
+        messageBody: '${sender.name}: ${newMessage.text}',
         data: <String>['chat', 'message', 'personal'],
       );
     }
