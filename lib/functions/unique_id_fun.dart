@@ -31,4 +31,12 @@ class UniqueIdFun {
   static String messageID(String chatID) {
     return '$chatID-${generateRandomString()}-${DateTime.now().microsecondsSinceEpoch}-me-${AuthMethods.uid}';
   }
+
+  static String boardID() {
+    return '${AuthMethods.uid}-tb-${generateRandomString()}-${generateRandomString(length: 3)}-${generateRandomString(length: 3)}';
+  }
+
+  static String listID(String value) {
+    return '$value-ls-${generateRandomString()}';
+  }
 }
