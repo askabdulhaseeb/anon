@@ -1,6 +1,10 @@
+import 'package:hive/hive.dart';
+
 import '../../database/firebase/auth_methods.dart';
 import '../../functions/time_functions.dart';
+part 'check_item.g.dart';
 
+@HiveType(typeId: 65)
 class CheckItem {
   CheckItem({
     required this.text,
@@ -13,11 +17,17 @@ class CheckItem {
         createdBy = createdBy ?? AuthMethods.uid,
         createdDate = createdDate ?? DateTime.now();
 
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final int position;
+  @HiveField(2)
   final String text;
+  @HiveField(3)
   final bool isChecked;
+  @HiveField(4)
   final String createdBy;
+  @HiveField(5)
   final DateTime createdDate;
 
   Map<String, dynamic> toMap() {

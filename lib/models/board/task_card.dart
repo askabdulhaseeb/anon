@@ -1,10 +1,14 @@
+import 'package:hive/hive.dart';
+
 import '../../database/firebase/auth_methods.dart';
 import '../../functions/time_functions.dart';
 import '../../functions/unique_id_fun.dart';
 import '../project/attachment.dart';
 import 'check_list.dart';
+part 'task_card.g.dart';
 
-class TaskCard {
+@HiveType(typeId: 63)
+class TaskCard extends HiveObject{
   TaskCard({
     required this.boardID,
     required this.listID,
@@ -33,21 +37,37 @@ class TaskCard {
         lastFetch = lastFetch ?? DateTime.now(),
         lastUpdate = lastUpdate ?? DateTime.now();
 
+  @HiveField(0)
   final String cardID;
+  @HiveField(1)
   final String boardID;
+  @HiveField(2)
   final String listID;
+  @HiveField(3)
   final String? projectID;
+  @HiveField(4)
   final int position;
+  @HiveField(5)
   final String title;
+  @HiveField(6)
   final String description;
+  @HiveField(7)
   final List<Attachment> attachments;
+  @HiveField(8)
   final List<String> assignTo;
+  @HiveField(9)
   final List<CheckList> checklists;
+  @HiveField(10)
   final String createdBy;
+  @HiveField(11)
   final DateTime createdDate;
+  @HiveField(12)
   final DateTime startDate;
+  @HiveField(13)
   final DateTime dueDate;
+  @HiveField(14)
   final DateTime lastFetch;
+  @HiveField(15)
   final DateTime lastUpdate;
 
   Map<String, dynamic> toMap() {

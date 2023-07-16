@@ -60,4 +60,4 @@ class MyApp extends StatelessWidget {
 // Project -> 3
 // Chat -> 4
 // Messages -> 5
-// Messages -> 6
+// Board -> 6
