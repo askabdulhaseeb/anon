@@ -13,6 +13,11 @@ import '../../enums/user/user_designation.dart';
 import '../../enums/user/user_type.dart';
 import '../../models/agency/agency.dart';
 import '../../models/agency/member_detail.dart';
+import '../../models/board/board.dart';
+import '../../models/board/check_item.dart';
+import '../../models/board/check_list.dart';
+import '../../models/board/task_card.dart';
+import '../../models/board/task_list.dart';
 import '../../models/chat/chat.dart';
 import '../../models/chat/chat_group_member.dart';
 import '../../models/chat/message.dart';
@@ -26,6 +31,9 @@ import '../../models/project/project.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/device_token.dart';
 import '../../models/user/number_detail.dart';
+import 'board/local_board.dart';
+import 'board/local_task_card.dart';
+import 'board/local_task_list.dart';
 import 'local_agency.dart';
 import 'local_chat.dart';
 import 'local_data.dart';
@@ -71,6 +79,13 @@ class HiveDB {
     Hive.registerAdapter(MessageTypeAdapter()); // 44
     Hive.registerAdapter(MessageReadInfoAdapter()); // 45
     Hive.registerAdapter(UnseenMessageAdapter()); // 46
+    //
+    // Type: Chat 6
+    Hive.registerAdapter(BoardAdapter()); // 61
+    Hive.registerAdapter(TaskListAdapter()); // 62
+    Hive.registerAdapter(TaskCardAdapter()); // 63
+    Hive.registerAdapter(CheckListAdapter()); // 64
+    Hive.registerAdapter(CheckItemAdapter()); // 65
 
     //
     // Open Boxes
@@ -80,6 +95,9 @@ class HiveDB {
     await LocalChat.openBox;
     await LocalMessage.openBox;
     await LocalUnseenMessage.openBox;
+    await LocalBoard.openBox;
+    await LocalTaskList.openBox;
+    await LocalTaskCard.openBox;
   }
 
   Future<void> signOut() async {
@@ -90,5 +108,8 @@ class HiveDB {
     await LocalChat().signOut();
     await LocalMessage().signOut();
     await LocalUnseenMessage().signOut();
+    await LocalBoard().signOut();
+    await LocalTaskList().signOut();
+    await LocalTaskCard().signOut();
   }
 }
