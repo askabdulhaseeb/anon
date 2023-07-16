@@ -1,23 +1,22 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../enums/my_hive_type.dart';
 import '../../enums/project/milestone_status.dart';
 import '../../models/project/milestone.dart';
 import '../../models/project/project.dart';
 import '../firebase/project_api.dart';
 
 class LocalProject {
+  static const String _boxName = 'dm-projects';
   static Future<Box<Project>> get openBox async =>
-      await Hive.openBox<Project>(MyHiveType.project.database);
+      await Hive.openBox<Project>(_boxName);
 
-  static Future<void> get closeBox async =>
-      Hive.box<Project>(MyHiveType.project.database).close();
+  static Future<void> get closeBox async => Hive.box<Project>(_boxName).close();
 
   Future<Box<Project>> refresh() async {
-    final bool isOpen = Hive.box<Project>(MyHiveType.project.database).isOpen;
+    final bool isOpen = Hive.box<Project>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<Project>(MyHiveType.project.database);
+      return Hive.box<Project>(_boxName);
     } else {
       return await openBox;
     }
@@ -103,12 +102,12 @@ class LocalProject {
   }
 
   ValueListenable<Box<Project>> listenable() {
-    final bool isOpen = Hive.box<Project>(MyHiveType.project.database).isOpen;
+    final bool isOpen = Hive.box<Project>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<Project>(MyHiveType.project.database).listenable();
+      return Hive.box<Project>(_boxName).listenable();
     } else {
       openBox;
-      return Hive.box<Project>(MyHiveType.project.database).listenable();
+      return Hive.box<Project>(_boxName).listenable();
     }
   }
 

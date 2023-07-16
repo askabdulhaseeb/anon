@@ -1,22 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../enums/my_hive_type.dart';
 import '../../models/chat/chat.dart';
 import '../../models/chat/chat_group_member.dart';
 import '../firebase/chat_api.dart';
 
 class LocalChat {
+  static const String _boxName = 'dm-chats';
   static Future<Box<Chat>> get openBox async =>
-      await Hive.openBox<Chat>(MyHiveType.chat.database);
+      await Hive.openBox<Chat>(_boxName);
 
-  static Future<void> get closeBox async =>
-      Hive.box<Chat>(MyHiveType.chat.database).close();
+  static Future<void> get closeBox async => Hive.box<Chat>(_boxName).close();
 
   Future<Box<Chat>> refresh() async {
-    final bool isOpen = Hive.box<Chat>(MyHiveType.chat.database).isOpen;
+    final bool isOpen = Hive.box<Chat>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<Chat>(MyHiveType.chat.database);
+      return Hive.box<Chat>(_boxName);
     } else {
       return await openBox;
     }
@@ -95,12 +94,12 @@ class LocalChat {
   }
 
   ValueListenable<Box<Chat>> listenable() {
-    final bool isOpen = Hive.box<Chat>(MyHiveType.chat.database).isOpen;
+    final bool isOpen = Hive.box<Chat>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<Chat>(MyHiveType.chat.database).listenable();
+      return Hive.box<Chat>(_boxName).listenable();
     } else {
       openBox;
-      return Hive.box<Chat>(MyHiveType.chat.database).listenable();
+      return Hive.box<Chat>(_boxName).listenable();
     }
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import '../../enums/my_hive_type.dart';
 import '../../enums/user/user_type.dart';
 import '../../models/user/app_user.dart';
 import '../../models/user/number_detail.dart';
@@ -9,16 +8,16 @@ import '../firebase/auth_methods.dart';
 import '../firebase/user_api.dart';
 
 class LocalUser {
+  static const String _boxName = 'dm-users';
   static Future<Box<AppUser>> get openBox async =>
-      await Hive.openBox<AppUser>(MyHiveType.user.database);
+      await Hive.openBox<AppUser>(_boxName);
 
-  static Future<void> get closeBox async =>
-      Hive.box<AppUser>(MyHiveType.user.database).close();
+  static Future<void> get closeBox async => Hive.box<AppUser>(_boxName).close();
 
   Future<Box<AppUser>> refresh() async {
-    final bool isOpen = Hive.box<AppUser>(MyHiveType.user.database).isOpen;
+    final bool isOpen = Hive.box<AppUser>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<AppUser>(MyHiveType.user.database);
+      return Hive.box<AppUser>(_boxName);
     } else {
       return await openBox;
     }
@@ -62,8 +61,7 @@ class LocalUser {
   }
 
   AppUser userWithoutFuture(String value) {
-    final AppUser? result =
-        Hive.box<AppUser>(MyHiveType.user.database).get(value);
+    final AppUser? result = Hive.box<AppUser>(_boxName).get(value);
     return result ?? _null;
   }
 

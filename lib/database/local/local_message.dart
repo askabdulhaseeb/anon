@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../enums/chat/message_type.dart';
-import '../../enums/my_hive_type.dart';
 import '../../models/chat/message.dart';
 import '../../models/chat/message_read_info.dart';
 import '../../models/project/attachment.dart';
@@ -11,16 +10,16 @@ import '../firebase/message_api.dart';
 import 'local_unseen_message.dart';
 
 class LocalMessage {
+  static const String _boxName = 'dm-messages';
   static Future<Box<Message>> get openBox async =>
-      await Hive.openBox<Message>(MyHiveType.message.database);
+      await Hive.openBox<Message>(_boxName);
 
-  static Future<void> get closeBox async =>
-      Hive.box<Message>(MyHiveType.message.database).close();
+  static Future<void> get closeBox async => Hive.box<Message>(_boxName).close();
 
   Future<Box<Message>> refresh() async {
-    final bool isOpen = Hive.box<Message>(MyHiveType.message.database).isOpen;
+    final bool isOpen = Hive.box<Message>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<Message>(MyHiveType.message.database);
+      return Hive.box<Message>(_boxName);
     } else {
       return await openBox;
     }
@@ -108,12 +107,12 @@ class LocalMessage {
   }
 
   ValueListenable<Box<Message>> listenable() {
-    final bool isOpen = Hive.box<Message>(MyHiveType.message.database).isOpen;
+    final bool isOpen = Hive.box<Message>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<Message>(MyHiveType.message.database).listenable();
+      return Hive.box<Message>(_boxName).listenable();
     } else {
       openBox;
-      return Hive.box<Message>(MyHiveType.message.database).listenable();
+      return Hive.box<Message>(_boxName).listenable();
     }
   }
 

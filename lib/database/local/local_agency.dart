@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../enums/my_hive_type.dart';
 import '../../enums/user/user_designation.dart';
 import '../../models/agency/agency.dart';
 import '../../models/agency/member_detail.dart';
@@ -12,16 +11,17 @@ import 'local_data.dart';
 
 class LocalAgency {
   static const String nullID = '-%-null-%-';
-  static Future<Box<Agency>> get openBox async =>
-      await Hive.openBox<Agency>(MyHiveType.agency.database);
+  static const String _boxName = 'dm-agencies';
 
-  static Future<void> get closeBox async =>
-      Hive.box<Agency>(MyHiveType.agency.database).close();
+  static Future<Box<Agency>> get openBox async =>
+      await Hive.openBox<Agency>(_boxName);
+
+  static Future<void> get closeBox async => Hive.box<Agency>(_boxName).close();
 
   Future<Box<Agency>> refresh() async {
-    final bool isOpen = Hive.box<Agency>(MyHiveType.agency.database).isOpen;
+    final bool isOpen = Hive.box<Agency>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<Agency>(MyHiveType.agency.database);
+      return Hive.box<Agency>(_boxName);
     } else {
       return await openBox;
     }
@@ -150,12 +150,12 @@ class LocalAgency {
   }
 
   ValueListenable<Box<Agency>> listenable() {
-    final bool isOpen = Hive.box<Agency>(MyHiveType.agency.database).isOpen;
+    final bool isOpen = Hive.box<Agency>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<Agency>(MyHiveType.agency.database).listenable();
+      return Hive.box<Agency>(_boxName).listenable();
     } else {
       openBox;
-      return Hive.box<Agency>(MyHiveType.agency.database).listenable();
+      return Hive.box<Agency>(_boxName).listenable();
     }
   }
 

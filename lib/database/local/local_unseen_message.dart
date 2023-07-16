@@ -1,22 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../enums/my_hive_type.dart';
 import '../../models/chat/message.dart';
 import '../../models/chat/unseen_message.dart';
 
 class LocalUnseenMessage {
+  static const String _boxName = 'dm-unseen-messages';
   static Future<Box<UnseenMessage>> get openBox async =>
-      await Hive.openBox<UnseenMessage>(MyHiveType.unseenMessage.database);
+      await Hive.openBox<UnseenMessage>(_boxName);
 
   static Future<void> get closeBox async =>
-      Hive.box<UnseenMessage>(MyHiveType.unseenMessage.database).close();
+      Hive.box<UnseenMessage>(_boxName).close();
 
   Future<Box<UnseenMessage>> refresh() async {
-    final bool isOpen =
-        Hive.box<UnseenMessage>(MyHiveType.unseenMessage.database).isOpen;
+    final bool isOpen = Hive.box<UnseenMessage>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<UnseenMessage>(MyHiveType.unseenMessage.database);
+      return Hive.box<UnseenMessage>(_boxName);
     } else {
       return await openBox;
     }
@@ -116,15 +115,12 @@ class LocalUnseenMessage {
   }
 
   ValueListenable<Box<UnseenMessage>> listenable() {
-    final bool isOpen =
-        Hive.box<UnseenMessage>(MyHiveType.unseenMessage.database).isOpen;
+    final bool isOpen = Hive.box<UnseenMessage>(_boxName).isOpen;
     if (isOpen) {
-      return Hive.box<UnseenMessage>(MyHiveType.unseenMessage.database)
-          .listenable();
+      return Hive.box<UnseenMessage>(_boxName).listenable();
     } else {
       openBox;
-      return Hive.box<UnseenMessage>(MyHiveType.unseenMessage.database)
-          .listenable();
+      return Hive.box<UnseenMessage>(_boxName).listenable();
     }
   }
 }
