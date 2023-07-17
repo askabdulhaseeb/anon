@@ -46,6 +46,22 @@ class LocalBoard {
     return null;
   }
 
+  Future<Board?> boardByBoardID(String boardID) async {
+    final Box<Board> box = await refresh();
+    try {
+      return box.values
+          .firstWhere((Board element) => element.boardID == boardID);
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+      await BoardAPI().refreshBoardByBoardID(boardID);
+      try {
+        return box.values
+            .firstWhere((Board element) => element.boardID == boardID);
+      } catch (_) {}
+    }
+    return null;
+  }
+
   Future<void> remove(Board value) async {
     try {
       final Box<Board> box = await refresh();

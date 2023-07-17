@@ -53,7 +53,7 @@ class ProjectPage extends StatelessWidget {
                     onTap: () => Navigator.of(context)
                         .pushNamed(CreateProjectScreen.routeName),
                   ),
-                const Divider(),
+                const Divider(height: 8),
                 const SizedBox(height: 6),
                 StatefulBuilder(builder: (
                   BuildContext context,

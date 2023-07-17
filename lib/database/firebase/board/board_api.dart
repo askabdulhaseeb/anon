@@ -83,13 +83,22 @@ class BoardAPI {
         .collection(_collection)
         .where('project_id', isEqualTo: projectID)
         .get();
-    print(result.docs.length);
     if (result.docs.isEmpty) return;
     for (DocumentSnapshot<Map<String, dynamic>> element in result.docs) {
       final Board updated = Board.fromDoc(element);
       if (updated.persons.contains(AuthMethods.uid)) {
         await LocalBoard().add(updated);
       }
+    }
+  }
+
+  Future<void> refreshBoardByBoardID(String boardID) async {
+    final DocumentSnapshot<Map<String, dynamic>> result =
+        await _instance.collection(_collection).doc(boardID).get();
+    if (!result.exists) return;
+    final Board updated = Board.fromDoc(result);
+    if (updated.persons.contains(AuthMethods.uid)) {
+      await LocalBoard().add(updated);
     }
   }
 }

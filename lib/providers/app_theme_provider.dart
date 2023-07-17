@@ -63,7 +63,8 @@ class AppThemes {
     scaffoldBackgroundColor: _darkScaffoldColor,
     primaryColor: _primary,
     iconTheme: const IconThemeData(color: Colors.white),
-    dividerTheme: DividerThemeData(color: Colors.grey.shade200, thickness: 0.5),
+    dividerTheme:
+        DividerThemeData(color: Colors.grey.shade200, thickness: 1, space: 0),
     dividerColor: Colors.grey.shade300,
     listTileTheme: const ListTileThemeData(
       contentPadding: EdgeInsets.symmetric(horizontal: 16),
@@ -98,7 +99,8 @@ class AppThemes {
     scaffoldBackgroundColor: Colors.white,
     primaryColor: _primary,
     iconTheme: const IconThemeData(color: Colors.black),
-    dividerTheme: DividerThemeData(color: Colors.grey.shade200, thickness: 0.5),
+    dividerTheme:
+        DividerThemeData(color: Colors.grey.shade200, thickness: 1, space: 0),
     dividerColor: Colors.grey.shade300,
     listTileTheme: const ListTileThemeData(
       contentPadding: EdgeInsets.symmetric(horizontal: 16),

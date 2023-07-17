@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../database/local/board/local_board.dart';
 import '../../functions/time_functions.dart';
 import '../../models/board/board.dart';
+import '../board_screens/board/board_screen.dart';
 
 class BoardsPage extends StatelessWidget {
   const BoardsPage({super.key});
@@ -43,6 +44,11 @@ class BoardsPage extends StatelessWidget {
                             'Last Update: ${TimeFun.timeInWords(board.lastUpdate)}',
                             style: const TextStyle(color: Colors.grey),
                           ),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                BoardScreen.routeName,
+                                arguments: board.boardID);
+                          },
                         );
                       },
                     );

@@ -15,6 +15,7 @@ import 'views/auth/user_auth/forget_password_screen.dart';
 import 'views/auth/agency_auth/start_agency_screen.dart';
 import 'views/auth/user_auth/sign_in_screen.dart';
 import 'views/auth/user_auth/sign_up_screen.dart';
+import 'views/board_screens/board/board_screen.dart';
 import 'views/chat_screens/chat_detail_screen.dart';
 import 'views/chat_screens/chat_screen.dart';
 import 'views/chat_screens/create_chat_screen.dart';
@@ -64,6 +65,8 @@ final Map<String, WidgetBuilder> myRoutes = <String, WidgetBuilder>{
   MessageMediaFullScreen.routeName: (_) => const MessageMediaFullScreen(),
   // User
   UserProfileScreeen.routeName: (_) => const UserProfileScreeen(),
+  //Board
+  BoardScreen.routeName: (_) => const BoardScreen(),
   // System
   AccountScreen.routeName: (_) => const AccountScreen(),
 };
