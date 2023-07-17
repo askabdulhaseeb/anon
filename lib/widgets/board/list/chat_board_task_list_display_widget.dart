@@ -7,6 +7,7 @@ import '../../../database/local/local_project.dart';
 import '../../../models/board/board.dart';
 import '../../../models/board/task_list.dart';
 import '../../../models/project/project.dart';
+import '../../../views/board_screens/board/board_screen.dart';
 
 class ChatBoardTaskListDisplayWidget extends StatefulWidget {
   const ChatBoardTaskListDisplayWidget(this.projectID, {super.key});
@@ -50,26 +51,31 @@ class _ChatBoardTaskListDisplayWidgetState
                     AsyncSnapshot<List<TaskList>> snapshot,
                   ) {
                     final List<TaskList> lists = snapshot.data ?? <TaskList>[];
-                    return SizedBox(
-                      height: 40,
-                      width: double.infinity,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: lists.length,
-                              itemBuilder: (BuildContext context, int index) =>
-                                  _ListCard(lists[index]),
+                    return lists.isEmpty
+                        ? const SizedBox()
+                        : SizedBox(
+                            height: 34,
+                            width: double.infinity,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: lists.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) =>
+                                            _ListCard(lists[index]),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.of(context)
+                                      .pushNamed(BoardScreen.routeName,
+                                          arguments: lists[0].boardID),
+                                  child: const Text('View Full Board'),
+                                ),
+                              ],
                             ),
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: const Text('View Full Board'),
-                          ),
-                        ],
-                      ),
-                    );
+                          );
                   },
                 );
         } else {
@@ -94,7 +100,7 @@ class _ListCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
         border: Border.all(color: color),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
       ),
       alignment: Alignment.center,
       child: Text(
