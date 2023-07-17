@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 
 import '../../database/firebase/auth_methods.dart';
@@ -8,7 +9,7 @@ import 'check_list.dart';
 part 'task_card.g.dart';
 
 @HiveType(typeId: 63)
-class TaskCard extends HiveObject{
+class TaskCard extends HiveObject {
   TaskCard({
     required this.boardID,
     required this.listID,
@@ -46,11 +47,11 @@ class TaskCard extends HiveObject{
   @HiveField(3)
   final String? projectID;
   @HiveField(4)
-  final int position;
+  int position;
   @HiveField(5)
-  final String title;
+  String title;
   @HiveField(6)
-  final String description;
+  String description;
   @HiveField(7)
   final List<Attachment> attachments;
   @HiveField(8)
@@ -62,11 +63,11 @@ class TaskCard extends HiveObject{
   @HiveField(11)
   final DateTime createdDate;
   @HiveField(12)
-  final DateTime startDate;
+  DateTime startDate;
   @HiveField(13)
-  final DateTime dueDate;
+  DateTime dueDate;
   @HiveField(14)
-  final DateTime lastFetch;
+  DateTime lastFetch;
   @HiveField(15)
   final DateTime lastUpdate;
 
@@ -91,32 +92,32 @@ class TaskCard extends HiveObject{
   }
 
   // ignore: sort_constructors_first
-  factory TaskCard.fromMap(Map<String, dynamic> map) {
+  factory TaskCard.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     return TaskCard(
-      cardID: map['card_id'] as String,
-      boardID: map['board_id'] as String,
-      listID: map['list_id'] as String,
-      projectID: map['project_id'] as String,
-      position: map['position'] as int,
-      title: map['title'] as String,
-      description: map['description'] as String,
-      assignTo: List<String>.from(map['assign_to'] as List<String>),
+      cardID: doc.data()?['card_id'] ?? '',
+      boardID: doc.data()?['board_id'] ?? '',
+      listID: doc.data()?['list_id'] ?? '',
+      projectID: doc.data()?['project_id'] ?? '',
+      position: doc.data()?['position'] as int,
+      title: doc.data()?['title'] ?? '',
+      description: doc.data()?['description'] ?? '',
+      assignTo: List<String>.from(doc.data()?['assign_to'] as List<String>),
       attachments: List<Attachment>.from(
-        (map['attachments'] as List<dynamic>).map<Attachment>(
+        (doc.data()?['attachments'] as List<dynamic>).map<Attachment>(
           (dynamic x) => Attachment.fromMap(x as Map<String, dynamic>),
         ),
       ),
       checklists: List<CheckList>.from(
-        (map['checklists'] as List<dynamic>).map<CheckList>(
+        (doc.data()?['checklists'] as List<dynamic>).map<CheckList>(
           (dynamic x) => CheckList.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      createdBy: map['created_by'] as String,
-      createdDate: TimeFun.parseTime(map['created_date']),
-      startDate: TimeFun.parseTime(map['start_date']),
-      dueDate: TimeFun.parseTime(map['due_date']),
+      createdBy: doc.data()?['created_by'] ?? '',
+      createdDate: TimeFun.parseTime(doc.data()?['created_date']),
+      startDate: TimeFun.parseTime(doc.data()?['start_date']),
+      dueDate: TimeFun.parseTime(doc.data()?['due_date']),
       lastFetch: DateTime.now(),
-      lastUpdate: TimeFun.parseTime(map['last_update']),
+      lastUpdate: TimeFun.parseTime(doc.data()?['last_update']),
     );
   }
 }

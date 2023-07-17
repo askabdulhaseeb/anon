@@ -20,11 +20,11 @@ class CheckItem {
   @HiveField(0)
   final String id;
   @HiveField(1)
-  final int position;
+  int position;
   @HiveField(2)
-  final String text;
+  String text;
   @HiveField(3)
-  final bool isChecked;
+  bool isChecked;
   @HiveField(4)
   final String createdBy;
   @HiveField(5)

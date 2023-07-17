@@ -1,6 +1,4 @@
 class CustomExceptions {
-  fromObject(dynamic e) {}
-
   static String auth(dynamic e) {
     final String code = e.code;
     switch (code) {

@@ -21,6 +21,24 @@ class LocalTaskCard {
     }
   }
 
+  Future<void> add(TaskCard value) async {
+    try {
+      final Box<TaskCard> box = await refresh();
+      box.put(value.cardID, value);
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+    }
+  }
+
+  Future<void> remove(TaskCard value) async {
+    try {
+      final Box<TaskCard> box = await refresh();
+      box.delete(value.cardID);
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+    }
+  }
+
   //
   //
   Future<void> signOut() async {

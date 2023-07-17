@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 
 import '../../database/firebase/auth_methods.dart';
@@ -27,7 +28,7 @@ class Board extends HiveObject {
   @HiveField(0)
   final String boardID;
   @HiveField(1)
-  final String title;
+  String title;
   @HiveField(2)
   final String? projectID;
   @HiveField(3)
@@ -39,7 +40,7 @@ class Board extends HiveObject {
   @HiveField(6)
   final DateTime createdDate;
   @HiveField(7)
-  final DateTime lastFetch;
+  DateTime lastFetch;
   @HiveField(8)
   final DateTime lastUpdate;
 
@@ -57,22 +58,22 @@ class Board extends HiveObject {
   }
 
   // ignore: sort_constructors_first
-  factory Board.fromMap(Map<String, dynamic> map) {
+  factory Board.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     return Board(
-      boardID: map['board_id'] ?? '',
-      title: map['title'] ?? '',
-      projectID: map['project_id'],
+      boardID: doc.data()?['board_id'] ?? '',
+      title: doc.data()?['title'] ?? '',
+      projectID: doc.data()?['project_id'],
       persons:
-          List<String>.from((map['persons'] ?? <String>[]) as List<String>),
+          List<String>.from((doc.data()?['persons'] ?? <String>[]) as List<String>),
       members: List<BoardMember>.from(
-        (map['member'] as List<dynamic>).map<BoardMember>(
+        (doc.data()?['member'] as List<dynamic>).map<BoardMember>(
           (dynamic x) => BoardMember.fromMap(x as Map<String, dynamic>),
         ),
       ),
-      createdBy: map['created_by'] ?? '',
-      createdDate: TimeFun.parseTime(map['created_date']),
+      createdBy: doc.data()?['created_by'] ?? '',
+      createdDate: TimeFun.parseTime(doc.data()?['created_date']),
       lastFetch: DateTime.now(),
-      lastUpdate: TimeFun.parseTime(map['last_update']),
+      lastUpdate: TimeFun.parseTime(doc.data()?['last_update']),
     );
   }
 }

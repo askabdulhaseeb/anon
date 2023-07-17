@@ -20,6 +20,24 @@ class LocalBoard {
     }
   }
 
+  Future<void> add(Board value) async {
+    try {
+      final Box<Board> box = await refresh();
+      box.put(value.boardID, value);
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+    }
+  }
+
+  Future<void> remove(Board value) async {
+    try {
+      final Box<Board> box = await refresh();
+      box.delete(value.boardID);
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+    }
+  }
+
   //
   //
   Future<void> signOut() async {

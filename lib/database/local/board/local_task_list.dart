@@ -21,6 +21,24 @@ class LocalTaskList {
     }
   }
 
+  Future<void> add(TaskList value) async {
+    try {
+      final Box<TaskList> box = await refresh();
+      box.put(value.listID, value);
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+    }
+  }
+
+  Future<void> remove(TaskList value) async {
+    try {
+      final Box<TaskList> box = await refresh();
+      box.delete(value.listID);
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+    }
+  }
+
   //
   //
   Future<void> signOut() async {

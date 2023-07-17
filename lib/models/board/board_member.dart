@@ -25,11 +25,11 @@ class BoardMember {
   @HiveField(1)
   final String addedBy;
   @HiveField(2)
-  final ChatMemberRole role;
+  ChatMemberRole role;
   @HiveField(3)
-  final bool isRequestPending;
+  bool isRequestPending;
   @HiveField(4)
-  final bool invitationAccepted;
+  bool invitationAccepted;
   @HiveField(5)
   final DateTime joiningDate;
   @HiveField(6)
@@ -42,8 +42,23 @@ class BoardMember {
       'role': role.json,
       'is_request_pending': isRequestPending,
       'invitation_accepted': invitationAccepted,
-      'joining_date': joiningDate.millisecondsSinceEpoch,
-      'last_update': lastUpdate.millisecondsSinceEpoch,
+      'joining_date': joiningDate,
+      'last_update': lastUpdate,
+    };
+  }
+
+  Map<String, dynamic> requestResponceMap() {
+    return <String, dynamic>{
+      'role': role.json,
+      'is_request_pending': isRequestPending,
+      'last_update': DateTime.now(),
+    };
+  }
+
+  Map<String, dynamic> invitationResponceMap() {
+    return <String, dynamic>{
+      'invitation_accepted': invitationAccepted,
+      'last_update': DateTime.now(),
     };
   }
 

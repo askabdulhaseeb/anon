@@ -7,7 +7,7 @@ import 'check_item.dart';
 part 'check_list.g.dart';
 
 @HiveType(typeId: 64)
-class CheckList extends HiveObject{
+class CheckList extends HiveObject {
   CheckList({
     required this.cardID,
     required this.title,
@@ -30,9 +30,9 @@ class CheckList extends HiveObject{
   @HiveField(1)
   final String cardID;
   @HiveField(2)
-  final String title;
+  String title;
   @HiveField(3)
-  final int position;
+  int position;
   @HiveField(4)
   final List<CheckItem> items;
   @HiveField(5)
@@ -40,7 +40,7 @@ class CheckList extends HiveObject{
   @HiveField(6)
   final DateTime createdDate;
   @HiveField(7)
-  final DateTime lastFetch;
+  DateTime lastFetch;
   @HiveField(8)
   final DateTime lastUpdate;
 

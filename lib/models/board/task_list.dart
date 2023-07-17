@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 
 import '../../database/firebase/auth_methods.dart';
@@ -28,17 +29,17 @@ class TaskList extends HiveObject {
   @HiveField(1)
   final String? projectID;
   @HiveField(2)
-  final int position;
+  int position;
   @HiveField(3)
   final String listID;
   @HiveField(4)
-  final String title;
+  String title;
   @HiveField(5)
   final String createdBy;
   @HiveField(6)
   final DateTime createdDate;
   @HiveField(7)
-  final DateTime lastFetch;
+  DateTime lastFetch;
   @HiveField(8)
   final DateTime lastUpdate;
 
@@ -46,8 +47,8 @@ class TaskList extends HiveObject {
     return <String, dynamic>{
       'board_id': boardID,
       'project_id': projectID,
-      'position': position,
       'list_id': listID,
+      'position': position,
       'title': title,
       'created_by': createdBy,
       'created_date': createdDate,
@@ -56,17 +57,17 @@ class TaskList extends HiveObject {
   }
 
   // ignore: sort_constructors_first
-  factory TaskList.fromMap(Map<String, dynamic> map) {
+  factory TaskList.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     return TaskList(
-      boardID: map['board_id'] ?? '',
-      projectID: map['project_id'] ?? '',
-      position: map['position'] ?? 0,
-      listID: map['list_id'] ?? '',
-      title: map['title'] ?? '',
-      createdBy: map['created_by'] ?? '',
-      createdDate: TimeFun.parseTime(map['created_date']),
+      boardID: doc.data()?['board_id'] ?? '',
+      projectID: doc.data()?['project_id'] ?? '',
+      listID: doc.data()?['list_id'] ?? '',
+      position: doc.data()?['position'] ?? 0,
+      title: doc.data()?['title'] ?? '',
+      createdBy: doc.data()?['created_by'] ?? '',
+      createdDate: TimeFun.parseTime(doc.data()?['created_date']),
       lastFetch: DateTime.now(),
-      lastUpdate: TimeFun.parseTime(map['last_update']),
+      lastUpdate: TimeFun.parseTime(doc.data()?['last_update']),
     );
   }
 }
