@@ -55,6 +55,18 @@ class LocalBoard {
     }
   }
 
+  Future<List<Board>> boards() async {
+    try {
+      final Box<Board> box = await refresh();
+      final List<Board> result = box.values.toList();
+      result.sort((Board a, Board b) => a.lastUpdate.compareTo(b.lastUpdate));
+      return result;
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+      return <Board>[];
+    }
+  }
+
   //
   //
   Future<void> signOut() async {

@@ -7,6 +7,7 @@ import '../../database/firebase/message_api.dart';
 import '../../database/local/local_user.dart';
 import '../../providers/app_nav_provider.dart';
 import '../../widgets/agency/agency_app_bar_title.dart';
+import '../main_pages/boards_page.dart';
 import '../main_pages/settings_page.dart';
 import '../main_pages/project_page.dart';
 import 'main_bottom_nav_bar.dart';
@@ -18,7 +19,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> pages = const <Widget>[
       ProjectPage(),
-      Center(child: Text('Coming soon...')),
+      BoardsPage(),
       SettingsPage(),
     ];
     return Scaffold(

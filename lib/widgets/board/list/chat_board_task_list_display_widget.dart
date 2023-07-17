@@ -51,7 +51,7 @@ class _ChatBoardTaskListDisplayWidgetState
                   ) {
                     final List<TaskList> lists = snapshot.data ?? <TaskList>[];
                     return SizedBox(
-                      height: 42,
+                      height: 40,
                       width: double.infinity,
                       child: Row(
                         children: <Widget>[
@@ -91,7 +91,7 @@ class _ListCard extends StatelessWidget {
         boardColor ?? Theme.of(context).textTheme.bodyMedium!.color!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
         border: Border.all(color: color),
         borderRadius: BorderRadius.circular(20),

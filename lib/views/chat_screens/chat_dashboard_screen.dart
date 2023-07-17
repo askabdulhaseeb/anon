@@ -73,6 +73,7 @@ class ProjectDashboardScreen extends StatelessWidget {
                         );
                       },
                     ),
+                    const SizedBox(height: 12),
                     ChatBoardTaskListDisplayWidget(project.pid),
                     ValueListenableBuilder<Box<Chat>>(
                         valueListenable: LocalChat().listenable(),
