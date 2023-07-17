@@ -14,6 +14,7 @@ class TaskListAPI {
           .collection(_collection)
           .doc(value.listID)
           .set(value.toMap());
+      await LocalTaskList().add(value);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;

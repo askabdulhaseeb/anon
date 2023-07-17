@@ -14,6 +14,7 @@ import '../../models/user/app_user.dart';
 import '../local/local_data.dart';
 import '../local/local_project.dart';
 import 'auth_methods.dart';
+import 'board/board_api.dart';
 import 'chat_api.dart';
 
 class ProjectAPI {
@@ -25,7 +26,7 @@ class ProjectAPI {
       await _instance.collection(_collection).doc(value.pid).set(value.toMap());
       await LocalProject().add(value);
       final String me = AuthMethods.uid;
-      ChatAPI().startChat(
+      await ChatAPI().startChat(
         newChat: Chat(
           imageURL: '',
           persons: <String>[me],
@@ -40,6 +41,7 @@ class ProjectAPI {
         receiver: <AppUser>[],
         sender: null,
       );
+      await BoardAPI().createProjectBoard(value);
       return true;
     } catch (e) {
       debugPrint(e.toString());
@@ -79,11 +81,12 @@ class ProjectAPI {
         .subtract(const Duration(minutes: 10))
         .millisecondsSinceEpoch);
     for (DocumentChange<Map<String, dynamic>> element in changes) {
-      final Project msg = Project.fromDoc(element.doc);
-      if (element.type == DocumentChangeType.removed) {
-        LocalProject().remove(msg);
+      final Project pro = Project.fromDoc(element.doc);
+      if (element.type == DocumentChangeType.removed ||
+          !pro.members.contains(AuthMethods.uid)) {
+        LocalProject().remove(pro);
       } else {
-        LocalProject().add(msg);
+        LocalProject().add(pro);
       }
     }
   }

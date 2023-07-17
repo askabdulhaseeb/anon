@@ -14,6 +14,7 @@ class TaskCardAPI {
           .collection(_collection)
           .doc(value.cardID)
           .set(value.toMap());
+      await LocalTaskCard().add(value);
     } catch (e) {
       debugPrint(e.toString());
       rethrow;

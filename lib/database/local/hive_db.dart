@@ -14,6 +14,7 @@ import '../../enums/user/user_type.dart';
 import '../../models/agency/agency.dart';
 import '../../models/agency/member_detail.dart';
 import '../../models/board/board.dart';
+import '../../models/board/board_member.dart';
 import '../../models/board/check_item.dart';
 import '../../models/board/check_list.dart';
 import '../../models/board/task_card.dart';
@@ -81,7 +82,8 @@ class HiveDB {
     Hive.registerAdapter(UnseenMessageAdapter()); // 46
     //
     // Type: Chat 6
-    Hive.registerAdapter(BoardAdapter()); // 61
+    Hive.registerAdapter(BoardAdapter()); // 60
+    Hive.registerAdapter(BoardMemberAdapter()); // 61
     Hive.registerAdapter(TaskListAdapter()); // 62
     Hive.registerAdapter(TaskCardAdapter()); // 63
     Hive.registerAdapter(CheckListAdapter()); // 64

@@ -64,7 +64,8 @@ class ChatAPI {
       for (DocumentChange<Map<String, dynamic>> element in event.docChanges) {
         final DocumentSnapshot<Map<String, dynamic>> doc = element.doc;
         final Chat temp = Chat.fromDoc(doc);
-        if (element.type == DocumentChangeType.removed) {
+        if (element.type == DocumentChangeType.removed ||
+            !temp.persons.contains(AuthMethods.uid)) {
           LocalChat().remove(temp.chatID);
         } else {
           LocalChat().addChat(temp);
@@ -83,6 +84,7 @@ class ChatAPI {
         .collection(_collection)
         .doc(newChat.chatID)
         .set(newChat.toMap());
+    await LocalChat().addChat(newChat);
     if (newChat.lastMessage != null) {
       final Message msg = Message(
         chatID: newChat.chatID,

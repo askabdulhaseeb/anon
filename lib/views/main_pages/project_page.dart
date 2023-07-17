@@ -34,8 +34,17 @@ class ProjectPage extends StatelessWidget {
                     .uid ==
                 AuthMethods.uid;
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(height: 16),
+                Text(
+                  'Work Space',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).dividerColor,
+                  ),
+                ),
                 if (myAgency)
                   CustomIconElevatedButton(
                     title: 'Start New Project',
@@ -44,7 +53,7 @@ class ProjectPage extends StatelessWidget {
                     onTap: () => Navigator.of(context)
                         .pushNamed(CreateProjectScreen.routeName),
                   ),
-                if (myAgency) const Divider(),
+                const Divider(),
                 const SizedBox(height: 6),
                 StatefulBuilder(builder: (
                   BuildContext context,

@@ -7,6 +7,7 @@ import '../../database/local/local_chat.dart';
 import '../../database/local/local_project.dart';
 import '../../models/chat/chat.dart';
 import '../../models/project/project.dart';
+import '../../widgets/board/list/chat_board_task_list_display_widget.dart';
 import '../../widgets/chat/chat_dashboard_tile.dart';
 import '../../widgets/custom/show_loading.dart';
 import '../project_screens/project_detail_screen.dart';
@@ -61,6 +62,7 @@ class ProjectDashboardScreen extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<Project> snapshot) {
               if (snapshot.hasData) {
                 final Project project = snapshot.data!;
+                // final bool canEdit = project.createdBy == AuthMethods.uid;
                 return Column(
                   children: <Widget>[
                     StatefulBuilder(
@@ -71,15 +73,7 @@ class ProjectDashboardScreen extends StatelessWidget {
                         );
                       },
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          // TODO: Project Notes
-                        },
-                        child: Text('Imp. Notes (${project.notes.length})'),
-                      ),
-                    ),
+                    ChatBoardTaskListDisplayWidget(project.pid),
                     ValueListenableBuilder<Box<Chat>>(
                         valueListenable: LocalChat().listenable(),
                         builder: (BuildContext context, Box<Chat> box, _) {

@@ -30,6 +30,21 @@ class LocalTaskList {
     }
   }
 
+  Future<List<TaskList>> listByBoardID(String boardID) async {
+    try {
+      final Box<TaskList> box = await refresh();
+      final List<TaskList> result = box.values
+          .where((TaskList element) => element.boardID == boardID)
+          .toList();
+      if (result.length <= 1) return result;
+      result.sort((TaskList a, TaskList b) => a.position.compareTo(b.position));
+      return result;
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+      return <TaskList>[];
+    }
+  }
+
   Future<void> remove(TaskList value) async {
     try {
       final Box<TaskList> box = await refresh();
