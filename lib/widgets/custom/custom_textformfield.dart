@@ -103,7 +103,9 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
           textAlign: widget.textAlign,
           onChanged: widget.onChanged,
           minLines: widget.minLines,
-          maxLines: (widget._controller!.text.isEmpty) ? 1 : widget.maxLines,
+          maxLines: (widget._controller!.text.isEmpty)
+              ? widget.minLines
+              : widget.maxLines,
           maxLength: widget.maxLength,
           style: widget.style,
           validator: (String? value) => widget.validator!(value),
