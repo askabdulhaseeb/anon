@@ -101,7 +101,7 @@ class TaskCard extends HiveObject {
       position: doc.data()?['position'] as int,
       title: doc.data()?['title'] ?? '',
       description: doc.data()?['description'] ?? '',
-      assignTo: List<String>.from(doc.data()?['assign_to'] as List<String>),
+      assignTo: List<String>.from(doc.data()?['assign_to'] ?? <String>[]),
       attachments: List<Attachment>.from(
         (doc.data()?['attachments'] as List<dynamic>).map<Attachment>(
           (dynamic x) => Attachment.fromMap(x as Map<String, dynamic>),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../database/firebase/agency_api.dart';
+import '../../database/firebase/board/board_api.dart';
 import '../../database/firebase/chat_api.dart';
 import '../../database/firebase/message_api.dart';
 import '../../database/local/local_user.dart';
@@ -52,20 +53,23 @@ class MainScreen extends StatelessWidget {
               return StreamBuilder<bool>(
                   stream: AgencyAPI().refreshAgency(),
                   builder: (_, __) {
-                    return StreamBuilder<void>(
-                        stream: ChatAPI().refreshChats(),
-                        builder: (_, __) {
-                          return StreamBuilder<void>(
-                              stream: MessageAPI().refreshMessages(),
-                              builder: (_, __) {
-                                return Consumer<AppNavProvider>(
-                                  builder: (BuildContext context,
-                                      AppNavProvider appPro, _) {
-                                    return pages[appPro.currentTap];
-                                  },
-                                );
-                              });
-                        });
+                    return FutureBuilder<void>(
+                      future: BoardAPI().refreshBoards(),
+                      builder: (_, __) => StreamBuilder<void>(
+                          stream: ChatAPI().refreshChats(),
+                          builder: (_, __) {
+                            return StreamBuilder<void>(
+                                stream: MessageAPI().refreshMessages(),
+                                builder: (_, __) {
+                                  return Consumer<AppNavProvider>(
+                                    builder: (BuildContext context,
+                                        AppNavProvider appPro, _) {
+                                      return pages[appPro.currentTap];
+                                    },
+                                  );
+                                });
+                          }),
+                    );
                   });
             }),
       ),

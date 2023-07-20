@@ -1,12 +1,16 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../../enums/chat/chat_member_role.dart';
+import '../../../functions/time_functions.dart';
 import '../../../models/board/board.dart';
 import '../../../models/board/board_member.dart';
 import '../../../models/board/task_list.dart';
 import '../../../models/project/project.dart';
 import '../../local/board/local_board.dart';
+import '../../local/local_data.dart';
 import '../auth_methods.dart';
 import 'task_list_api.dart';
 
@@ -46,6 +50,41 @@ class BoardAPI {
                         : ChatMemberRole.member,
                   ))
               .toList()));
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> refreshBoards() async {
+    final int time = DateTime.now().millisecondsSinceEpoch;
+    final int? lastUpdate = LocalData.lastBoardFetch();
+    try {
+      final QuerySnapshot<Map<String, dynamic>> result = lastUpdate == null
+          ? await _instance
+              .collection(_collection)
+              .where('persons', arrayContains: AuthMethods.uid)
+              .get()
+          : await _instance
+              .collection(_collection)
+              .where('persons', arrayContains: AuthMethods.uid)
+              .where('last_update',
+                  isGreaterThanOrEqualTo: TimeFun.miliToObject(lastUpdate)!
+                      .subtract(const Duration(hours: 1)))
+              .get();
+      if (result.docs.isNotEmpty) {
+        LocalData.setBoardTimeKey(time);
+      }
+      for (DocumentChange<Map<String, dynamic>> element in result.docChanges) {
+        final Board updated = Board.fromDoc(element.doc);
+        if (element.type == DocumentChangeType.removed ||
+            !updated.persons.contains(AuthMethods.uid)) {
+          await LocalBoard().remove(updated);
+        } else {
+          await LocalBoard().add(updated);
+        }
+      }
+      log('Board API: ${result.docChanges.length} Boards Refreshed');
     } catch (e) {
       debugPrint(e.toString());
       rethrow;

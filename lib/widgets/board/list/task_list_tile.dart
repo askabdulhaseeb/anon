@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../database/firebase/board/task_card_api.dart';
 import '../../../database/local/board/local_task_card.dart';
 import '../../../models/board/task_card.dart';
 import '../../../models/board/task_list.dart';
@@ -49,12 +50,17 @@ class TaskListTile extends StatelessWidget {
               builder: (BuildContext context,
                   AsyncSnapshot<List<TaskCard>> snapshot) {
                 final List<TaskCard> cards = snapshot.data ?? <TaskCard>[];
-                return ListView.builder(
-                  primary: false,
-                  shrinkWrap: true,
-                  itemCount: cards.length,
-                  itemBuilder: (_, int index) => TaskCardTile(cards[index]),
-                );
+                return FutureBuilder<void>(
+                    future: TaskCardAPI().refreshCards(list.boardID),
+                    builder: (_, __) {
+                      return ListView.builder(
+                        primary: false,
+                        shrinkWrap: true,
+                        itemCount: cards.length,
+                        itemBuilder: (_, int index) =>
+                            TaskCardTile(cards[index]),
+                      );
+                    });
               },
             ),
             AddTaskCardWidget(list),

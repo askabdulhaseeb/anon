@@ -63,10 +63,9 @@ class Board extends HiveObject {
       boardID: doc.data()?['board_id'] ?? '',
       title: doc.data()?['title'] ?? '',
       projectID: doc.data()?['project_id'],
-      persons: List<String>.from(
-          (doc.data()?['persons'] ?? <String>[]) as List<String>),
+      persons: List<String>.from(doc.data()?['persons'] ?? <String>[]),
       members: List<BoardMember>.from(
-        (doc.data()?['member'] as List<dynamic>).map<BoardMember>(
+        (doc.data()?['members'] ?? <dynamic>[]).map<BoardMember>(
           (dynamic x) => BoardMember.fromMap(x as Map<String, dynamic>),
         ),
       ),
