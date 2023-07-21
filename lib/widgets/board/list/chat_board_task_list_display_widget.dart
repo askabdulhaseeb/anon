@@ -44,44 +44,50 @@ class _ChatBoardTaskListDisplayWidgetState
                         },
                   child: const Text('Create New Board'),
                 )
-              : FutureBuilder<List<TaskList>>(
-                  future: LocalTaskList().listByBoardID(board.boardID),
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<List<TaskList>> snapshot,
-                  ) {
-                    final List<TaskList> lists = snapshot.data ?? <TaskList>[];
-                    return lists.isEmpty
-                        ? TextButton(
-                            onPressed: () => Navigator.of(context).pushNamed(
-                                BoardScreen.routeName,
-                                arguments: board.boardID),
-                            child: const Text('View Full Board'),
-                          )
-                        : SizedBox(
-                            height: 34,
-                            width: double.infinity,
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: lists.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) =>
-                                            _ListCard(lists[index]),
+              : GestureDetector(
+                  onTap: () => Navigator.of(context).pushNamed(
+                      BoardScreen.routeName,
+                      arguments: board.boardID),
+                  child: FutureBuilder<List<TaskList>>(
+                    future: LocalTaskList().listByBoardID(board.boardID),
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<List<TaskList>> snapshot,
+                    ) {
+                      final List<TaskList> lists =
+                          snapshot.data ?? <TaskList>[];
+                      return lists.isEmpty
+                          ? TextButton(
+                              onPressed: () => Navigator.of(context).pushNamed(
+                                  BoardScreen.routeName,
+                                  arguments: board.boardID),
+                              child: const Text('View Full Board'),
+                            )
+                          : SizedBox(
+                              height: 34,
+                              width: double.infinity,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: lists.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) =>
+                                              _ListCard(lists[index]),
+                                    ),
                                   ),
-                                ),
-                                TextButton(
-                                  onPressed: () => Navigator.of(context)
-                                      .pushNamed(BoardScreen.routeName,
-                                          arguments: board.boardID),
-                                  child: const Text('View Full Board'),
-                                ),
-                              ],
-                            ),
-                          );
-                  },
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context)
+                                        .pushNamed(BoardScreen.routeName,
+                                            arguments: board.boardID),
+                                    child: const Text('View Full Board'),
+                                  ),
+                                ],
+                              ),
+                            );
+                    },
+                  ),
                 );
         } else {
           return const Text('Loading...');

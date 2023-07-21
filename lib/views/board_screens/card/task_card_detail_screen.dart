@@ -9,7 +9,7 @@ import '../../../models/board/task_card.dart';
 import '../../../models/board/task_list.dart';
 import '../../../widgets/board/card/checklist/checklist_lists_display_widget.dart';
 import '../../../widgets/board/card/checklist/start_new_checklist_widget.dart';
-import '../../../widgets/custom/parsed_text_widget.dart';
+import '../../../widgets/custom/custom_textformfield.dart';
 import '../../../widgets/custom/show_loading.dart';
 
 class TaskCardDetailScreen extends StatefulWidget {
@@ -23,6 +23,8 @@ class TaskCardDetailScreen extends StatefulWidget {
 class _TaskCardDetailScreenState extends State<TaskCardDetailScreen> {
   bool needUpdate = false;
   late TaskCard? card;
+  late TextEditingController _title;
+  late TextEditingController _des;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,8 @@ class _TaskCardDetailScreenState extends State<TaskCardDetailScreen> {
           builder: (BuildContext context, AsyncSnapshot<TaskCard?> cardSnap) {
             if (cardSnap.connectionState == ConnectionState.done) {
               card = cardSnap.data;
+              _title = TextEditingController(text: card?.title ?? 'null');
+              _des = TextEditingController(text: card?.description ?? 'null');
               return card == null
                   ? const Center(child: Text('ERROR'))
                   : SingleChildScrollView(
@@ -54,12 +58,19 @@ class _TaskCardDetailScreenState extends State<TaskCardDetailScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              card!.title,
+                            CustomTextFormField(
+                              controller: _title,
+                              showSuffixIcon: false,
+                              contentPadding: const EdgeInsets.all(0),
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w500,
                               ),
+                              onChanged: (String p0) {
+                                needUpdate = true;
+                                card!.title = p0;
+                              },
+                              border: InputBorder.none,
                             ),
                             FutureBuilder<TaskList?>(
                               future:
@@ -85,13 +96,22 @@ class _TaskCardDetailScreenState extends State<TaskCardDetailScreen> {
                             ),
                             Container(
                               width: double.infinity,
-                              padding: const EdgeInsets.all(16),
+                              // padding: const EdgeInsets.all(16),
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.grey.shade200,
                               ),
-                              child: ParsedTextWidget(card!.description),
+                              child: CustomTextFormField(
+                                controller: _des,
+                                showSuffixIcon: false,
+                                maxLines: 10,
+                                onChanged: (String p0) {
+                                  needUpdate = true;
+                                  card!.description = p0;
+                                },
+                                border: InputBorder.none,
+                              ),
                             ),
                             Align(
                               alignment: Alignment.centerRight,

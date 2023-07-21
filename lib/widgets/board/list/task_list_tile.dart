@@ -8,10 +8,15 @@ import '../../../utilities/utilities.dart';
 import '../card/add_task_card_widget.dart';
 import '../card/task_card_tile.dart';
 
-class TaskListTile extends StatelessWidget {
+class TaskListTile extends StatefulWidget {
   const TaskListTile(this.list, {super.key});
   final TaskList list;
 
+  @override
+  State<TaskListTile> createState() => _TaskListTileState();
+}
+
+class _TaskListTileState extends State<TaskListTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,7 +39,7 @@ class TaskListTile extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
-                    list.title,
+                    widget.list.title,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -46,12 +51,12 @@ class TaskListTile extends StatelessWidget {
             ),
             const Divider(thickness: 1),
             FutureBuilder<List<TaskCard>>(
-              future: LocalTaskCard().cardsByListID(list.listID),
+              future: LocalTaskCard().cardsByListID(widget.list.listID),
               builder: (BuildContext context,
                   AsyncSnapshot<List<TaskCard>> snapshot) {
                 final List<TaskCard> cards = snapshot.data ?? <TaskCard>[];
                 return FutureBuilder<void>(
-                    future: TaskCardAPI().refreshCards(list.boardID),
+                    future: TaskCardAPI().refreshCards(widget.list.boardID),
                     builder: (_, __) {
                       return ListView.builder(
                         primary: false,
@@ -63,7 +68,10 @@ class TaskListTile extends StatelessWidget {
                     });
               },
             ),
-            AddTaskCardWidget(list),
+            AddTaskCardWidget(
+              widget.list,
+              onAdd: (_) => setState(() {}),
+            ),
           ],
         ),
       ),

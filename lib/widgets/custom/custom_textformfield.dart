@@ -112,7 +112,8 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
           cursorColor: Theme.of(context).colorScheme.secondary,
           onFieldSubmitted: widget.onFieldSubmitted,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+            contentPadding: widget.contentPadding ??
+                const EdgeInsets.symmetric(horizontal: 12),
             fillColor: widget.color ??
                 Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.15),
             hintText: widget.hint,

@@ -9,8 +9,9 @@ import '../../custom/custom_elevated_button.dart';
 import '../../custom/custom_textformfield.dart';
 
 class AddTaskCardWidget extends StatefulWidget {
-  const AddTaskCardWidget(this.list, {super.key});
+  const AddTaskCardWidget(this.list, {required this.onAdd, super.key});
   final TaskList list;
+  final void Function(TaskCard) onAdd;
 
   @override
   State<AddTaskCardWidget> createState() => _AddTaskCardWidgetState();
@@ -117,6 +118,7 @@ class _AddTaskCardWidgetState extends State<AddTaskCardWidget> {
       projectID: widget.list.projectID,
     );
     await TaskCardAPI().create(newCard);
+    widget.onAdd(newCard);
     _reset();
   }
 }
