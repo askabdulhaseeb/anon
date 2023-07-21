@@ -1,11 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../../database/local/board/local_task_card.dart';
 import '../../../database/local/board/local_task_list.dart';
+import '../../../models/board/check_item.dart';
 import '../../../models/board/check_list.dart';
 import '../../../models/board/task_card.dart';
 import '../../../models/board/task_list.dart';
-import '../../../widgets/board/card/checklist/checklist_item_widget.dart';
+import '../../../widgets/board/card/checklist/checklist_lists_display_widget.dart';
 import '../../../widgets/board/card/checklist/start_new_checklist_widget.dart';
 import '../../../widgets/custom/parsed_text_widget.dart';
 import '../../../widgets/custom/show_loading.dart';
@@ -114,41 +116,16 @@ class _TaskCardDetailScreenState extends State<TaskCardDetailScreen> {
                                 label: const Text('Add Checklist'),
                               ),
                             ),
-                            Column(
-                              children: card!.checklists
-                                  .map(
-                                    (CheckList e) => Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          e.title,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        ListView.builder(
-                                          primary: false,
-                                          shrinkWrap: true,
-                                          itemCount: e.items.length,
-                                          itemBuilder: (BuildContext context,
-                                                  int index) =>
-                                              CheckListItemWidget(
-                                            e.items[index],
-                                            onTap: () {
-                                              needUpdate = true;
-                                              setState(() {
-                                                e.items[index].isChecked =
-                                                    !e.items[index].isChecked;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                  .toList(),
+                            ChecklistListsDisplayWidget(
+                              card!,
+                              onChange: (
+                                CheckList v,
+                                CheckItem item,
+                                DocumentChangeType type,
+                              ) =>
+                                  onChange(v, item, type),
                             ),
+                            const SizedBox(height: 200),
                           ],
                         ),
                       ),
@@ -160,5 +137,24 @@ class _TaskCardDetailScreenState extends State<TaskCardDetailScreen> {
         ),
       ),
     );
+  }
+
+  onChange(CheckList v, CheckItem item, DocumentChangeType type) {
+    needUpdate = true;
+    if (type == DocumentChangeType.added) {
+      card!.checklists
+          .firstWhere(
+              (CheckList element) => element.checkListID == v.checkListID)
+          .items
+          .toSet()
+          .add(item);
+    } else if (type == DocumentChangeType.modified) {
+      card!.checklists
+          .firstWhere(
+              (CheckList element) => element.checkListID == v.checkListID)
+          .items
+          .firstWhere((CheckItem ele) => ele.id == item.id)
+          .isChecked = item.isChecked;
+    }
   }
 }
