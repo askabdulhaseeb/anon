@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../database/firebase/board/task_card_api.dart';
 import '../../../database/firebase/board/task_list_api.dart';
 import '../../../database/local/board/local_board.dart';
 import '../../../database/local/board/local_task_list.dart';
@@ -34,23 +35,28 @@ class BoardScreen extends StatelessWidget {
             (BuildContext context, AsyncSnapshot<List<TaskList>> snapshot) {
           final List<TaskList> lists = snapshot.data ?? <TaskList>[];
           return FutureBuilder<void>(
-              future: TaskListAPI().refreshLists(boardID),
+              future: TaskCardAPI().refreshCards(boardID),
               builder: (_, __) {
-                return lists.isEmpty
-                    ? AddTaskListWidget(boardID)
-                    : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: lists.length,
-                        itemBuilder: (BuildContext context, int index) => Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            if (index == 0) const SizedBox(width: 20),
-                            TaskListTile(lists[index]),
-                            if (index == (lists.length - 1))
-                              AddTaskListWidget(boardID),
-                          ],
-                        ),
-                      );
+                return FutureBuilder<void>(
+                    future: TaskListAPI().refreshLists(boardID),
+                    builder: (_, __) {
+                      return lists.isEmpty
+                          ? AddTaskListWidget(boardID)
+                          : ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: lists.length,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  if (index == 0) const SizedBox(width: 20),
+                                  TaskListTile(lists[index]),
+                                  if (index == (lists.length - 1))
+                                    AddTaskListWidget(boardID),
+                                ],
+                              ),
+                            );
+                    });
               });
         },
       ),

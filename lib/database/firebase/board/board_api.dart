@@ -26,7 +26,12 @@ class BoardAPI {
           .set(value.toMap());
       await LocalBoard().add(value);
       await TaskListAPI().create(
-        TaskList(boardID: value.boardID, title: 'To Do', position: 0),
+        TaskList(
+          boardID: value.boardID,
+          projectID: value.projectID,
+          title: 'To Do',
+          position: 0,
+        ),
       );
     } catch (e) {
       debugPrint(e.toString());

@@ -7,6 +7,7 @@ class CustomElevatedButton extends StatelessWidget {
     required this.title,
     required this.isLoading,
     required this.onTap,
+    this.width,
     this.margin,
     this.padding,
     this.bgColor,
@@ -16,7 +17,9 @@ class CustomElevatedButton extends StatelessWidget {
     this.textColor,
     Key? key,
   }) : super(key: key);
+
   final String title;
+  final double? width;
   final VoidCallback onTap;
   final bool isLoading;
   final EdgeInsetsGeometry? margin;
@@ -32,7 +35,8 @@ class CustomElevatedButton extends StatelessWidget {
     return isLoading
         ? const ShowLoading()
         : Container(
-            constraints: const BoxConstraints(maxWidth: 400),
+            width: width,
+            constraints: const BoxConstraints(maxWidth: 400, maxHeight: 50),
             margin: margin ?? const EdgeInsets.symmetric(vertical: 6),
             decoration: BoxDecoration(
               color: bgColor ?? Theme.of(context).primaryColor,
