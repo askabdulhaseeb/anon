@@ -52,7 +52,12 @@ class _ChatBoardTaskListDisplayWidgetState
                   ) {
                     final List<TaskList> lists = snapshot.data ?? <TaskList>[];
                     return lists.isEmpty
-                        ? const SizedBox()
+                        ? TextButton(
+                            onPressed: () => Navigator.of(context).pushNamed(
+                                BoardScreen.routeName,
+                                arguments: board.boardID),
+                            child: const Text('View Full Board'),
+                          )
                         : SizedBox(
                             height: 34,
                             width: double.infinity,
@@ -70,7 +75,7 @@ class _ChatBoardTaskListDisplayWidgetState
                                 TextButton(
                                   onPressed: () => Navigator.of(context)
                                       .pushNamed(BoardScreen.routeName,
-                                          arguments: lists[0].boardID),
+                                          arguments: board.boardID),
                                   child: const Text('View Full Board'),
                                 ),
                               ],

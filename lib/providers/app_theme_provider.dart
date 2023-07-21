@@ -37,7 +37,7 @@ class AppThemeProvider extends ChangeNotifier {
 }
 
 class AppThemes {
-  static const Color _primary = Colors.deepPurple;
+  static const Color _primary = Color(0xFF673AB7);
   static const Color _secondary = Color.fromRGBO(2, 122, 190, 1);
 
   static const Color _darkScaffoldColor = Color(0xFF101018);

@@ -69,7 +69,7 @@ class TaskCard extends HiveObject {
   @HiveField(14)
   DateTime lastFetch;
   @HiveField(15)
-  final DateTime lastUpdate;
+  DateTime lastUpdate;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -88,6 +88,20 @@ class TaskCard extends HiveObject {
       'start_date': startDate,
       'due_date': dueDate,
       'last_update': lastUpdate,
+    };
+  }
+
+  Map<String, dynamic> updateMap() {
+    return <String, dynamic>{
+      'position': position,
+      'title': title,
+      'description': description,
+      'attachments': attachments.map((Attachment x) => x.toMap()).toList(),
+      'assign_to': assignTo,
+      'checklists': checklists.map((CheckList x) => x.toMap()).toList(),
+      'start_date': startDate,
+      'due_date': dueDate,
+      'last_update': lastUpdate = DateTime.now(),
     };
   }
 

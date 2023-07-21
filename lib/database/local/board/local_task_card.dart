@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../../models/board/task_card.dart';
+import '../../firebase/board/task_card_api.dart';
 
 class LocalTaskCard {
   static const String _boxName = 'dm-task-card';
@@ -30,6 +31,16 @@ class LocalTaskCard {
     }
   }
 
+  Future<TaskCard?> cardsByCardID(String cardID) async {
+    try {
+      final Box<TaskCard> box = await refresh();
+      return box.get(cardID);
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+      return null;
+    }
+  }
+
   Future<List<TaskCard>> cardsByListID(String listID) async {
     try {
       final Box<TaskCard> box = await refresh();
@@ -42,6 +53,16 @@ class LocalTaskCard {
     } catch (e) {
       debugPrint('$_boxName: ERROR - ${e.toString()}');
       return <TaskCard>[];
+    }
+  }
+
+  Future<void> update(TaskCard value) async {
+    try {
+      final Box<TaskCard> box = await refresh();
+      await TaskCardAPI().update(value);
+      box.put(value.cardID, value);
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
     }
   }
 

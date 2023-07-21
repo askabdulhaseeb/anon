@@ -16,6 +16,7 @@ import 'views/auth/agency_auth/start_agency_screen.dart';
 import 'views/auth/user_auth/sign_in_screen.dart';
 import 'views/auth/user_auth/sign_up_screen.dart';
 import 'views/board_screens/board/board_screen.dart';
+import 'views/board_screens/card/task_card_detail_screen.dart';
 import 'views/chat_screens/chat_detail_screen.dart';
 import 'views/chat_screens/chat_screen.dart';
 import 'views/chat_screens/create_chat_screen.dart';
@@ -67,6 +68,7 @@ final Map<String, WidgetBuilder> myRoutes = <String, WidgetBuilder>{
   UserProfileScreeen.routeName: (_) => const UserProfileScreeen(),
   //Board
   BoardScreen.routeName: (_) => const BoardScreen(),
+  TaskCardDetailScreen.routeName: (_) => const TaskCardDetailScreen(),
   // System
   AccountScreen.routeName: (_) => const AccountScreen(),
 };

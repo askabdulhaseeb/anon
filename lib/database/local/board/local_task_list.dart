@@ -45,6 +45,16 @@ class LocalTaskList {
     }
   }
 
+  Future<TaskList?> listByListID(String listID) async {
+    try {
+      final Box<TaskList> box = await refresh();
+      return box.get(listID);
+    } catch (e) {
+      debugPrint('$_boxName: ERROR - ${e.toString()}');
+      return null;
+    }
+  }
+
   Future<void> remove(TaskList value) async {
     try {
       final Box<TaskList> box = await refresh();

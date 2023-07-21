@@ -25,6 +25,19 @@ class TaskCardAPI {
     }
   }
 
+  Future<void> update(TaskCard value) async {
+    try {
+      await _instance
+          .collection(_collection)
+          .doc(value.cardID)
+          .update(value.updateMap());
+      await LocalTaskCard().add(value);
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
+
   Future<void> refreshCard(TaskCard value) async {
     try {
       final QuerySnapshot<Map<String, dynamic>> result = await _instance

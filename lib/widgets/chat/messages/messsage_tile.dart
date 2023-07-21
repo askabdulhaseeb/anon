@@ -63,7 +63,7 @@ class MessageTile extends StatelessWidget {
                         ),
                       ],
                       color: isMe
-                          ? Theme.of(context).primaryColor
+                          ? const Color(0xFFB299D4)
                           : Theme.of(context).scaffoldBackgroundColor,
                     ),
                     child: Column(
@@ -104,9 +104,9 @@ class MessageTile extends StatelessWidget {
                           alignment: Alignment.centerRight,
                           child: Text(
                             TimeFun.timeInDigits(message.timestamp),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 11,
-                              color: Colors.grey,
+                              color: isMe ? Colors.black54 : Colors.grey,
                             ),
                           ),
                         )

@@ -51,11 +51,13 @@ class _AddTaskListWidgetState extends State<AddTaskListWidget> {
                     onPressed: rest,
                     icon: const Icon(Icons.cancel_outlined, color: Colors.red),
                   ),
-                  CustomElevatedButton(
-                    isLoading: isLoading,
+                  SizedBox(
                     width: 80,
-                    onTap: onAdd,
-                    title: 'Save',
+                    child: CustomElevatedButton(
+                      isLoading: isLoading,
+                      onTap: onAdd,
+                      title: 'Save',
+                    ),
                   ),
                 ],
               ),

@@ -13,25 +13,22 @@ class ParsedTextWidget extends StatelessWidget {
       text: text,
       selectable: true,
       textWidthBasis: TextWidthBasis.parent,
-      style: isMe ? const TextStyle(color: Colors.white) : null,
+      style: isMe ? const TextStyle(color: Colors.black) : null,
       textScaleFactor: 0.5,
       parse: <MatchText>[
         MatchText(
           type: ParsedType.EMAIL,
-          style: const TextStyle(color: Colors.blue),
+          style: const TextStyle(color: Color(0xFF3866FF)),
           onTap: (String url) => _launchUrl(url, type: ParsedType.EMAIL),
         ),
         MatchText(
           type: ParsedType.URL,
-          style: const TextStyle(
-            color: Colors.blue,
-            decoration: TextDecoration.underline,
-          ),
+          style: const TextStyle(color: Color(0xFF3866FF)),
           onTap: (String url) => _launchUrl(url, type: ParsedType.URL),
         ),
         MatchText(
           type: ParsedType.PHONE,
-          style: const TextStyle(color: Colors.blue),
+          style: const TextStyle(color: Color(0xFF3866FF)),
           onTap: (String url) => _launchUrl(url, type: ParsedType.PHONE),
         ),
       ],

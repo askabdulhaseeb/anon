@@ -29,17 +29,25 @@ class MessageMediaAttachmentWidget extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: <Widget>[
-              message.attachment[0].isLive
-                  ? message.attachment[0].type == AttachmentType.video
-                      ? CustomVideoPlayer(path: message.attachment[0].url)
-                      : CustomNetworkImage(imageURL: message.attachment[0].url)
-                  : message.attachment[0].type == AttachmentType.video
-                      ? CustomVideoPlayer(
-                          path: message.attachment[0].localStoragePath,
-                          isFileVideo: true)
-                      : Image.file(
-                          File(message.attachment[0].localStoragePath),
-                        ),
+              SizedBox(
+                height: double.infinity,
+                width: double.infinity,
+                child: message.attachment[0].isLive
+                    ? message.attachment[0].type == AttachmentType.video
+                        ? CustomVideoPlayer(path: message.attachment[0].url)
+                        : CustomNetworkImage(
+                            imageURL: message.attachment[0].url,
+                            fit: BoxFit.cover,
+                          )
+                    : message.attachment[0].type == AttachmentType.video
+                        ? CustomVideoPlayer(
+                            path: message.attachment[0].localStoragePath,
+                            isFileVideo: true)
+                        : Image.file(
+                            File(message.attachment[0].localStoragePath),
+                            fit: BoxFit.cover,
+                          ),
+              ),
               if (!message.attachment[0].isLive)
                 const Center(child: ShowLoading()),
               if (message.attachment.length > 1)
