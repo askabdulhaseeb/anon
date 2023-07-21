@@ -26,7 +26,7 @@ class _TaskListTileState extends State<TaskListTile> {
       margin: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.grey.shade100,
+        color: Colors.grey.withOpacity(0.3),
       ),
       child: SingleChildScrollView(
         child: Column(

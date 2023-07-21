@@ -11,8 +11,7 @@ class AppThemeProvider extends ChangeNotifier {
               ? ThemeMode.light
               : ThemeMode.dark;
 
-  // ThemeMode get themeMode => _themeMode;
-  ThemeMode get themeMode => ThemeMode.light;
+  ThemeMode get themeMode => _themeMode;
 
   bool get isDarkMode {
     if (_themeMode == ThemeMode.system) {
@@ -71,6 +70,7 @@ class AppThemes {
       visualDensity: VisualDensity(vertical: -4),
       horizontalTitleGap: 10,
     ),
+    disabledColor: Colors.grey.withOpacity(0.3),
     dialogTheme: const DialogTheme(surfaceTintColor: _darkScaffoldColor),
     bottomSheetTheme: const BottomSheetThemeData(),
     colorScheme: const ColorScheme.dark(
@@ -107,6 +107,7 @@ class AppThemes {
       visualDensity: VisualDensity(vertical: -4),
       horizontalTitleGap: 10,
     ),
+    disabledColor: Colors.grey.withOpacity(0.3),
     dialogTheme: const DialogTheme(surfaceTintColor: _lightScaffoldColor),
     bottomSheetTheme: const BottomSheetThemeData(),
     colorScheme: const ColorScheme.light(

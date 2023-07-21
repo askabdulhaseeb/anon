@@ -30,7 +30,7 @@ class _AddTaskListWidgetState extends State<AddTaskListWidget> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.grey.shade100,
+        color: Colors.grey.withOpacity(0.3),
       ),
       child: isAdding
           ? Form(

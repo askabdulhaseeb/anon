@@ -36,11 +36,7 @@ class _TaskCardDetailScreenState extends State<TaskCardDetailScreen> {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(
-          actions: const <Widget>[
-            Icon(Icons.person_add_alt_1_outlined),
-          ],
-        ),
+        appBar: AppBar(),
         body: FutureBuilder<TaskCard?>(
           future: LocalTaskCard().cardsByCardID(cardID),
           builder: (BuildContext context, AsyncSnapshot<TaskCard?> cardSnap) {
@@ -96,11 +92,10 @@ class _TaskCardDetailScreenState extends State<TaskCardDetailScreen> {
                             ),
                             Container(
                               width: double.infinity,
-                              // padding: const EdgeInsets.all(16),
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey.shade200,
+                                color: Theme.of(context).disabledColor,
                               ),
                               child: CustomTextFormField(
                                 controller: _des,

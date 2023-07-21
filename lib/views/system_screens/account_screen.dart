@@ -63,7 +63,6 @@ class AccountScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  onTap: () => themePro.toggleTheme(themePro.isDarkMode),
                 );
               },
             ),

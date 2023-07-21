@@ -51,7 +51,7 @@ class SettingsPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).dividerColor,
+                      color: Colors.grey.withOpacity(0.3),
                     ),
                   ),
                 ),
@@ -88,7 +88,7 @@ class SettingsPage extends StatelessWidget {
                     },
                   ),
                 ),
-                Divider(color: Colors.grey.shade300),
+                const Divider(height: 16),
                 ListTile(
                   leading: const Icon(Icons.workspace_premium_outlined),
                   title: const Text('Agency Details'),

@@ -21,10 +21,10 @@ class BoardsPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).dividerColor,
+              color: Colors.grey.withOpacity(0.3),
             ),
           ),
-          const Divider(),
+          const Divider(height: 16),
           FutureBuilder<List<Board>>(
             future: LocalBoard().boards(),
             builder: (BuildContext context, AsyncSnapshot<List<Board>> snap) {

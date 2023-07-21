@@ -42,7 +42,7 @@ class ProjectPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).dividerColor,
+                    color: Colors.grey.withOpacity(0.3),
                   ),
                 ),
                 if (myAgency)
@@ -53,8 +53,7 @@ class ProjectPage extends StatelessWidget {
                     onTap: () => Navigator.of(context)
                         .pushNamed(CreateProjectScreen.routeName),
                   ),
-                const Divider(height: 8),
-                const SizedBox(height: 6),
+                const Divider(height: 16),
                 StatefulBuilder(builder: (
                   BuildContext context,
                   void Function(void Function()) setState,

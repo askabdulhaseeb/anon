@@ -25,10 +25,8 @@ class NotificationAPI {
     try {
       if (deviceToken.isEmpty) return false;
       const String fcmToken = AppKey.fcm;
-      log('FCM token: $fcmToken');
       for (int i = 0; i < deviceToken.length; i++) {
         if (deviceToken[i].token.isEmpty) continue;
-        log('Receiver Devive Token: ${deviceToken[i].token}');
         final Map<String, String> headers = <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'key=$fcmToken',
@@ -51,7 +49,6 @@ class NotificationAPI {
           if (kDebugMode) {
             debugPrint(await response.stream.bytesToString());
           }
-          log('Notification send to: ${deviceToken[i].token}');
         } else {
           log('ERROR in FCM');
         }

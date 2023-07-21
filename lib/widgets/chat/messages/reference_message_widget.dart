@@ -19,7 +19,7 @@ class ReferenceMessageWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 4, top: 2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Theme.of(context).dividerColor,
+        color: Colors.grey.withOpacity(0.7),
       ),
       child: Row(
         children: <Widget>[
