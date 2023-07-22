@@ -75,7 +75,7 @@ class BoardAPI {
               .where('persons', arrayContains: AuthMethods.uid)
               .where('last_update',
                   isGreaterThanOrEqualTo: TimeFun.miliToObject(lastUpdate)!
-                      .subtract(const Duration(hours: 1)))
+                      .subtract(const Duration(minutes: 2)))
               .get();
       if (result.docs.isNotEmpty) {
         LocalData.setBoardTimeKey(time);

@@ -77,7 +77,7 @@ class TaskCardAPI {
               .where('board_id', isEqualTo: boardID)
               .where('last_update',
                   isGreaterThanOrEqualTo: TimeFun.miliToObject(lastUpdate)!
-                      .subtract(const Duration(minutes: 15)))
+                      .subtract(const Duration(minutes: 2)))
               .get();
       if (result.docs.isNotEmpty) {
         LocalData.setTaskCardTimeKey(time);

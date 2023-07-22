@@ -64,7 +64,7 @@ class TaskListAPI {
               .where('board_id', isEqualTo: boardID)
               .where('last_update',
                   isGreaterThanOrEqualTo: TimeFun.miliToObject(lastUpdate)!
-                      .subtract(const Duration(minutes: 30)))
+                      .subtract(const Duration(minutes: 2)))
               .get();
       if (result.docs.isNotEmpty) {
         LocalData.setTaskListTimeKey(time);
