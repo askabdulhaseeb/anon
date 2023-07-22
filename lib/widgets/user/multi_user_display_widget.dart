@@ -24,6 +24,7 @@ class MultiUserDisplayWidget extends StatelessWidget {
         ? emptyListWidget ?? const SizedBox()
         : Container(
             height: size * 2,
+            width: ((size * 2) - (users.length * 2)) * users.length,
             constraints: maxWidth != double.infinity
                 ? BoxConstraints(
                     maxWidth: users.length < 4

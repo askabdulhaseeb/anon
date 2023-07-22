@@ -57,14 +57,12 @@ class TaskCardTile extends StatelessWidget {
                           icon: Icons.playlist_add_check_sharp,
                           count: _checklistCount(),
                         ),
+                      const Spacer(),
                       if (card.assignTo.isNotEmpty)
-                        SizedBox(
-                          width: 100,
-                          child: MultiUserDisplayWidget(
-                            card.assignTo,
-                            maxWidth: 100,
-                            size: 18,
-                          ),
+                        MultiUserDisplayWidget(
+                          card.assignTo,
+                          maxWidth: 100,
+                          size: 16,
                         ),
                     ],
                   ),

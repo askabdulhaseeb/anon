@@ -8,7 +8,7 @@ import 'board_member.dart';
 part 'board.g.dart';
 
 @HiveType(typeId: 60)
-class Board extends HiveObject {
+class Board extends HiveObject { 
   Board({
     required this.title,
     required this.persons,

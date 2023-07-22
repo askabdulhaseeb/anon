@@ -1,7 +1,7 @@
 name: devmarkaz
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 0.0.1+4
+version: 0.0.1+5
 
 environment:
   sdk: '>=3.0.2 <4.0.0'

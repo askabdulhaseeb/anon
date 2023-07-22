@@ -29,11 +29,29 @@ class _ChecklistListsDisplayWidgetState
             (CheckList e) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  e.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: <Widget>[
+                    Flexible(
+                      child: Text(
+                        e.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Icon(
+                      Icons.playlist_add_check_sharp,
+                      size: 20,
+                      color: Theme.of(context).disabledColor,
+                    ),
+                    Text(
+                      '${e.items.where((CheckItem element) => element.isChecked).length}/${e.items.length}',
+                      style: TextStyle(color: Theme.of(context).disabledColor),
+                    )
+                  ],
                 ),
                 ListView.builder(
                   primary: false,

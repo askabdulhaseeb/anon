@@ -57,18 +57,21 @@ class _AddableMemberWidgetState extends State<AddableMemberWidget> {
                     ),
                   ),
                   Expanded(
-                    child: Text(
-                      widget.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                    child: Center(
+                      child: Text(
+                        widget.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
                   TextButton(
-                    onPressed: () => Navigator.of(context).pop(newAdded),
+                    onPressed: () =>
+                        Navigator.of(context).pop(newAdded.toSet().toList()),
                     child: const Text(
                       'Add Member',
                       style: TextStyle(fontWeight: FontWeight.bold),
