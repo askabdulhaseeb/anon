@@ -71,7 +71,7 @@ class TaskCard extends HiveObject {
   DateTime lastFetch;
   @HiveField(15)
   DateTime lastUpdate; //
-  @HiveField(16, defaultValue: null)
+  @HiveField(16)
   String? coverURL;
 
   Map<String, dynamic> toMap() {

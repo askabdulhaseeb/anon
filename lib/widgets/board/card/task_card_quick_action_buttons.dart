@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/card_display_provider.dart';
+import '../../user/multi_user_display_widget.dart';
 
 class TaskCardQuickActionButtonsWidget extends StatelessWidget {
   const TaskCardQuickActionButtonsWidget({super.key});
@@ -55,7 +56,12 @@ class TaskCardQuickActionButtonsWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              const Expanded(child: SizedBox()),
+              Expanded(
+                child: MultiUserDisplayWidget(
+                  Provider.of<CardDisplayProvider>(context).card.assignTo,
+                  size: 20,
+                ),
+              ),
             ],
           ),
         ],

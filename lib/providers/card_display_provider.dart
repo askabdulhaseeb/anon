@@ -26,12 +26,24 @@ class CardDisplayProvider extends ChangeNotifier {
     onNeedToUpdate();
   }
 
+  onDescriptionUpdate(BuildContext context) async {
+    if (_card == null) return;
+    final String? result = await BottomSheetFun().editableSheet(
+      context,
+      displayTitle: 'Card Discription',
+      initText: _card!.description,
+    );
+    if (result == null) return;
+    _card!.description = result;
+    onNeedToUpdate();
+  }
+
   Future<void> onAssignTo(BuildContext context) async {
     if (_card == null) return;
     if (_addables.isEmpty) {
       final Board? board = await LocalBoard().boardByBoardID(_card!.boardID);
       if (board == null) return;
-      _addables.addAll(board.persons);
+      _addables.toSet().addAll(board.persons);
     }
     final List<AppUser> members = <AppUser>[];
     for (String element in _card!.assignTo) {
@@ -106,13 +118,20 @@ class CardDisplayProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> reset() async {
-    if (_needUpdate && _card != null) {
+  Future<void> onSaveChanges(BuildContext context) async {
+    if (_card != null) {
       await LocalTaskCard().update(_card!);
     }
+    // ignore: use_build_context_synchronously
+    await reset(context);
+  }
+
+  Future<void> reset(BuildContext context) async {
     _card = null;
     _addables.clear();
     _needUpdate = false;
+    Navigator.of(context).pop();
+    notifyListeners();
   }
 
   void onNeedToUpdate({bool value = true}) {
@@ -120,7 +139,9 @@ class CardDisplayProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  TaskCard? get card => _card;
+  bool get needUpdate => _needUpdate;
+  TaskCard get card =>
+      _card ?? TaskCard(boardID: '', listID: '', position: 0, title: '');
   void setCard(TaskCard? value) {
     _card = value;
     _init();
