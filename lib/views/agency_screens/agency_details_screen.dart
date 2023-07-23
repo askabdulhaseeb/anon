@@ -5,7 +5,7 @@ import '../../database/firebase/agency_api.dart';
 import '../../database/firebase/auth_methods.dart';
 import '../../database/local/local_agency.dart';
 import '../../enums/user/user_designation.dart';
-import '../../functions/bottom_sheet.dart';
+import '../../functions/bottom_sheet_fun.dart';
 import '../../functions/helping_funcation.dart';
 import '../../models/agency/agency.dart';
 import '../../models/agency/member_detail.dart';

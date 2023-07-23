@@ -18,6 +18,7 @@ class TaskCard extends HiveObject {
     this.description = '',
     this.projectID,
     String? cardID,
+    this.coverURL,
     List<Attachment>? attachments,
     List<String>? assignTo,
     List<CheckList>? checklists,
@@ -43,7 +44,7 @@ class TaskCard extends HiveObject {
   @HiveField(1)
   final String boardID;
   @HiveField(2)
-  final String listID;
+  String listID;
   @HiveField(3)
   final String? projectID;
   @HiveField(4)
@@ -69,7 +70,9 @@ class TaskCard extends HiveObject {
   @HiveField(14)
   DateTime lastFetch;
   @HiveField(15)
-  DateTime lastUpdate;
+  DateTime lastUpdate; //
+  @HiveField(16, defaultValue: null)
+  String? coverURL;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -80,6 +83,7 @@ class TaskCard extends HiveObject {
       'position': position,
       'title': title,
       'description': description,
+      'cover_url': coverURL,
       'attachments': attachments.map((Attachment x) => x.toMap()).toList(),
       'assign_to': assignTo,
       'checklists': checklists.map((CheckList x) => x.toMap()).toList(),
@@ -96,6 +100,7 @@ class TaskCard extends HiveObject {
       'position': position,
       'title': title,
       'description': description,
+      'cover_url': coverURL,
       'attachments': attachments.map((Attachment x) => x.toMap()).toList(),
       'assign_to': assignTo,
       'checklists': checklists.map((CheckList x) => x.toMap()).toList(),
@@ -116,6 +121,7 @@ class TaskCard extends HiveObject {
       title: doc.data()?['title'] ?? '',
       description: doc.data()?['description'] ?? '',
       assignTo: List<String>.from(doc.data()?['assign_to'] ?? <String>[]),
+      coverURL: doc.data()?['cover_url'] ?? '',
       attachments: List<Attachment>.from(
         (doc.data()?['attachments'] as List<dynamic>).map<Attachment>(
           (dynamic x) => Attachment.fromMap(x as Map<String, dynamic>),

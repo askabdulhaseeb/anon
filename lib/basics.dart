@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'providers/app_nav_provider.dart';
 import 'providers/app_theme_provider.dart';
+import 'providers/card_display_provider.dart';
 import 'providers/chat_provider.dart';
 import 'providers/new_project_provider.dart';
 import 'views/agency_screens/agency_details_screen.dart';
@@ -34,6 +35,9 @@ final List<ChangeNotifierProvider<ChangeNotifier>> myProviders =
   ChangeNotifierProvider<AppNavProvider>.value(value: AppNavProvider()),
   ChangeNotifierProvider<NewProjectProvider>.value(value: NewProjectProvider()),
   ChangeNotifierProvider<ChatProvider>.value(value: ChatProvider()),
+  ChangeNotifierProvider<CardDisplayProvider>.value(
+    value: CardDisplayProvider(),
+  ),
 ];
 
 //

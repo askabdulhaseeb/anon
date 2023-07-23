@@ -1,10 +1,14 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../functions/time_functions.dart';
+import '../../../functions/unique_id_fun.dart';
 import '../../../models/board/task_card.dart';
+import '../../../models/project/attachment.dart';
 import '../../local/board/local_task_card.dart';
 import '../../local/local_data.dart';
 
@@ -94,6 +98,60 @@ class TaskCardAPI {
     } catch (e) {
       debugPrint(e.toString());
       rethrow;
+    }
+  }
+
+  Future<List<Attachment>> uploadAttachments({
+    required List<Attachment> attachments,
+    required String cardID,
+  }) async {
+    try {
+      print('${attachments.length} Uploading ...');
+      final List<Attachment> cloudAttachments = <Attachment>[];
+      if (attachments.isNotEmpty) {
+        for (int i = 0; i < attachments.length; i++) {
+          final String id = UniqueIdFun.unique();
+          final Attachment attach = attachments[i];
+          if (attach.filePath == null) continue;
+          final (String path, String? url) = await _uploadAttachment(
+            file: File(attach.filePath!),
+            cardID: cardID,
+            attachmentID: id,
+          );
+          cloudAttachments.add(
+            Attachment(
+              url: url ?? '',
+              type: attach.type,
+              attachmentID: id,
+              storagePath: path,
+              localStoragePath: attach.localStoragePath,
+              filePath: attach.filePath,
+              isLive: url == null ? false : true,
+              hasError: url == null ? true : false,
+            ),
+          );
+        }
+      }
+      print('${cloudAttachments.length} Uploaded');
+      return cloudAttachments;
+    } catch (e) {
+      return (<Attachment>[]);
+    }
+  }
+
+  Future<(String path, String? url)> _uploadAttachment({
+    required File file,
+    required String cardID,
+    required String attachmentID,
+  }) async {
+    try {
+      String tempPath = '$_collection/$cardID/$attachmentID}';
+      TaskSnapshot snapshot =
+          await FirebaseStorage.instance.ref(tempPath).putFile(file);
+      String url = (await snapshot.ref.getDownloadURL()).toString();
+      return (tempPath, url);
+    } catch (e) {
+      return ('', null);
     }
   }
 }

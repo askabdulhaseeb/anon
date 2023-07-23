@@ -23,83 +23,87 @@ class _ChecklistListsDisplayWidgetState
   final TextEditingController _newCheckItem = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: widget.card.checklists
-          .map(
-            (CheckList e) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Flexible(
-                      child: Text(
-                        e.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: widget.card.checklists
+            .map(
+              (CheckList e) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Flexible(
+                        child: Text(
+                          e.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                    Icon(
-                      Icons.playlist_add_check_sharp,
-                      size: 20,
-                      color: Theme.of(context).disabledColor,
-                    ),
-                    Text(
-                      '${e.items.where((CheckItem element) => element.isChecked).length}/${e.items.length}',
-                      style: TextStyle(color: Theme.of(context).disabledColor),
-                    )
-                  ],
-                ),
-                ListView.builder(
-                  primary: false,
-                  shrinkWrap: true,
-                  itemCount: e.items.length,
-                  itemBuilder: (BuildContext context, int index) =>
-                      CheckListItemWidget(
-                    e.items[index],
-                    onTap: () {
-                      setState(() {
-                        e.items[index].isChecked = !e.items[index].isChecked;
-                      });
-                      widget.onChange(
-                          e, e.items[index], DocumentChangeType.modified);
-                    },
+                      const SizedBox(width: 16),
+                      Icon(
+                        Icons.playlist_add_check_sharp,
+                        size: 20,
+                        color: Theme.of(context).disabledColor,
+                      ),
+                      Text(
+                        '${e.items.where((CheckItem element) => element.isChecked).length}/${e.items.length}',
+                        style:
+                            TextStyle(color: Theme.of(context).disabledColor),
+                      )
+                    ],
                   ),
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: CustomTextFormField(
-                      controller: _newCheckItem,
-                      hint: 'write task here...',
-                      showSuffixIcon: false,
-                    )),
-                    TextButton(
-                      onPressed: () async {
-                        if (_newCheckItem.text.isEmpty) {
-                          return;
-                        }
-                        final CheckItem newItem = CheckItem(
-                          text: _newCheckItem.text.trim(),
-                          position: e.items.length,
-                        );
+                  ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: e.items.length,
+                    itemBuilder: (BuildContext context, int index) =>
+                        CheckListItemWidget(
+                      e.items[index],
+                      onTap: () {
                         setState(() {
-                          e.items.add(newItem);
+                          e.items[index].isChecked = !e.items[index].isChecked;
                         });
-                        _newCheckItem.clear();
-                        widget.onChange(e, newItem, DocumentChangeType.added);
+                        widget.onChange(
+                            e, e.items[index], DocumentChangeType.modified);
                       },
-                      child: const Text('Add'),
                     ),
-                  ],
-                ),
-              ],
-            ),
-          )
-          .toList(),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                          child: CustomTextFormField(
+                        controller: _newCheckItem,
+                        hint: 'write task here...',
+                        showSuffixIcon: false,
+                      )),
+                      TextButton(
+                        onPressed: () async {
+                          if (_newCheckItem.text.isEmpty) {
+                            return;
+                          }
+                          final CheckItem newItem = CheckItem(
+                            text: _newCheckItem.text.trim(),
+                            position: e.items.length,
+                          );
+                          setState(() {
+                            e.items.add(newItem);
+                          });
+                          _newCheckItem.clear();
+                          widget.onChange(e, newItem, DocumentChangeType.added);
+                        },
+                        child: const Text('Add'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }
